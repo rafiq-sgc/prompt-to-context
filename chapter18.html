@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 18: AI Governance for Companies</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="reading-progress"></div>
+    <button class="mobile-menu-toggle" onclick="toggleMobileMenu()" aria-label="Toggle menu">☰</button>
+    <div class="container">
+        <header class="header">
+            <h1>Chapter 18: AI Governance for Companies</h1>
+            <p class="subtitle">Shadow AI, developer policy, controls stack, organizational questions.</p>
+        </header>
+        <nav class="nav-sidebar" id="nav-sidebar">
+            <div class="nav-brand">CONTEXT ENGINEERING 2026</div>
+            <ul>
+                <li><a href="index.html">🏠 Home</a></li>
+                <li><a href="chapter01.html">🚀 Ch1: Introduction</a></li>
+                <li><a href="chapter02.html">🧠 Ch2: LLM Recap</a></li>
+                <li><a href="chapter03.html">✍️ Ch3: Prompt Basics</a></li>
+                <li><a href="chapter04.html">🎯 Ch4: Advanced Prompts</a></li>
+                <li><a href="chapter05.html">⚠️ Ch5: Why Prompts Fail</a></li>
+                <li><a href="chapter06.html">🏗️ Ch6: Context Engineering</a></li>
+                <li><a href="chapter07.html">📚 Ch7: RAG</a></li>
+                <li><a href="chapter08.html">🔧 Ch8: Tools & MCP</a></li>
+                <li><a href="chapter09.html">🤖 Ch9: AI Agents</a></li>
+                <li><a href="chapter10.html">👥 Ch10: Multi-Agent</a></li>
+                <li><a href="chapter11.html">🔄 Ch11: AI SDLC</a></li>
+                <li><a href="chapter12.html">⚡ Ch12: Productivity</a></li>
+                <li><a href="chapter13.html">🛠️ Ch13: AI Tools</a></li>
+                <li><a href="chapter14.html">🎨 Ch14: Vibe Coding</a></li>
+                <li><a href="chapter15.html">🗄️ Ch15: NL-to-SQL</a></li>
+                <li><a href="chapter16.html">📊 Ch16: Evals</a></li>
+                <li><a href="chapter17.html">🔒 Ch17: Security</a></li>
+                <li><a href="chapter18.html" class="active">🏢 Ch18: Governance</a></li>
+                <li><a href="chapter19.html">🔮 Ch19: Future</a></li>
+                <li><a href="chapter20.html">🎤 Ch20: Present</a></li>
+                <li><a href="chapter21.html">⚖️ Ch21: Prompt vs Context</a></li>
+                <li><a href="chapter22.html">⚡ Ch22: Productivity Paradox</a></li>
+                <li><a href="chapter23.html">👁️ Ch23: Supervisory Eng.</a></li>
+                <li><a href="chapter24.html">📉 Ch24: Context Debt</a></li>
+                <li><a href="chapter25.html">🔬 Ch25: How LLMs Work</a></li>
+            </ul>
+        </nav>
+        <main class="main-content">
+            
+            <div class="chapter-header">
+                <h1>🏢 Chapter 18: AI Governance for Companies</h1>
+                <p class="chapter-meta">Shadow AI, developer policy, controls stack, organizational questions.</p>
+            </div><div class="chapter-nav"><a href="chapter17.html">← Previous</a><a href="index.html">🏠 Home</a><a href="chapter19.html">Next Chapter →</a></div>
+<div class="tagline-banner" style="text-align:left;margin-bottom:1.5rem">
+<strong>From Prompt Engineering to Context Engineering</strong><br>
+<span style="font-size:.95rem;color:#4338ca">How Developers Should Build, Use, and Control AI in 2026</span>
+<div style="margin-top:.75rem;font-size:.9rem;color:#334155">
+📍 <strong>Chapter 18</strong> · Phase: <strong>Control — Organizational AI Governance</strong><br>
+Human judgment makes AI valuable — at scale that means policies, approved tools, and clear ownership.
+</div>
+</div>
+<div class="diagram-section">
+<h3>Production & Delivery Journey (Chapters 11–20)</h3>
+<div style="overflow-x:auto;padding:.5rem 0;font-size:.82rem;line-height:2"><span style="color:#64748b">Ch11 SDLC</span> → <span style="color:#64748b">Ch12 Workflow</span> → <span style="color:#64748b">Ch13 Tools</span> → <span style="color:#64748b">Ch14 Vibe Coding</span> → <span style="color:#64748b">Ch15 NL-to-SQL</span> → <span style="color:#64748b">Ch16 Evals</span> → <span style="color:#64748b">Ch17 Security</span> → <span style="font-weight:700;color:#4f46e5">Ch18 Governance</span> → <span style="color:#64748b">Ch19 Future</span> → <span style="color:#64748b">Ch20 Present</span></div>
+<p style="font-size:.88rem;color:#64748b;margin-top:.5rem">Chapters 2–10 taught you to <em>build</em> AI systems. Chapters 11–20 teach you to <em>use, measure, secure, govern</em>, and <em>present</em> them professionally.</p>
+</div><div class="objectives"><h3>🎯 Learning Objectives</h3><ul><li>Define AI governance and shadow AI risk</li><li>Answer key policy questions for engineering leaders</li><li>Draft a practical developer AI policy</li><li>Balance productivity with compliance</li><li>Connect governance to NL2SQL and coding tool usage</li></ul></div>
+<div class="section">
+<h2>Why Governance Belongs in a Developer Presentation</h2>
+<p>Individual skill is not enough. Teams without governance get: random tools, data pasted into public chat, unreviewed AI merges, and <strong>shadow AI</strong> — employees using unapproved tools with company data.</p>
+<div class="diagram-container"><div class="mermaid">
+flowchart TB
+    subgraph Without governance
+        S1[Everyone uses random AI tools]
+        S2[Data leaks]
+        S3[Inconsistent quality]
+        S4[No audit trail]
+    end
+    subgraph With governance
+        G1[Approved tools + policies]
+        G2[Safe paths for productivity]
+        G3[Evals + review gates]
+        G4[Logging + accountability]
+    end
+</div></div>
+</div>
+
+<div class="section">
+<h2>Questions Every Company Must Answer</h2>
+<ul class="checklist">
+<li>Which AI tools are approved for code? For data?</li>
+<li>Can developers paste proprietary code into external AI?</li>
+<li>Can student/customer PII be used in prompts?</li>
+<li>Must AI-generated code pass tests + human review?</li>
+<li>Who owns AI feature quality (NL2SQL accuracy)?</li>
+<li>Are prompts and outputs logged? Retention?</li>
+<li>Can agents access production systems?</li>
+<li>What requires manager/security approval?</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>Sample Developer AI Policy</h2>
+<div class="compare-grid">
+<div class="compare-col good">
+<h4>✅ Allowed</h4>
+<ul>
+<li>Learning and explanation (no sensitive data)</li>
+<li>Boilerplate and test generation</li>
+<li>Documentation drafts</li>
+<li>Architecture brainstorming (sanitized)</li>
+<li>Approved enterprise AI IDE with team rules</li>
+<li>Internal NL2SQL with ACL</li>
+</ul>
+</div>
+<div class="compare-col bad">
+<h4>❌ Not allowed without approval</h4>
+<ul>
+<li>Pasting secrets, API keys, credentials</li>
+<li>Customer/student PII in public ChatGPT</li>
+<li>AI executing write SQL on production</li>
+<li>Autonomous deploy agents</li>
+<li>Merging unreviewed AI-generated auth/payment code</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div class="section">
+<h2>Governance Controls Stack</h2>
+<table>
+<tr><th>Control</th><th>Implementation</th><th>NL2SQL example</th></tr>
+<tr><td>Approved tool list</td><td>IT maintains registry</td><td>Internal app OK; random GPT plugins not</td></tr>
+<tr><td>Data classification</td><td>Public / internal / confidential / PII</td><td>PII questions → stricter ACL</td></tr>
+<tr><td>Human review gates</td><td>PR policy, SQL approval</td><td>Finance queries → manager OK</td></tr>
+<tr><td>Eval CI</td><td>Block deploy on regression</td><td>Golden 50 SQL cases</td></tr>
+<tr><td>Audit logging</td><td>Central log store</td><td>question + sql + user_id</td></tr>
+</table>
+</div>
+
+<div class="section">
+<h2>Shadow AI — Failure → Fix</h2>
+<div class="error-box"><h4>❌ Failure</h4>
+<p>Developers use personal ChatGPT with production schema screenshots. Data leaves country. No contract, no audit.</p></div>
+<div class="success-box"><h4>✅ Fix</h4>
+<ol>
+<li>Publish approved tools (enterprise API, internal NL2SQL)</li>
+<li>Training: this presentation + guide</li>
+<li>Make safe path easier than shadow path</li>
+<li>Secret scanning on repos</li>
+</ol></div>
+</div>
+
+<div class="takeaway"><h3>Key Takeaway</h3>
+<p>Good governance enables productivity — it doesn't block it. Give developers safe paths, not just rules.</p></div>
+<div class="chapter-nav"><a href="chapter17.html">← Previous</a><a href="index.html">🏠 Home</a><a href="chapter19.html">Next Chapter →</a></div>
+        </main>
+        <footer class="footer">
+            <p>From Prompt Engineering to Context Engineering — Developer Learning Guide</p>
+            <p>Chapter 18 of 25 · Prepared for Sakib Hasan · June 2026</p>
+        </footer>
+    </div>
+    <script src="js/app.js"></script>
+</body>
+</html>

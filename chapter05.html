@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 5: Why Prompting Alone Fails</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="reading-progress"></div>
+    <button class="mobile-menu-toggle" onclick="toggleMobileMenu()" aria-label="Toggle menu">☰</button>
+    <div class="container">
+        <header class="header">
+            <h1>Chapter 5: Why Prompting Alone Fails</h1>
+            <p class="subtitle">Advanced: failure taxonomy, 3 case studies, context rot, decision tree, metrics.</p>
+        </header>
+        <nav class="nav-sidebar" id="nav-sidebar">
+            <div class="nav-brand">CONTEXT ENGINEERING 2026</div>
+            <ul>
+                <li><a href="index.html">🏠 Home</a></li>
+                <li><a href="chapter01.html">🚀 Ch1: Introduction</a></li>
+                <li><a href="chapter02.html">🧠 Ch2: LLM Recap</a></li>
+                <li><a href="chapter03.html">✍️ Ch3: Prompt Basics</a></li>
+                <li><a href="chapter04.html">🎯 Ch4: Advanced Prompts</a></li>
+                <li><a href="chapter05.html" class="active">⚠️ Ch5: Why Prompts Fail</a></li>
+                <li><a href="chapter06.html">🏗️ Ch6: Context Engineering</a></li>
+                <li><a href="chapter07.html">📚 Ch7: RAG</a></li>
+                <li><a href="chapter08.html">🔧 Ch8: Tools & MCP</a></li>
+                <li><a href="chapter09.html">🤖 Ch9: AI Agents</a></li>
+                <li><a href="chapter10.html">👥 Ch10: Multi-Agent</a></li>
+                <li><a href="chapter11.html">🔄 Ch11: AI SDLC</a></li>
+                <li><a href="chapter12.html">⚡ Ch12: Productivity</a></li>
+                <li><a href="chapter13.html">🛠️ Ch13: AI Tools</a></li>
+                <li><a href="chapter14.html">🎨 Ch14: Vibe Coding</a></li>
+                <li><a href="chapter15.html">🗄️ Ch15: NL-to-SQL</a></li>
+                <li><a href="chapter16.html">📊 Ch16: Evals</a></li>
+                <li><a href="chapter17.html">🔒 Ch17: Security</a></li>
+                <li><a href="chapter18.html">🏢 Ch18: Governance</a></li>
+                <li><a href="chapter19.html">🔮 Ch19: Future</a></li>
+                <li><a href="chapter20.html">🎤 Ch20: Present</a></li>
+                <li><a href="chapter21.html">⚖️ Ch21: Prompt vs Context</a></li>
+                <li><a href="chapter22.html">⚡ Ch22: Productivity Paradox</a></li>
+                <li><a href="chapter23.html">👁️ Ch23: Supervisory Eng.</a></li>
+                <li><a href="chapter24.html">📉 Ch24: Context Debt</a></li>
+                <li><a href="chapter25.html">🔬 Ch25: How LLMs Work</a></li>
+            </ul>
+        </nav>
+        <main class="main-content">
+            
+            <div class="chapter-header">
+                <h1>⚠️ Chapter 5: Why Prompting Alone Fails</h1>
+                <p class="chapter-meta">Advanced: failure taxonomy, 3 case studies, context rot, decision tree, metrics.</p>
+            </div><div class="chapter-nav"><a href="chapter04.html">← Previous</a><a href="index.html">🏠 Home</a><a href="chapter06.html">Next Chapter →</a></div>
+<div class="tagline-banner" style="text-align:left;margin-bottom:1.5rem">
+<strong>From Prompt Engineering to Context Engineering</strong><br>
+<span style="font-size:.95rem;color:#4338ca">How Developers Should Build, Use, and Control AI in 2026</span>
+<div style="margin-top:.75rem;font-size:.9rem;color:#334155">
+📍 <strong>Chapter 5</strong> · Phase: <strong>The Wall</strong><br>
+Why AI fails despite good prompts — the pivot point of your presentation.
+</div>
+</div>
+<div class="diagram-section">
+<h3>Your Presentation Journey (Chapters 2–10)</h3>
+<div style="overflow-x:auto;padding:.5rem 0;font-size:.82rem;line-height:2"><span style="color:#64748b">Ch2 LLM Recap</span> → <span style="color:#64748b">Ch3 Prompts</span> → <span style="color:#64748b">Ch4 Advanced Prompts</span> → <span style="font-weight:700;color:#4f46e5">Ch5 Why Prompts Fail</span> → <span style="color:#64748b">Ch6 Context Engineering</span> → <span style="color:#64748b">Ch7 RAG</span> → <span style="color:#64748b">Ch8 Tools & MCP</span> → <span style="color:#64748b">Ch9 Agents</span> → <span style="color:#64748b">Ch10 Multi-Agent</span></div>
+<p style="font-size:.88rem;color:#64748b;margin-top:.5rem">Prompting is how we talk to AI. Context engineering is how we make AI useful. Chapters 7–10 show how to <em>build</em> applications (NL2SQL, chatbots, coding assistants) on top.</p>
+</div><div class="objectives"><h3>🎯 Learning Objectives</h3><ul><li>Classify AI failures by root cause — not just 'bad output'</li><li>Prove with examples that instruction quality cannot replace missing facts</li><li>Recognize context rot, stale knowledge, and permission-blind generation</li><li>Use a decision tree: when to keep prompting vs engineer context</li><li>Quantify the cost of prompt-stuffing anti-patterns</li></ul></div>
+<div class="section">
+<h2>The Senior-Level Problem Statement</h2>
+<div class="quote-block">The danger is not that AI writes bad code. The danger is that AI writes <em>believable</em> code that passes casual review.</div>
+<p>Prompt engineering optimizes <strong>how instructions are written</strong>. It cannot create facts that were never retrieved, validated, or authorized. Senior teams stop asking "how do we prompt better?" and start asking "what must the system know?"</p>
+</div>
+
+<div class="section">
+<h2>Failure Taxonomy by Root Cause</h2>
+<div class="diagram-container"><div class="mermaid">
+mindmap
+  root((AI Failure))
+    Missing Facts
+      No schema
+      No business rules
+      No permissions
+    Wrong Facts
+      Stale docs
+      Conflicting definitions
+      Outdated APIs
+    Reasoning
+      Wrong JOIN logic
+      Off-by-one
+      Race assumptions
+    Behavior
+      Sycophancy
+      Scope creep
+      Overconfidence
+    System
+      No validation
+      No evals
+      Prompt injection
+</div></div>
+<table>
+<tr><th>Root cause</th><th>Prompting alone?</th><th>Required fix</th></tr>
+<tr><td>Missing schema</td><td>❌ Cannot invent correctly</td><td>RAG / schema tool</td></tr>
+<tr><td>Ambiguous business term</td><td>⚠️ Can ask clarifying question</td><td>Business glossary + intent classifier</td></tr>
+<tr><td>Stale API docs</td><td>❌ Training cutoff</td><td>Retrieve current docs</td></tr>
+<tr><td>User lacks permission</td><td>❌ Model doesn't know user</td><td>Auth-aware retrieval + column ACL</td></tr>
+<tr><td>SQL injection in generated code</td><td>⚠️ Partial — "use parameterized queries"</td><td>Linter + security review + tests</td></tr>
+<tr><td>Malicious doc in RAG</td><td>❌</td><td>Injection defenses (Ch 17)</td></tr>
+</table>
+</div>
+
+<div class="section">
+<h2>Case Study 1: Believable Wrong SQL (Expanded)</h2>
+<p><strong>User:</strong> Show unpaid students.</p>
+<div class="code-block"><button class="copy-btn">Copy</button><pre><code>SELECT *
+FROM student
+WHERE invoice_status = 'unpaid';</code></pre></div>
+<div class="diagram-section">
+<h3>Failure layer analysis</h3>
+<table>
+<tr><th>Layer</th><th>What failed</th><th>Why it looks correct</th><th>Production fix</th></tr>
+<tr><td>Schema</td><td><code class="inline-code">student</code>, <code class="inline-code">invoice_status</code></td><td>Common naming patterns</td><td>Retrieve DDL; schema validator</td></tr>
+<tr><td>Semantics</td><td>No join to invoices</td><td>Denormalized designs exist</td><td>Join path from relationship metadata</td></tr>
+<tr><td>Business</td><td>"Unpaid" undefined</td><td>English maps to one column</td><td>Glossary: overdue vs unpaid vs partial</td></tr>
+<tr><td>Security</td><td><code class="inline-code">SELECT *</code></td><td>Fastest answer</td><td>Column allowlist per role</td></tr>
+<tr><td>Ops</td><td>No LIMIT</td><td>Not visible in demo</td><td>Enforce LIMIT in validator</td></tr>
+</table>
+</div>
+</div>
+
+<div class="section">
+<h2>Case Study 2: Ambiguous Metric — Retention Rate</h2>
+<p><strong>User:</strong> Show retention rate for fall term by department.</p>
+<div class="error-box"><h4>Minimum facts required (none in prompt)</h4>
+<ul>
+<li>Retention = enrolled fall → enrolled spring? or fall → graduated?</li>
+<li>Exclude transfers? withdrawals? leaves?</li>
+<li>Department = academic dept or cost center?</li>
+<li>Fall term ID vs date range in <code class="inline-code">terms</code> table?</li>
+</ul></div>
+<div class="tab-group" data-tab-group="retention">
+<div class="tab-buttons">
+<button class="active" data-tab="weak">❌ Prompt-only guess</button>
+<button data-tab="strong">✅ Context-engineered</button>
+</div>
+<div class="tab-panel active" data-panel="weak"><div class="code-block"><button class="copy-btn">Copy</button><pre><code>SELECT department, COUNT(*) * 1.0 / LAG(COUNT(*)) OVER () AS retention_rate
+FROM enrollments
+WHERE term = 'fall'
+GROUP BY department;</code></pre></div></div>
+<div class="tab-panel" data-panel="strong"><div class="code-block"><button class="copy-btn">Copy</button><pre><code>RETRIEVED BUSINESS RULE (authoritative):
+retention_rate_fall_to_spring = 
+  count(students enrolled spring same academic_year) /
+  count(students enrolled fall same academic_year)
+Exclude: transfer_out, deceased
+Department: academic_department_id from programs table
+
+SCHEMA: enrollments, terms, programs, students ...
+→ then generate SQL</code></pre></div></div>
+</div>
+</div>
+
+<div class="section">
+<h2>Case Study 3: Stale Framework Knowledge</h2>
+<p><strong>User:</strong> Add async validation to Django form.</p>
+<div class="code-block"><button class="copy-btn">Copy</button><pre><code># ❌ Model may suggest deprecated patterns
+from django.forms import ModelForm
+
+class MyForm(ModelForm):
+    async def clean_email(self):  # Django forms are not async-native
+        ...</code></pre></div>
+<div class="success-box"><h4>Fix stack</h4>
+<ol>
+<li>Retrieve project's Django version from <code class="inline-code">pyproject.toml</code></li>
+<li>Retrieve current Django docs chunk on forms validation</li>
+<li>Run <code class="inline-code">python manage.py check</code> and tests</li>
+</ol></div>
+</div>
+
+<div class="section">
+<h2>Context Rot in Long Conversations</h2>
+<div class="diagram-container"><div class="mermaid">
+flowchart LR
+    T1[Turn 1: correct schema] --> T5[Turn 5: user changes term]
+    T5 --> T12[Turn 12: model uses wrong term from turn 3]
+    T12 --> F[Wrong SQL with confidence]
+</div></div>
+<p><strong>Fixes:</strong> explicit session state object, summarize old turns, re-inject authoritative context each turn, don't rely on chat history for facts.</p>
+</div>
+
+<div class="section">
+<h2>Prompt Stuffing Anti-Pattern</h2>
+<div class="compare-grid">
+<div class="compare-col bad">
+<h4>❌ "Just add more to the prompt"</h4>
+<ul>
+<li>Entire 500-table schema</li>
+<li>All Confluence pages</li>
+<li>Full git history</li>
+<li>Repeated "be accurate" instructions</li>
+</ul>
+<p><strong>Result:</strong> high cost, lost-in-the-middle, worse accuracy</p>
+</div>
+<div class="compare-col good">
+<h4>✅ Context engineering</h4>
+<ul>
+<li>Retrieve 5 relevant tables</li>
+<li>2 business definitions</li>
+<li>1 similar example query</li>
+<li>Safety rules at top</li>
+</ul>
+<p><strong>Result:</strong> higher accuracy, lower tokens, auditable</p>
+</div>
+</div>
+</div>
+
+<div class="section">
+<h2>Decision Tree: Prompt More or Engineer Context?</h2>
+<div class="diagram-container"><div class="mermaid">
+flowchart TD
+    START[Output wrong?] --> Q1{Missing fact not in prompt?}
+    Q1 -->|Yes| CE[Context engineering: retrieve / tool]
+    Q1 -->|No| Q2{Wrong workflow / rushed?}
+    Q2 -->|Yes| AP[Advanced prompting: plan / review]
+    Q2 -->|No| Q3{Wrong but confident?}
+    Q3 -->|Yes| VAL[Validation layer + evals]
+    Q3 -->|No| Q4{Ambiguous user intent?}
+    Q4 -->|Yes| CL[Clarify or intent classifier]
+    Q4 -->|No| ITER[Iterate prompt + measure]
+    CE --> M[Measure with evals]
+    AP --> M
+    VAL --> M
+    CL --> M
+    ITER --> M
+</div></div>
+</div>
+
+<div class="section">
+<h2>How to Know Prompting Has Failed (Metrics)</h2>
+<table>
+<tr><th>Signal</th><th>What it means</th></tr>
+<tr><td>Eval accuracy plateaus after prompt tweaks</td><td>Missing context layer</td></tr>
+<tr><td>Correct on demos, wrong in production data</td><td>Demo prompt overfit; no real schema</td></tr>
+<tr><td>Invented column names in logs</td><td>No schema binding</td></tr>
+<tr><td>Users report "sometimes wrong"</td><td>Ambiguity + no clarification path</td></tr>
+<tr><td>Token cost spikes</td><td>Stuffing instead of retrieval</td></tr>
+</table>
+</div>
+
+<div class="presentation-tip"><strong>🎤 Senior discussion:</strong> "Have you shipped a feature where AI was right in chat but wrong against real data?" — bridges to context engineering as engineering discipline, not prompt hacks.</div>
+
+<div class="section">
+<h2>The Presentation Bridge: Prompt Engineering → Context Engineering</h2>
+<div class="diagram-container"><div class="mermaid">
+flowchart LR
+    PE[Prompt Engineering<br/>Ch 3-4] --> LIMIT[Hits fact ceiling<br/>Ch 5]
+    LIMIT --> CE[Context Engineering<br/>Ch 6]
+    CE --> BUILD[RAG + Tools + Agents<br/>Ch 7-10]
+    BUILD --> APP[NL2SQL / Chat / Code apps]
+</div></div>
+<p>Your audience should feel: <em>we mastered prompts, we hit a wall, now we engineer context and build systems.</em></p>
+</div>
+
+<div class="section">
+<h2>Failure Modes When Building Applications</h2>
+<table>
+<tr><th>App type</th><th>Typical failure</th><th>Looks like prompt problem</th><th>Actual fix</th></tr>
+<tr><td>NL2SQL chatbot</td><td>Wrong JOIN</td><td>"Write better SQL prompt"</td><td>RAG schema + relationship metadata</td></tr>
+<tr><td>Doc Q&A</td><td>Outdated policy</td><td>"Be more accurate"</td><td>Re-index + version metadata</td></tr>
+<tr><td>Cursor refactor</td><td>Breaks unrelated tests</td><td>"Be careful"</td><td>@file scope + plan-first + run tests</td></tr>
+<tr><td>Copilot completion</td><td>Wrong import path</td><td>—</td><td>Verify compile; don't tab-accept blindly</td></tr>
+<tr><td>Support bot</td><td>Leaks other customer data</td><td>"Don't leak"</td><td>Retriever ACL per user_id</td></tr>
+</table>
+</div>
+
+<div class="section">
+<h2>Junior vs Senior: When Prompting Stops</h2>
+<div class="compare-grid">
+<div class="compare-col bad">
+<h4>Junior mistake</h4>
+<p>Keeps adding "be accurate", "double check", "you are expert" to prompt for 2 weeks.</p>
+</div>
+<div class="compare-col good">
+<h4>Senior move</h4>
+<p>Builds schema retriever, adds validator, writes 20 eval cases, measures accuracy — prompt becomes stable.</p>
+</div>
+</div>
+</div>
+
+<div class="takeaway"><h3>Key Takeaway</h3>
+<p>When the missing ingredient is <em>facts or permissions</em>, stop prompting. Engineer context, validation, and measurement.</p></div>
+<div class="chapter-nav"><a href="chapter04.html">← Previous</a><a href="index.html">🏠 Home</a><a href="chapter06.html">Next Chapter →</a></div>
+        </main>
+        <footer class="footer">
+            <p>From Prompt Engineering to Context Engineering — Developer Learning Guide</p>
+            <p>Chapter 5 of 25 · Prepared for Sakib Hasan · June 2026</p>
+        </footer>
+    </div>
+    <script src="js/app.js"></script>
+</body>
+</html>

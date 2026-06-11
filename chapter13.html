@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 13: ChatGPT, Claude, Cursor, Copilot & AI IDEs</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="reading-progress"></div>
+    <button class="mobile-menu-toggle" onclick="toggleMobileMenu()" aria-label="Toggle menu">☰</button>
+    <div class="container">
+        <header class="header">
+            <h1>Chapter 13: ChatGPT, Claude, Cursor, Copilot & AI IDEs</h1>
+            <p class="subtitle">Behind the scenes per tool, decision tree, deep comparison, durable skills.</p>
+        </header>
+        <nav class="nav-sidebar" id="nav-sidebar">
+            <div class="nav-brand">CONTEXT ENGINEERING 2026</div>
+            <ul>
+                <li><a href="index.html">🏠 Home</a></li>
+                <li><a href="chapter01.html">🚀 Ch1: Introduction</a></li>
+                <li><a href="chapter02.html">🧠 Ch2: LLM Recap</a></li>
+                <li><a href="chapter03.html">✍️ Ch3: Prompt Basics</a></li>
+                <li><a href="chapter04.html">🎯 Ch4: Advanced Prompts</a></li>
+                <li><a href="chapter05.html">⚠️ Ch5: Why Prompts Fail</a></li>
+                <li><a href="chapter06.html">🏗️ Ch6: Context Engineering</a></li>
+                <li><a href="chapter07.html">📚 Ch7: RAG</a></li>
+                <li><a href="chapter08.html">🔧 Ch8: Tools & MCP</a></li>
+                <li><a href="chapter09.html">🤖 Ch9: AI Agents</a></li>
+                <li><a href="chapter10.html">👥 Ch10: Multi-Agent</a></li>
+                <li><a href="chapter11.html">🔄 Ch11: AI SDLC</a></li>
+                <li><a href="chapter12.html">⚡ Ch12: Productivity</a></li>
+                <li><a href="chapter13.html" class="active">🛠️ Ch13: AI Tools</a></li>
+                <li><a href="chapter14.html">🎨 Ch14: Vibe Coding</a></li>
+                <li><a href="chapter15.html">🗄️ Ch15: NL-to-SQL</a></li>
+                <li><a href="chapter16.html">📊 Ch16: Evals</a></li>
+                <li><a href="chapter17.html">🔒 Ch17: Security</a></li>
+                <li><a href="chapter18.html">🏢 Ch18: Governance</a></li>
+                <li><a href="chapter19.html">🔮 Ch19: Future</a></li>
+                <li><a href="chapter20.html">🎤 Ch20: Present</a></li>
+                <li><a href="chapter21.html">⚖️ Ch21: Prompt vs Context</a></li>
+                <li><a href="chapter22.html">⚡ Ch22: Productivity Paradox</a></li>
+                <li><a href="chapter23.html">👁️ Ch23: Supervisory Eng.</a></li>
+                <li><a href="chapter24.html">📉 Ch24: Context Debt</a></li>
+                <li><a href="chapter25.html">🔬 Ch25: How LLMs Work</a></li>
+            </ul>
+        </nav>
+        <main class="main-content">
+            
+            <div class="chapter-header">
+                <h1>🛠️ Chapter 13: ChatGPT, Claude, Cursor, Copilot & AI IDEs</h1>
+                <p class="chapter-meta">Behind the scenes per tool, decision tree, deep comparison, durable skills.</p>
+            </div><div class="chapter-nav"><a href="chapter12.html">← Previous</a><a href="index.html">🏠 Home</a><a href="chapter14.html">Next Chapter →</a></div>
+<div class="tagline-banner" style="text-align:left;margin-bottom:1.5rem">
+<strong>From Prompt Engineering to Context Engineering</strong><br>
+<span style="font-size:.95rem;color:#4338ca">How Developers Should Build, Use, and Control AI in 2026</span>
+<div style="margin-top:.75rem;font-size:.9rem;color:#334155">
+📍 <strong>Chapter 13</strong> · Phase: <strong>Use — Right Tool, Right Task</strong><br>
+ChatGPT, Claude, Cursor, and Copilot are not interchangeable. Match the tool to the task — then always verify.
+</div>
+</div>
+<div class="diagram-section">
+<h3>Production & Delivery Journey (Chapters 11–20)</h3>
+<div style="overflow-x:auto;padding:.5rem 0;font-size:.82rem;line-height:2"><span style="color:#64748b">Ch11 SDLC</span> → <span style="color:#64748b">Ch12 Workflow</span> → <span style="font-weight:700;color:#4f46e5">Ch13 Tools</span> → <span style="color:#64748b">Ch14 Vibe Coding</span> → <span style="color:#64748b">Ch15 NL-to-SQL</span> → <span style="color:#64748b">Ch16 Evals</span> → <span style="color:#64748b">Ch17 Security</span> → <span style="color:#64748b">Ch18 Governance</span> → <span style="color:#64748b">Ch19 Future</span> → <span style="color:#64748b">Ch20 Present</span></div>
+<p style="font-size:.88rem;color:#64748b;margin-top:.5rem">Chapters 2–10 taught you to <em>build</em> AI systems. Chapters 11–20 teach you to <em>use, measure, secure, govern</em>, and <em>present</em> them professionally.</p>
+</div><div class="objectives"><h3>🎯 Learning Objectives</h3><ul><li>Compare ChatGPT, Claude, Cursor, Copilot, and custom apps</li><li>Understand what each tool sees behind the scenes</li><li>Select tools per task type with decision flowchart</li><li>Apply tool-specific best practices and failure avoidance</li><li>Focus on durable skills that outlast product updates</li></ul></div>
+<div class="section">
+<h2>What Each Tool Actually Does (Behind the Scenes)</h2>
+
+<table>
+<tr><th>Tool</th><th>What it really is</th><th>Best for juniors</th><th>Best for seniors</th><th>Failure mode</th></tr>
+<tr><td><strong>ChatGPT</strong></td><td>Chat UI over a remote LLM API</td><td>Learning, quick questions</td><td>Architecture drafts, eval design</td><td>Treating chat as source of truth</td></tr>
+<tr><td><strong>Claude</strong></td><td>Chat + API + long-context models</td><td>Explaining code, writing docs</td><td>Long doc analysis, review</td><td>Pasting prod secrets into chat</td></tr>
+<tr><td><strong>Cursor</strong></td><td>IDE + codebase index + agent loop</td><td>Small edits with @file</td><td>Plan-first multi-file with rules</td><td>Agent refactors without review</td></tr>
+<tr><td><strong>GitHub Copilot</strong></td><td>Inline completion on current file context</td><td>Boilerplate, tests</td><td>Fast typing aid only</td><td>Accepting wrong completions blindly</td></tr>
+<tr><td><strong>Your NL2SQL app</strong></td><td>Custom pipeline: RAG + LLM + validators</td><td>—</td><td>Full control, evals, governance</td><td>Prompt-only without schema RAG</td></tr>
+</table>
+<div class="diagram-container"><div class="mermaid">
+flowchart TB
+    subgraph Chat tools
+        GPT[ChatGPT] --> API1[OpenAI API + optional tools]
+        CL[Claude] --> API2[Anthropic API + projects/MCP]
+    end
+    subgraph IDE tools
+        CUR[Cursor] --> IDX[Codebase index] --> API3[LLM + agent loop]
+        COP[Copilot] --> CTX[Open file context] --> API4[Completion model]
+    end
+    subgraph Custom
+        NL[Your NL2SQL] --> RAG[RAG] --> API5[LLM + validators]
+    end
+</div></div>
+</div>
+
+<div class="section">
+<h2>Tool Selection Decision Tree</h2>
+<div class="diagram-container"><div class="mermaid">
+flowchart TD
+    Q{What do you need?}
+    Q -->|Learn concept / write doc| CHAT[ChatGPT or Claude]
+    Q -->|Multi-file code change| IDE[Cursor Agent with plan]
+    Q -->|Single line / function| COP[Copilot tab-complete]
+    Q -->|Company schema / policy| CUSTOM[Internal RAG app]
+    Q -->|Production SQL from users| NL2SQL[Controlled NL2SQL pipeline]
+    CHAT --> V[Review + verify]
+    IDE --> V
+    COP --> V
+    CUSTOM --> V
+    NL2SQL --> V
+</div></div>
+</div>
+
+<div class="section">
+<h2>Deep Comparison Table (2026)</h2>
+<table>
+<tr><th>Dimension</th><th>ChatGPT</th><th>Claude</th><th>Cursor</th><th>Copilot</th><th>Custom NL2SQL</th></tr>
+<tr><td>Codebase awareness</td><td>Manual paste</td><td>Projects upload</td><td>Full index + @file</td><td>Current file</td><td>Schema RAG only</td></tr>
+<tr><td>Multi-file edit</td><td>❌ Manual</td><td>⚠️ Limited</td><td>✅ Agent</td><td>❌</td><td>N/A</td></tr>
+<tr><td>Long documents</td><td>⚠️</td><td>✅ Strong</td><td>⚠️</td><td>❌</td><td>Chunked RAG</td></tr>
+<tr><td>Enterprise control</td><td>API + policies</td><td>API + policies</td><td>Team rules</td><td>Org settings</td><td>Full ownership</td></tr>
+<tr><td>Best prompt style</td><td>Structured sections</td><td>Long context blocks</td><td>@file + plan-first</td><td>Comment-driven</td><td>JSON + schema injection</td></tr>
+<tr><td>Biggest failure</td><td>Trust without verify</td><td>Secret paste</td><td>Agent scope creep</td><td>Wrong completion</td><td>No validator</td></tr>
+</table>
+</div>
+
+<div class="section">
+<h2>Tool-Specific Best Practices</h2>
+<h3>ChatGPT / Claude (Chat)</h3>
+<ul>
+<li>Use for: learning, architecture options, writing, debugging reasoning</li>
+<li>Structure: role + task + context + constraints + output format</li>
+<li>Never: paste production secrets, full customer DB, unchecked merge to prod</li>
+</ul>
+<h3>Cursor (AI IDE)</h3>
+<ul>
+<li>Use <code class="inline-code">.cursor/rules</code> for project conventions</li>
+<li>Ask mode for plan; Agent for execution after approval</li>
+<li>Scope: <code class="inline-code">@file</code> / <code class="inline-code">@folder</code> — never "fix whole repo"</li>
+<li>Review every line in diff; run tests before commit</li>
+</ul>
+<h3>GitHub Copilot</h3>
+<ul>
+<li>Great for: boilerplate, tests, repetitive patterns</li>
+<li>Verify: imports exist, API signatures match, license headers</li>
+<li>Not for: architecture decisions or security-critical auth alone</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>Failure → Fix by Tool</h2>
+<table>
+<tr><th>Tool</th><th>Failure story</th><th>Fix</th></tr>
+<tr><td>ChatGPT</td><td>Generated SQL looked correct, wrong table names</td><td>Paste schema or use internal NL2SQL with RAG</td></tr>
+<tr><td>Claude</td><td>Analyzed 200-page doc, missed contradiction on page 87</td><td>Chunk + cite sources; human verify critical facts</td></tr>
+<tr><td>Cursor</td><td>Agent refactored 15 files for 1-line bug</td><td>Plan-first, file scope, small commits</td></tr>
+<tr><td>Copilot</td><td>Suggested deprecated API</td><td>Compiler/linter catches; don't tab-accept blindly</td></tr>
+</table>
+</div>
+
+<div class="section">
+<h2>Durable Skills (Outlast Any Tool)</h2>
+<div class="overview-cards">
+<div class="card"><h3>Requirements = prompts</h3><p>Clear specs → clear AI output</p></div>
+<div class="card"><h3>Context design</h3><p>What the model must see</p></div>
+<div class="card"><h3>Verification</h3><p>Tests, validators, review</p></div>
+<div class="card"><h3>Security thinking</h3><p>Permissions, data classification</p></div>
+<div class="card"><h3>When to say no</h3><p>Reject bad AI output</p></div>
+</div>
+</div>
+
+<div class="takeaway"><h3>Key Takeaway</h3>
+<p>Tools change quarterly. Skills in context engineering, verification, and judgment are your career moat — not memorizing Cursor shortcuts.</p></div>
+<div class="chapter-nav"><a href="chapter12.html">← Previous</a><a href="index.html">🏠 Home</a><a href="chapter14.html">Next Chapter →</a></div>
+        </main>
+        <footer class="footer">
+            <p>From Prompt Engineering to Context Engineering — Developer Learning Guide</p>
+            <p>Chapter 13 of 25 · Prepared for Sakib Hasan · June 2026</p>
+        </footer>
+    </div>
+    <script src="js/app.js"></script>
+</body>
+</html>

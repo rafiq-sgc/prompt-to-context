@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 15: NL-to-SQL Production Case Study</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="reading-progress"></div>
+    <button class="mobile-menu-toggle" onclick="toggleMobileMenu()" aria-label="Toggle menu">☰</button>
+    <div class="container">
+        <header class="header">
+            <h1>Chapter 15: NL-to-SQL Production Case Study</h1>
+            <p class="subtitle">Flagship 3-stage live demo script, enterprise entities, Ch2–10 applied.</p>
+        </header>
+        <nav class="nav-sidebar" id="nav-sidebar">
+            <div class="nav-brand">CONTEXT ENGINEERING 2026</div>
+            <ul>
+                <li><a href="index.html">🏠 Home</a></li>
+                <li><a href="chapter01.html">🚀 Ch1: Introduction</a></li>
+                <li><a href="chapter02.html">🧠 Ch2: LLM Recap</a></li>
+                <li><a href="chapter03.html">✍️ Ch3: Prompt Basics</a></li>
+                <li><a href="chapter04.html">🎯 Ch4: Advanced Prompts</a></li>
+                <li><a href="chapter05.html">⚠️ Ch5: Why Prompts Fail</a></li>
+                <li><a href="chapter06.html">🏗️ Ch6: Context Engineering</a></li>
+                <li><a href="chapter07.html">📚 Ch7: RAG</a></li>
+                <li><a href="chapter08.html">🔧 Ch8: Tools & MCP</a></li>
+                <li><a href="chapter09.html">🤖 Ch9: AI Agents</a></li>
+                <li><a href="chapter10.html">👥 Ch10: Multi-Agent</a></li>
+                <li><a href="chapter11.html">🔄 Ch11: AI SDLC</a></li>
+                <li><a href="chapter12.html">⚡ Ch12: Productivity</a></li>
+                <li><a href="chapter13.html">🛠️ Ch13: AI Tools</a></li>
+                <li><a href="chapter14.html">🎨 Ch14: Vibe Coding</a></li>
+                <li><a href="chapter15.html" class="active">🗄️ Ch15: NL-to-SQL</a></li>
+                <li><a href="chapter16.html">📊 Ch16: Evals</a></li>
+                <li><a href="chapter17.html">🔒 Ch17: Security</a></li>
+                <li><a href="chapter18.html">🏢 Ch18: Governance</a></li>
+                <li><a href="chapter19.html">🔮 Ch19: Future</a></li>
+                <li><a href="chapter20.html">🎤 Ch20: Present</a></li>
+                <li><a href="chapter21.html">⚖️ Ch21: Prompt vs Context</a></li>
+                <li><a href="chapter22.html">⚡ Ch22: Productivity Paradox</a></li>
+                <li><a href="chapter23.html">👁️ Ch23: Supervisory Eng.</a></li>
+                <li><a href="chapter24.html">📉 Ch24: Context Debt</a></li>
+                <li><a href="chapter25.html">🔬 Ch25: How LLMs Work</a></li>
+            </ul>
+        </nav>
+        <main class="main-content">
+            
+            <div class="chapter-header">
+                <h1>🗄️ Chapter 15: NL-to-SQL Production Case Study</h1>
+                <p class="chapter-meta">Flagship 3-stage live demo script, enterprise entities, Ch2–10 applied.</p>
+            </div><div class="chapter-nav"><a href="chapter14.html">← Previous</a><a href="index.html">🏠 Home</a><a href="chapter16.html">Next Chapter →</a></div>
+<div class="tagline-banner" style="text-align:left;margin-bottom:1.5rem">
+<strong>From Prompt Engineering to Context Engineering</strong><br>
+<span style="font-size:.95rem;color:#4338ca">How Developers Should Build, Use, and Control AI in 2026</span>
+<div style="margin-top:.75rem;font-size:.9rem;color:#334155">
+📍 <strong>Chapter 15</strong> · Phase: <strong>Build & Demo — NL-to-SQL Case Study</strong><br>
+Your flagship live demo: naive prompt fails → context engineering succeeds. Every failure mode from Ch 2–10 in one system.
+</div>
+</div>
+<div class="diagram-section">
+<h3>Production & Delivery Journey (Chapters 11–20)</h3>
+<div style="overflow-x:auto;padding:.5rem 0;font-size:.82rem;line-height:2"><span style="color:#64748b">Ch11 SDLC</span> → <span style="color:#64748b">Ch12 Workflow</span> → <span style="color:#64748b">Ch13 Tools</span> → <span style="color:#64748b">Ch14 Vibe Coding</span> → <span style="font-weight:700;color:#4f46e5">Ch15 NL-to-SQL</span> → <span style="color:#64748b">Ch16 Evals</span> → <span style="color:#64748b">Ch17 Security</span> → <span style="color:#64748b">Ch18 Governance</span> → <span style="color:#64748b">Ch19 Future</span> → <span style="color:#64748b">Ch20 Present</span></div>
+<p style="font-size:.88rem;color:#64748b;margin-top:.5rem">Chapters 2–10 taught you to <em>build</em> AI systems. Chapters 11–20 teach you to <em>use, measure, secure, govern</em>, and <em>present</em> them professionally.</p>
+</div><div class="objectives"><h3>🎯 Learning Objectives</h3><ul><li>Explain why NL-to-SQL is the perfect presentation case study</li><li>Run the 3-stage live demo: naive → schema → full pipeline</li><li>Map each pipeline stage to chapters 2–10</li><li>Build safe prompts, validators, and permission gates</li><li>Connect to real enterprise schema patterns</li></ul></div>
+<div class="section">
+<h2>Why NL-to-SQL for This Presentation</h2>
+<p>NL-to-SQL touches <strong>every topic</strong> in your guide: prompts, context, RAG, tools, agents, evals, security. Business users ask in English; developers must control what SQL runs.</p>
+<div class="diagram-container"><div class="mermaid">
+flowchart TB
+    subgraph Chapters applied
+        C2[Ch2: model guesses] --> C5[Ch5: believable wrong SQL]
+        C6[Ch6: context bundle] --> C7[Ch7: schema RAG]
+        C8[Ch8: validate_sql tool] --> C16[Ch16: evals]
+        C17[Ch17: injection + ACL]
+    end
+    C17 --> PROD[Production NL2SQL]
+</div></div>
+</div>
+
+<div class="section">
+<h2>Stage 1 — Naive Prompt (FAILURE DEMO)</h2>
+<p><strong>Prompt:</strong> Convert to SQL: Show active students with unpaid invoices.</p>
+<div class="code-block"><button class="copy-btn">Copy</button><pre><code>-- ❌ Fluent, wrong, dangerous
+SELECT name, email
+FROM student
+WHERE status = 'active'
+  AND invoice_status = 'unpaid';</code></pre></div>
+<table>
+<tr><th>#</th><th>Problem</th><th>Audience exercise</th></tr>
+<tr><td>1</td><td>Table <code class="inline-code">student</code> vs <code class="inline-code">students</code></td><td>"What did the model assume?"</td></tr>
+<tr><td>2</td><td>Column <code class="inline-code">invoice_status</code> on wrong table</td><td>"What join is missing?"</td></tr>
+<tr><td>3</td><td><code class="inline-code">email</code> may be PII</td><td>"Who can see this column?"</td></tr>
+<tr><td>4</td><td>No LIMIT</td><td>"What happens at scale?"</td></tr>
+</table>
+<div class="error-box"><h4>Teaching line</h4>
+<p>The danger is not bad SQL — it is <strong>believable</strong> SQL.</p></div>
+</div>
+
+<div class="section">
+<h2>Stage 2 — Prompt + Schema (PARTIAL FIX)</h2>
+<div class="code-block"><button class="copy-btn">Copy</button><pre><code>Schema:
+students(id, full_name, enrollment_status)
+invoices(id, student_id, amount, paid_status, due_date)
+
+Generate read-only SQL for: active students with unpaid invoices.</code></pre></div>
+<div class="code-block"><button class="copy-btn">Copy</button><pre><code>-- Better — but still gaps
+SELECT s.full_name, i.amount
+FROM students s
+JOIN invoices i ON i.student_id = s.id
+WHERE s.enrollment_status = 'active'
+  AND i.paid_status = 'unpaid';</code></pre></div>
+<div class="warning-box"><h4>Still missing</h4>
+<ul>
+<li>Business rule: overdue vs unpaid?</li>
+<li>User permission: can analyst see all students?</li>
+<li>No validator before execution</li>
+<li>No audit log</li>
+</ul></div>
+</div>
+
+<div class="section">
+<h2>Stage 3 — Full Production Pipeline (SUCCESS DEMO)</h2>
+<div class="diagram-container"><div class="mermaid">
+flowchart TD
+    U[User question] --> AUTH[Auth + role]
+    AUTH --> INT[Intent: reporting_sql]
+    INT --> RAG[RAG: students, invoices, rules]
+    RAG --> ASM[Context bundle]
+    ASM --> LLM[LLM → JSON SQL]
+    LLM --> VAL[validate_sql]
+    VAL --> ACL[Column ACL check]
+    ACL -->|pass| EXP[Explain to user]
+    EXP --> AP{Human approve?}
+    AP -->|yes| EXE[Read-only execute]
+    AP -->|no| HOLD[Hold]
+    VAL -->|fail| REF[Refuse / clarify]
+</div></div>
+</div>
+
+<div class="section">
+<h2>Correct Production SQL</h2>
+<div class="code-block"><button class="copy-btn">Copy</button><pre><code>SELECT
+    s.id,
+    s.full_name,
+    SUM(i.amount) AS total_unpaid_amount
+FROM students s
+JOIN invoices i ON i.student_id = s.id
+WHERE s.enrollment_status = 'active'
+  AND i.paid_status = 'unpaid'
+  AND i.due_date < CURRENT_DATE
+GROUP BY s.id, s.full_name
+ORDER BY total_unpaid_amount DESC
+LIMIT 100;</code></pre></div>
+</div>
+
+<div class="section">
+<h2>Live Demo Script (8 minutes)</h2>
+<table>
+<tr><th>Min</th><th>Action</th><th>Say this</th></tr>
+<tr><td>0–2</td><td>Stage 1 naive prompt in ChatGPT</td><td>"Looks fine. Who spots the first wrong assumption?"</td></tr>
+<tr><td>2–4</td><td>Stage 2 with schema pasted</td><td>"Better prompt helps — but is this production-ready?"</td></tr>
+<tr><td>4–7</td><td>Stage 3 diagram + correct SQL</td><td>"Context engineering: retrieve, validate, approve, execute."</td></tr>
+<tr><td>7–8</td><td>Destructive query test</td><td>"Delete inactive students" → must refuse</td></tr>
+</table>
+</div>
+
+<div class="section">
+<h2>Enterprise Entity Pattern (Multi-Table)</h2>
+<p>Real systems have entity groups — e.g. <code class="inline-code">student</code> + <code class="inline-code">student_holds</code> + <code class="inline-code">invoices</code>. RAG must retrieve <strong>relationship graph</strong>, not isolated tables.</p>
+<div class="code-block"><button class="copy-btn">Copy</button><pre><code>ENTITY GROUP: student_financials
+TABLES: students, invoices, payments, holds
+JOINS:
+  invoices.student_id → students.id
+  payments.invoice_id → invoices.id
+RULES:
+  unpaid = paid_status='unpaid' AND due_date < today
+  active = enrollment_status='active' AND no active hold type 'financial'</code></pre></div>
+</div>
+
+<div class="section">
+<h2>Failure → Fix Summary</h2>
+<table>
+<tr><th>Failure</th><th>Fix from guide</th></tr>
+<tr><td>Hallucinated columns</td><td>Ch 7 RAG + Ch 8 validate_sql</td></tr>
+<tr><td>Wrong business logic</td><td>Ch 6 business rules in context</td></tr>
+<tr><td>PII exposure</td><td>Ch 6 ACL + Ch 17 security</td></tr>
+<tr><td>Destructive SQL</td><td>Ch 3 constraints + validator</td></tr>
+<tr><td>Regression on prompt change</td><td>Ch 16 evals</td></tr>
+</table>
+</div>
+
+<div class="presentation-tip"><strong>🎤 This is your most important demo.</strong> Practice 3 times. Have screenshots as backup if live API fails.</div>
+<div class="takeaway"><h3>Key Takeaway</h3>
+<p>Production NL-to-SQL is not a prompt. It is the full Ch 2–10 stack: context, RAG, tools, validation, human control.</p></div>
+<div class="chapter-nav"><a href="chapter14.html">← Previous</a><a href="index.html">🏠 Home</a><a href="chapter16.html">Next Chapter →</a></div>
+        </main>
+        <footer class="footer">
+            <p>From Prompt Engineering to Context Engineering — Developer Learning Guide</p>
+            <p>Chapter 15 of 25 · Prepared for Sakib Hasan · June 2026</p>
+        </footer>
+    </div>
+    <script src="js/app.js"></script>
+</body>
+</html>

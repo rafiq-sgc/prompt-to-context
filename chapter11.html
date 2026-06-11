@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 11: AI-Augmented SDLC</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="reading-progress"></div>
+    <button class="mobile-menu-toggle" onclick="toggleMobileMenu()" aria-label="Toggle menu">☰</button>
+    <div class="container">
+        <header class="header">
+            <h1>Chapter 11: AI-Augmented SDLC</h1>
+            <p class="subtitle">AI per SDLC phase, human checkpoints, NL2SQL through lifecycle, failure→fix.</p>
+        </header>
+        <nav class="nav-sidebar" id="nav-sidebar">
+            <div class="nav-brand">CONTEXT ENGINEERING 2026</div>
+            <ul>
+                <li><a href="index.html">🏠 Home</a></li>
+                <li><a href="chapter01.html">🚀 Ch1: Introduction</a></li>
+                <li><a href="chapter02.html">🧠 Ch2: LLM Recap</a></li>
+                <li><a href="chapter03.html">✍️ Ch3: Prompt Basics</a></li>
+                <li><a href="chapter04.html">🎯 Ch4: Advanced Prompts</a></li>
+                <li><a href="chapter05.html">⚠️ Ch5: Why Prompts Fail</a></li>
+                <li><a href="chapter06.html">🏗️ Ch6: Context Engineering</a></li>
+                <li><a href="chapter07.html">📚 Ch7: RAG</a></li>
+                <li><a href="chapter08.html">🔧 Ch8: Tools & MCP</a></li>
+                <li><a href="chapter09.html">🤖 Ch9: AI Agents</a></li>
+                <li><a href="chapter10.html">👥 Ch10: Multi-Agent</a></li>
+                <li><a href="chapter11.html" class="active">🔄 Ch11: AI SDLC</a></li>
+                <li><a href="chapter12.html">⚡ Ch12: Productivity</a></li>
+                <li><a href="chapter13.html">🛠️ Ch13: AI Tools</a></li>
+                <li><a href="chapter14.html">🎨 Ch14: Vibe Coding</a></li>
+                <li><a href="chapter15.html">🗄️ Ch15: NL-to-SQL</a></li>
+                <li><a href="chapter16.html">📊 Ch16: Evals</a></li>
+                <li><a href="chapter17.html">🔒 Ch17: Security</a></li>
+                <li><a href="chapter18.html">🏢 Ch18: Governance</a></li>
+                <li><a href="chapter19.html">🔮 Ch19: Future</a></li>
+                <li><a href="chapter20.html">🎤 Ch20: Present</a></li>
+                <li><a href="chapter21.html">⚖️ Ch21: Prompt vs Context</a></li>
+                <li><a href="chapter22.html">⚡ Ch22: Productivity Paradox</a></li>
+                <li><a href="chapter23.html">👁️ Ch23: Supervisory Eng.</a></li>
+                <li><a href="chapter24.html">📉 Ch24: Context Debt</a></li>
+                <li><a href="chapter25.html">🔬 Ch25: How LLMs Work</a></li>
+            </ul>
+        </nav>
+        <main class="main-content">
+            
+            <div class="chapter-header">
+                <h1>🔄 Chapter 11: AI-Augmented SDLC</h1>
+                <p class="chapter-meta">AI per SDLC phase, human checkpoints, NL2SQL through lifecycle, failure→fix.</p>
+            </div><div class="chapter-nav"><a href="chapter10.html">← Previous</a><a href="index.html">🏠 Home</a><a href="chapter12.html">Next Chapter →</a></div>
+<div class="tagline-banner" style="text-align:left;margin-bottom:1.5rem">
+<strong>From Prompt Engineering to Context Engineering</strong><br>
+<span style="font-size:.95rem;color:#4338ca">How Developers Should Build, Use, and Control AI in 2026</span>
+<div style="margin-top:.75rem;font-size:.9rem;color:#334155">
+📍 <strong>Chapter 11</strong> · Phase: <strong>Use — AI Across the SDLC</strong><br>
+AI is not only for coding. Using it across requirements → design → test → deploy prevents building the wrong thing faster.
+</div>
+</div>
+<div class="diagram-section">
+<h3>Production & Delivery Journey (Chapters 11–20)</h3>
+<div style="overflow-x:auto;padding:.5rem 0;font-size:.82rem;line-height:2"><span style="font-weight:700;color:#4f46e5">Ch11 SDLC</span> → <span style="color:#64748b">Ch12 Workflow</span> → <span style="color:#64748b">Ch13 Tools</span> → <span style="color:#64748b">Ch14 Vibe Coding</span> → <span style="color:#64748b">Ch15 NL-to-SQL</span> → <span style="color:#64748b">Ch16 Evals</span> → <span style="color:#64748b">Ch17 Security</span> → <span style="color:#64748b">Ch18 Governance</span> → <span style="color:#64748b">Ch19 Future</span> → <span style="color:#64748b">Ch20 Present</span></div>
+<p style="font-size:.88rem;color:#64748b;margin-top:.5rem">Chapters 2–10 taught you to <em>build</em> AI systems. Chapters 11–20 teach you to <em>use, measure, secure, govern</em>, and <em>present</em> them professionally.</p>
+</div><div class="objectives"><h3>🎯 Learning Objectives</h3><ul><li>Map AI assistance to each SDLC phase with concrete prompts</li><li>Define non-negotiable human checkpoints per phase</li><li>Avoid the 'AI only at coding' trap with visual workflow</li><li>Apply AI-augmented SDLC to NL2SQL and feature development</li><li>Teach juniors where AI helps vs where humans must own decisions</li></ul></div>
+<div class="section">
+<h2>Why SDLC Still Matters in 2026</h2>
+<p>AI can draft code in seconds — but if requirements are wrong, design is weak, or tests are missing, you ship <strong>wrong features correctly implemented</strong>. The SDLC is not dead; effort shifts from typing to thinking, reviewing, and controlling.</p>
+<div class="quote-block">AI does not remove the SDLC. It accelerates each phase — and multiplies damage when phases are skipped.</div>
+</div>
+
+<div class="section">
+<h2>Traditional vs AI-Augmented SDLC</h2>
+<div class="diagram-container"><div class="mermaid">
+flowchart TB
+    subgraph Traditional
+        R1[Requirements] --> D1[Design] --> C1[Code] --> T1[Test] --> RV1[Review] --> DP1[Deploy] --> M1[Maintain]
+    end
+    subgraph AI-Augmented
+        R2[Requirements] -->|AI clarify| D2[Design]
+        D2 -->|AI options + trade-offs| C2[Code draft]
+        C2 -->|AI tests| T2[Test]
+        T2 -->|AI review assist| RV2[Human review]
+        RV2 --> DP2[Deploy] --> M2[Monitor + AI debug assist]
+    end
+</div></div>
+</div>
+
+<div class="section">
+<h2>AI Per Phase — What to Do, What Not to Do</h2>
+<table>
+<tr><th>Phase</th><th>✅ AI helps with</th><th>❌ AI cannot replace</th><th>Example prompt</th></tr>
+<tr><td><strong>Requirements</strong></td><td>Clarifying questions, user stories, edge cases</td><td>Stakeholder sign-off, priority calls</td><td>"List ambiguities in this requirement before we design"</td></tr>
+<tr><td><strong>Design</strong></td><td>3 architecture options, trade-offs, diagrams</td><td>Final architecture approval</td><td>"Propose 3 designs with security and ops trade-offs"</td></tr>
+<tr><td><strong>Development</strong></td><td>First draft, boilerplate, refactors</td><td>Understanding every line merged</td><td>"Implement step 1 only; no unrelated changes"</td></tr>
+<tr><td><strong>Testing</strong></td><td>Test cases, mocks, edge scenarios</td><td>Defining what "correct" means</td><td>"Generate tests: happy path, auth, invalid input"</td></tr>
+<tr><td><strong>Review</strong></td><td>Risk list, security scan suggestions</td><td>Merge approval, accountability</td><td>"Review as senior engineer; list CRITICAL first"</td></tr>
+<tr><td><strong>Deploy</strong></td><td>Runbook draft, rollback checklist</td><td>Production go/no-go decision</td><td>"Draft deployment checklist and rollback steps"</td></tr>
+<tr><td><strong>Maintenance</strong></td><td>Log analysis, incident hypotheses</td><td>Incident ownership, postmortem accountability</td><td>"Given these logs, list top 3 root cause hypotheses"</td></tr>
+</table>
+</div>
+
+<div class="section">
+<h2>Human Checkpoints (Non-Negotiable)</h2>
+<div class="diagram-container"><div class="mermaid">
+flowchart LR
+    REQ[Requirements signed] --> DES[Design approved]
+    DES --> CODE[Code reviewed]
+    CODE --> TEST[Tests pass]
+    TEST --> SEC[Security checked]
+    SEC --> DEP[Deploy approved]
+    style REQ fill:#ecfdf5
+    style DES fill:#ecfdf5
+    style CODE fill:#ecfdf5
+    style TEST fill:#ecfdf5
+    style SEC fill:#ecfdf5
+    style DEP fill:#ecfdf5
+</div></div>
+<ul class="checklist">
+<li>Before implementation: design approved by a human</li>
+<li>Before DB execution: SQL + permissions approved (NL2SQL)</li>
+<li>Before merge: tests green + human PR review</li>
+<li>Before production: rollback plan exists</li>
+<li>After release: monitor + user feedback loop</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>Example: Reporting API (Full SDLC Prompts)</h2>
+<div class="tab-group" data-tab-group="sdlc-api">
+<div class="tab-buttons">
+<button class="active" data-tab="weak">Phase 1 — Requirements</button>
+<button data-tab="strong">Phase 2 — Design</button>
+</div>
+<div class="tab-panel active" data-panel="weak"><div class="code-block"><button class="copy-btn">Copy</button><pre><code>Act as a senior backend engineer.
+I need a reporting API for student enrollment metrics.
+List: clarifying questions, ambiguities, stakeholders to confirm with.
+Do not design or code yet.</code></pre></div></div>
+<div class="tab-panel" data-panel="strong"><div class="code-block"><button class="copy-btn">Copy</button><pre><code>Given approved requirements: [paste]
+Propose API design, DB strategy, caching, auth model.
+List security risks and test strategy.
+Do not code yet.</code></pre></div></div>
+</div>
+<div class="code-block"><button class="copy-btn">Copy</button><pre><code>Phase 3 — Implement (after design approval):
+Implement only the GET /reports/enrollment endpoint.
+Follow existing project patterns in @folder src/reports.
+Include unit tests.
+
+Phase 4 — Review:
+Review the PR diff for security, N+1 queries, missing auth checks.</code></pre></div>
+</div>
+
+<div class="section">
+<h2>NL2SQL Feature Through SDLC Lens</h2>
+<div class="diagram-container"><div class="mermaid">
+flowchart TD
+    REQ[Req: NL chat for finance reports] --> DES[Design: RAG + validator + ACL]
+    DES --> DEV[Dev: pipeline + prompts]
+    DEV --> TEST[Test: golden eval dataset]
+    TEST --> RV[Review: security + SQL injection]
+    RV --> DEP[Deploy: read-only DB role]
+    DEP --> MON[Monitor: hallucination rate metric]
+</div></div>
+</div>
+
+<div class="section">
+<h2>Failure → Fix: SDLC</h2>
+<div class="error-box"><h4>❌ Failure</h4>
+<p>Team skips design, asks Cursor to "build NL2SQL feature". Ships prompt-only chatbot. First week: wrong revenue numbers in executive dashboard.</p></div>
+<div class="success-box"><h4>✅ Fix</h4>
+<ol>
+<li>Requirements: define "revenue", ACL, read-only policy</li>
+<li>Design: context engineering architecture (Ch 6–10)</li>
+<li>Evals before launch (Ch 16)</li>
+<li>Human gate on every generated SQL</li>
+</ol></div>
+</div>
+
+<div class="presentation-tip"><strong>🎤 For all developers:</strong> Ask "Where in our SDLC do we use AI today?" — usually only coding. Show the expanded diagram. One slide changes team behavior.</div>
+<div class="takeaway"><h3>Key Takeaway</h3>
+<p>Use AI in every SDLC phase with human checkpoints — especially before NL2SQL or any AI feature reaches production.</p></div>
+<div class="chapter-nav"><a href="chapter10.html">← Previous</a><a href="index.html">🏠 Home</a><a href="chapter12.html">Next Chapter →</a></div>
+        </main>
+        <footer class="footer">
+            <p>From Prompt Engineering to Context Engineering — Developer Learning Guide</p>
+            <p>Chapter 11 of 25 · Prepared for Sakib Hasan · June 2026</p>
+        </footer>
+    </div>
+    <script src="js/app.js"></script>
+</body>
+</html>

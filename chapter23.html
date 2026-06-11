@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 23: Supervisory Engineering</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="reading-progress"></div>
+    <button class="mobile-menu-toggle" onclick="toggleMobileMenu()" aria-label="Toggle menu">☰</button>
+    <div class="container">
+        <header class="header">
+            <h1>Chapter 23: Supervisory Engineering</h1>
+            <p class="subtitle">The new developer skill: direct, review, verify, own — junior and senior lessons.</p>
+        </header>
+        <nav class="nav-sidebar" id="nav-sidebar">
+            <div class="nav-brand">CONTEXT ENGINEERING 2026</div>
+            <ul>
+                <li><a href="index.html">🏠 Home</a></li>
+                <li><a href="chapter01.html">🚀 Ch1: Introduction</a></li>
+                <li><a href="chapter02.html">🧠 Ch2: LLM Recap</a></li>
+                <li><a href="chapter03.html">✍️ Ch3: Prompt Basics</a></li>
+                <li><a href="chapter04.html">🎯 Ch4: Advanced Prompts</a></li>
+                <li><a href="chapter05.html">⚠️ Ch5: Why Prompts Fail</a></li>
+                <li><a href="chapter06.html">🏗️ Ch6: Context Engineering</a></li>
+                <li><a href="chapter07.html">📚 Ch7: RAG</a></li>
+                <li><a href="chapter08.html">🔧 Ch8: Tools & MCP</a></li>
+                <li><a href="chapter09.html">🤖 Ch9: AI Agents</a></li>
+                <li><a href="chapter10.html">👥 Ch10: Multi-Agent</a></li>
+                <li><a href="chapter11.html">🔄 Ch11: AI SDLC</a></li>
+                <li><a href="chapter12.html">⚡ Ch12: Productivity</a></li>
+                <li><a href="chapter13.html">🛠️ Ch13: AI Tools</a></li>
+                <li><a href="chapter14.html">🎨 Ch14: Vibe Coding</a></li>
+                <li><a href="chapter15.html">🗄️ Ch15: NL-to-SQL</a></li>
+                <li><a href="chapter16.html">📊 Ch16: Evals</a></li>
+                <li><a href="chapter17.html">🔒 Ch17: Security</a></li>
+                <li><a href="chapter18.html">🏢 Ch18: Governance</a></li>
+                <li><a href="chapter19.html">🔮 Ch19: Future</a></li>
+                <li><a href="chapter20.html">🎤 Ch20: Present</a></li>
+                <li><a href="chapter21.html">⚖️ Ch21: Prompt vs Context</a></li>
+                <li><a href="chapter22.html">⚡ Ch22: Productivity Paradox</a></li>
+                <li><a href="chapter23.html" class="active">👁️ Ch23: Supervisory Eng.</a></li>
+                <li><a href="chapter24.html">📉 Ch24: Context Debt</a></li>
+                <li><a href="chapter25.html">🔬 Ch25: How LLMs Work</a></li>
+            </ul>
+        </nav>
+        <main class="main-content">
+            
+            <div class="chapter-header">
+                <h1>👁️ Chapter 23: Supervisory Engineering</h1>
+                <p class="chapter-meta">The new developer skill: direct, review, verify, own — junior and senior lessons.</p>
+            </div><div class="chapter-nav"><a href="chapter22.html">← Previous</a><a href="index.html">🏠 Home</a><a href="chapter24.html">Next Chapter →</a></div>
+<div class="tagline-banner" style="text-align:left;margin-bottom:1.5rem">
+<strong>From Prompt Engineering to Context Engineering</strong><br>
+<span style="font-size:.95rem;color:#4338ca">How Developers Should Build, Use, and Control AI in 2026</span>
+<div style="margin-top:.75rem;font-size:.9rem;color:#334155">
+📍 <strong>Chapter 23</strong> · Phase: <strong>Advanced — Supervisory Engineering</strong><br>
+Developers are becoming supervisors of AI-generated work. This is the defining skill of the AI-native developer in 2026.
+</div>
+</div>
+<div class="diagram-section">
+<h3>Advanced Topics (Chapters 22–24)</h3>
+<div style="overflow-x:auto;padding:.5rem 0;font-size:.82rem;line-height:2"><span style="color:#64748b">Ch22 Productivity Paradox</span> → <span style="font-weight:700;color:#4f46e5">Ch23 Supervisory Engineering</span> → <span style="color:#64748b">Ch24 Context Debt</span></div>
+<p style="font-size:.88rem;color:#64748b;margin-top:.5rem">These chapters answer the hard questions seniors ask: <em>Why doesn't AI always speed us up? What is my new role? Why does our AI know nothing about our business?</em></p>
+</div><div class="objectives"><h3>🎯 Learning Objectives</h3><ul><li>Define supervisory engineering and the 2026 role shift</li><li>List the seven supervisor skills every developer needs</li><li>Apply junior vs senior supervisory mindsets</li><li>Use the junior-then-senior-reviewer prompt pattern</li><li>Connect supervision to NL2SQL, Cursor, and production ownership</li></ul></div>
+<div class="section">
+<h2>The New Developer Skill</h2>
+<div class="quote-block">The future developer is not only a coder. The future developer is an <strong>AI supervisor</strong>.</div>
+<p>Research on the 2026 developer workforce describes a shift to <strong>supervisory engineering work</strong>: less time typing implementations, more time directing, evaluating, and correcting AI output. This is not a downgrade — it is a <em>higher-leverage</em> role when done well.</p>
+<div class="diagram-container"><div class="mermaid">
+pie title Developer effort shift (AI-native teams)
+    "Directing and planning" : 25
+    "Reviewing and correcting AI" : 30
+    "Testing and verification" : 20
+    "Writing code (often with AI)" : 25
+</div></div>
+</div>
+
+<div class="section">
+<h2>What Is Supervisory Engineering?</h2>
+<p><strong>Supervisory engineering</strong> means treating the LLM as a capable but unreliable team member: you assign work clearly, inspect output critically, reject bad work, and remain accountable for what ships.</p>
+<div class="diagram-container"><div class="mermaid">
+flowchart LR
+    DEV[Developer supervisor] -->|clear direction| AI[LLM worker]
+    AI -->|draft output| DEV
+    DEV -->|review| Q{Accept?}
+    Q -->|No| FIX[Correct / re-prompt / fix]
+    Q -->|Yes| TEST[Test and ship]
+    FIX --> AI
+</div></div>
+</div>
+
+<div class="section">
+<h2>The Seven Supervisor Skills</h2>
+<table>
+<tr><th>#</th><th>Skill</th><th>What it means</th><th>Failure if missing</th></tr>
+<tr><td>1</td><td><strong>Give clear direction</strong></td><td>Role, task, constraints, output format</td><td>AI guesses scope</td></tr>
+<tr><td>2</td><td><strong>Review AI output</strong></td><td>Read every line before merge</td><td>Believable bugs ship</td></tr>
+<tr><td>3</td><td><strong>Detect hallucinations</strong></td><td>Verify APIs, schema, facts</td><td>Invented tables in SQL</td></tr>
+<tr><td>4</td><td><strong>Correct mistakes</strong></td><td>Fix or re-prompt with specifics</td><td>Wrong patterns spread</td></tr>
+<tr><td>5</td><td><strong>Verify with tests</strong></td><td>Automated + edge cases</td><td>Demo-only correctness</td></tr>
+<tr><td>6</td><td><strong>Protect architecture</strong></td><td>Reject scope creep refactors</td><td>Inconsistent system design</td></tr>
+<tr><td>7</td><td><strong>Control scope</strong></td><td>One step at a time, plan-first</td><td>500-line agent diffs</td></tr>
+</table>
+</div>
+
+<div class="section">
+<h2>Junior Developer Lesson</h2>
+<div class="compare-grid">
+<div class="compare-col bad">
+<h4>❌ Wrong mindset</h4>
+<p><em>"AI will do everything for me."</em></p>
+<ul>
+<li>Merge without reading</li>
+<li>Can't debug at 2am</li>
+<li>Skills stagnate</li>
+</ul>
+</div>
+<div class="compare-col good">
+<h4>✅ Right mindset</h4>
+<p><em>"AI helps me learn faster — I must understand what it generates."</em></p>
+<ul>
+<li>Ask AI to explain its code</li>
+<li>Run tests yourself</li>
+<li>Use AI as tutor + draft assistant</li>
+</ul>
+</div>
+</div>
+<p><strong>Junior supervisory habit:</strong> After every AI generation, write one sentence: "This code works because ___." If you can't, don't merge.</p>
+</div>
+
+<div class="section">
+<h2>Senior Developer Lesson</h2>
+<div class="compare-grid">
+<div class="compare-col bad">
+<h4>❌ Wrong mindset</h4>
+<p><em>"AI is only for junior boilerplate."</em></p>
+</div>
+<div class="compare-col good">
+<h4>✅ Right mindset</h4>
+<p><em>"AI helps with architecture comparison, review, test strategy, migration planning, and documentation — I supervise quality."</em></p>
+</div>
+</div>
+<table>
+<tr><th>Senior use case</th><th>Supervisory prompt pattern</th></tr>
+<tr><td>Architecture decision</td><td>3 options + trade-offs + recommendation — you decide</td></tr>
+<tr><td>Code review</td><td>AI lists risks; senior approves merge</td></tr>
+<tr><td>Migration planning</td><td>AI drafts steps; senior validates rollback</td></tr>
+<tr><td>NL2SQL system</td><td>AI drafts pipeline; senior owns evals + ACL</td></tr>
+<tr><td>Security audit</td><td>AI finds candidates; senior confirms exploitability</td></tr>
+</table>
+</div>
+
+<div class="section">
+<h2>Power Prompt: Junior Proposes, Senior Reviews</h2>
+<div class="code-block"><button class="copy-btn">Copy</button><pre><code>Act in two phases.
+
+PHASE 1 — Junior developer:
+Propose a solution for: [describe task]
+Include: approach, files to change, risks, test ideas.
+
+PHASE 2 — Senior reviewer:
+Critique the Phase 1 proposal for:
+- correctness
+- security
+- maintainability
+- scope creep
+- missing edge cases
+
+PHASE 3 — Safest implementation plan:
+Give a minimal, safest plan based on the critique.
+Do not write full code yet.</code></pre></div>
+<p>This single prompt trains <strong>supervisory thinking</strong>: generate → critique → refine. Use in ChatGPT, Claude, or Cursor Ask mode.</p>
+</div>
+
+<div class="section">
+<h2>Supervisory Engineering in Different Tools</h2>
+<table>
+<tr><th>Tool</th><th>You supervise</th><th>How</th></tr>
+<tr><td>ChatGPT / Claude</td><td>Text and code drafts</td><td>Review-first; reject vague output</td></tr>
+<tr><td>Cursor Agent</td><td>Multi-file diffs</td><td>Plan approve → scope @files → review diff</td></tr>
+<tr><td>Copilot</td><td>Inline completions</td><td>Don't tab-accept without reading</td></tr>
+<tr><td>NL2SQL app</td><td>Generated SQL</td><td>Validator + human approval gate</td></tr>
+</table>
+</div>
+
+<div class="section">
+<h2>Supervision vs Micromanagement</h2>
+<div class="diagram-container"><div class="mermaid">
+flowchart TD
+    S[Good supervision] --> S1[Clear goals]
+    S --> S2[Review outcomes]
+    S --> S3[Trust but verify]
+    M[Bad micromanagement] --> M1[Rewrite every line yourself]
+    M --> M2[Reject AI entirely]
+    M --> M3[Accept AI blindly]
+</div></div>
+<p>Supervisory engineering is the <strong>middle path</strong>: use AI fully, verify rigorously, own the result.</p>
+</div>
+
+<div class="section">
+<h2>Ownership Remains Human</h2>
+<div class="error-box"><h4>Incident scenario</h4>
+<p>AI-generated NL2SQL exposes student emails to unauthorized role. Who is responsible?</p>
+<p><strong>Answer:</strong> The developer and organization — not the model vendor. Supervisors own output.</p></div>
+</div>
+
+<div class="takeaway"><h3>Key Takeaway</h3>
+<p>Supervisory engineering is the professional response to the productivity paradox: direct AI well, evaluate critically, verify always, own completely.</p></div>
+<div class="chapter-nav"><a href="chapter22.html">← Previous</a><a href="index.html">🏠 Home</a><a href="chapter24.html">Next Chapter →</a></div>
+        </main>
+        <footer class="footer">
+            <p>From Prompt Engineering to Context Engineering — Developer Learning Guide</p>
+            <p>Chapter 23 of 25 · Prepared for Sakib Hasan · June 2026</p>
+        </footer>
+    </div>
+    <script src="js/app.js"></script>
+</body>
+</html>

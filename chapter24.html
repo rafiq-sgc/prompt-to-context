@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 24: Context Debt</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="reading-progress"></div>
+    <button class="mobile-menu-toggle" onclick="toggleMobileMenu()" aria-label="Toggle menu">☰</button>
+    <div class="container">
+        <header class="header">
+            <h1>Chapter 24: Context Debt</h1>
+            <p class="subtitle">Bad docs → bad AI — sources, NL2SQL examples, team checklist, culture link.</p>
+        </header>
+        <nav class="nav-sidebar" id="nav-sidebar">
+            <div class="nav-brand">CONTEXT ENGINEERING 2026</div>
+            <ul>
+                <li><a href="index.html">🏠 Home</a></li>
+                <li><a href="chapter01.html">🚀 Ch1: Introduction</a></li>
+                <li><a href="chapter02.html">🧠 Ch2: LLM Recap</a></li>
+                <li><a href="chapter03.html">✍️ Ch3: Prompt Basics</a></li>
+                <li><a href="chapter04.html">🎯 Ch4: Advanced Prompts</a></li>
+                <li><a href="chapter05.html">⚠️ Ch5: Why Prompts Fail</a></li>
+                <li><a href="chapter06.html">🏗️ Ch6: Context Engineering</a></li>
+                <li><a href="chapter07.html">📚 Ch7: RAG</a></li>
+                <li><a href="chapter08.html">🔧 Ch8: Tools & MCP</a></li>
+                <li><a href="chapter09.html">🤖 Ch9: AI Agents</a></li>
+                <li><a href="chapter10.html">👥 Ch10: Multi-Agent</a></li>
+                <li><a href="chapter11.html">🔄 Ch11: AI SDLC</a></li>
+                <li><a href="chapter12.html">⚡ Ch12: Productivity</a></li>
+                <li><a href="chapter13.html">🛠️ Ch13: AI Tools</a></li>
+                <li><a href="chapter14.html">🎨 Ch14: Vibe Coding</a></li>
+                <li><a href="chapter15.html">🗄️ Ch15: NL-to-SQL</a></li>
+                <li><a href="chapter16.html">📊 Ch16: Evals</a></li>
+                <li><a href="chapter17.html">🔒 Ch17: Security</a></li>
+                <li><a href="chapter18.html">🏢 Ch18: Governance</a></li>
+                <li><a href="chapter19.html">🔮 Ch19: Future</a></li>
+                <li><a href="chapter20.html">🎤 Ch20: Present</a></li>
+                <li><a href="chapter21.html">⚖️ Ch21: Prompt vs Context</a></li>
+                <li><a href="chapter22.html">⚡ Ch22: Productivity Paradox</a></li>
+                <li><a href="chapter23.html">👁️ Ch23: Supervisory Eng.</a></li>
+                <li><a href="chapter24.html" class="active">📉 Ch24: Context Debt</a></li>
+                <li><a href="chapter25.html">🔬 Ch25: How LLMs Work</a></li>
+            </ul>
+        </nav>
+        <main class="main-content">
+            
+            <div class="chapter-header">
+                <h1>📉 Chapter 24: Context Debt</h1>
+                <p class="chapter-meta">Bad docs → bad AI — sources, NL2SQL examples, team checklist, culture link.</p>
+            </div><div class="chapter-nav"><a href="chapter23.html">← Previous</a><a href="index.html">🏠 Home</a><a href="chapter25.html">Next Chapter →</a></div>
+<div class="tagline-banner" style="text-align:left;margin-bottom:1.5rem">
+<strong>From Prompt Engineering to Context Engineering</strong><br>
+<span style="font-size:.95rem;color:#4338ca">How Developers Should Build, Use, and Control AI in 2026</span>
+<div style="margin-top:.75rem;font-size:.9rem;color:#334155">
+📍 <strong>Chapter 24</strong> · Phase: <strong>Advanced — Context Debt</strong><br>
+Bad documentation becomes bad AI output. Context debt is the hidden reason AI systems fail even with good prompts.
+</div>
+</div>
+<div class="diagram-section">
+<h3>Advanced Topics (Chapters 22–24)</h3>
+<div style="overflow-x:auto;padding:.5rem 0;font-size:.82rem;line-height:2"><span style="color:#64748b">Ch22 Productivity Paradox</span> → <span style="color:#64748b">Ch23 Supervisory Engineering</span> → <span style="font-weight:700;color:#4f46e5">Ch24 Context Debt</span></div>
+<p style="font-size:.88rem;color:#64748b;margin-top:.5rem">These chapters answer the hard questions seniors ask: <em>Why doesn't AI always speed us up? What is my new role? Why does our AI know nothing about our business?</em></p>
+</div><div class="objectives"><h3>🎯 Learning Objectives</h3><ul><li>Define context debt and how it differs from technical debt</li><li>Identify sources: stale docs, missing schema, tribal knowledge</li><li>Connect context debt to NL2SQL and RAG failures</li><li>Apply engineering culture fixes seniors care about</li><li>Build a context debt reduction checklist for teams</li></ul></div>
+<div class="section">
+<h2>Everyone Knows Technical Debt — Meet Context Debt</h2>
+<div class="compare-grid">
+<div class="compare-col good">
+<h4>Technical debt</h4>
+<p>Shortcuts in <strong>code</strong> that slow future development.</p>
+<p><em>Example:</em> Skipped tests, tangled modules.</p>
+</div>
+<div class="compare-col bad">
+<h4>Context debt</h4>
+<p>Shortcuts in <strong>knowledge</strong> that slow or break AI systems.</p>
+<p><em>Example:</em> Outdated wiki, missing schema descriptions.</p>
+</div>
+</div>
+<div class="quote-block">Bad documentation becomes bad AI output.</div>
+<p><strong>Context debt</strong> means the AI system operates with incomplete, outdated, noisy, or poorly structured context — so even perfect prompts produce wrong or unreliable answers.</p>
+</div>
+
+<div class="section">
+<h2>What Context Debt Looks Like</h2>
+<div class="diagram-container"><div class="mermaid">
+mindmap
+  root((Context Debt))
+    Documentation
+      Outdated wiki pages
+      Missing API docs
+      Conflicting requirements
+    Schema and data
+      No column descriptions
+      Undocumented joins
+      Renamed tables not indexed
+    Business rules
+      Tribal knowledge only
+      Multiple definitions
+      No glossary
+    AI artifacts
+      Stale few-shot examples
+      Wrong sample prompts in repo
+      Old RAG index
+    Organization
+      Duplicated knowledge
+      Siloed Confluence spaces
+      No single source of truth
+</div></div>
+</div>
+
+<div class="section">
+<h2>Sources of Context Debt</h2>
+<table>
+<tr><th>Source</th><th>Symptom in AI output</th><th>Who suffers</th></tr>
+<tr><td>Old documentation</td><td>AI cites deprecated API</td><td>Developers using Cursor/RAG</td></tr>
+<tr><td>Missing schema descriptions</td><td>Hallucinated column names</td><td>NL2SQL users</td></tr>
+<tr><td>Unclear business rules</td><td>Wrong revenue / retention metrics</td><td>Business users</td></tr>
+<tr><td>Outdated API examples</td><td>Broken integration code</td><td>Juniors copying AI output</td></tr>
+<tr><td>Duplicated knowledge</td><td>Model picks wrong version</td><td>Everyone</td></tr>
+<tr><td>Conflicting requirements</td><td>Inconsistent answers</td><td>Product + engineering</td></tr>
+<tr><td>Hidden tribal knowledge</td><td>AI can't retrieve what was never written</td><td>Whole company</td></tr>
+<tr><td>Stale RAG index</td><td>Correct last month, wrong today</td><td>Production AI apps</td></tr>
+</table>
+</div>
+
+<div class="section">
+<h2>Flagship Example: Revenue by Department</h2>
+<p><strong>User asks:</strong> Show revenue by department.</p>
+<div class="error-box"><h4>Context in RAG index (outdated)</h4>
+<div class="code-block"><button class="copy-btn">Copy</button><pre><code>Revenue = sum(invoice.amount)  -- wiki page last updated 2023</code></pre></div>
+</div>
+<div class="success-box"><h4>Actual business rule (never updated in wiki)</h4>
+<div class="code-block"><button class="copy-btn">Copy</button><pre><code>Revenue = sum(paid_invoice.amount) - sum(refunds.amount)
+-- Only finance team knows this; lives in Slack, not docs</code></pre></div>
+</div>
+<div class="code-block"><button class="copy-btn">Copy</button><pre><code>-- ❌ AI generates SQL from stale context
+SELECT department, SUM(amount) AS revenue
+FROM invoices
+GROUP BY department;
+
+-- Missing: paid filter, refund adjustment, correct table joins</code></pre></div>
+<div class="warning-box"><h4>Root cause</h4>
+<p>The model did not fail alone. <strong>The context failed.</strong> No prompt wording fixes missing business rules.</p></div>
+</div>
+
+<div class="section">
+<h2>Context Debt in NL2SQL Projects</h2>
+<div class="diagram-container"><div class="mermaid">
+flowchart TD
+    CD[Context debt] --> CD1[Schema registry outdated]
+    CD --> CD2[No FK documentation]
+    CD --> CD3[Business glossary missing]
+    CD --> CD4[Example queries from old schema]
+    CD1 --> FAIL[Wrong SQL]
+    CD2 --> FAIL
+    CD3 --> FAIL
+    CD4 --> FAIL
+    FAIL --> SYM[Users trust wrong numbers]
+</div></div>
+<table>
+<tr><th>NL2SQL symptom</th><th>Likely context debt</th><th>Fix</th></tr>
+<tr><td>Wrong table names</td><td>RAG index not updated after migration</td><td>CI re-index on schema change</td></tr>
+<tr><td>Missing JOIN</td><td>Relationships not in entity metadata</td><td>Document FK graph per entity</td></tr>
+<tr><td>Wrong metric</td><td>Stale business definition</td><td>Versioned glossary with owner</td></tr>
+<tr><td>Inconsistent answers</td><td>Two docs, same term, different meanings</td><td>Single authoritative source</td></tr>
+</table>
+</div>
+
+<div class="section">
+<h2>Why Seniors Care: Engineering Culture Connection</h2>
+<div class="quote-block">If our docs are messy, our AI assistant will be messy.<br>
+If our schema is unclear, our NL-to-SQL will be unreliable.<br>
+If our business rules live only in people's heads, AI cannot use them.</div>
+<p>Context engineering (Ch 6–7) is not only a model problem — it is an <strong>organizational knowledge problem</strong>. Seniors who own architecture also own context quality.</p>
+<div class="diagram-container"><div class="mermaid">
+flowchart LR
+    CULT[Engineering culture] --> DOC[Documentation quality]
+    CULT --> SCH[Schema hygiene]
+    CULT --> GOV[Business rule ownership]
+    DOC --> CTX[Good AI context]
+    SCH --> CTX
+    GOV --> CTX
+    CTX --> AI[Reliable AI systems]
+</div></div>
+</div>
+
+<div class="section">
+<h2>Context Debt vs Prompt Failure — How to Tell</h2>
+<table>
+<tr><th>Signal</th><th>Probably prompt issue</th><th>Probably context debt</th></tr>
+<tr><td>Wrong output format</td><td>✅ Fix template</td><td>—</td></tr>
+<tr><td>Scope creep refactor</td><td>✅ Plan-first</td><td>—</td></tr>
+<tr><td>Wrong metric definition</td><td>—</td><td>✅ Fix glossary / RAG</td></tr>
+<tr><td>Renamed column in SQL</td><td>—</td><td>✅ Re-index schema</td></tr>
+<tr><td>Conflicting answers same week</td><td>—</td><td>✅ Duplicate/conflicting docs</td></tr>
+<tr><td>Worked before migration</td><td>—</td><td>✅ Stale few-shots + RAG</td></tr>
+</table>
+</div>
+
+<div class="section">
+<h2>Reducing Context Debt — Team Checklist</h2>
+<ul class="checklist">
+<li>Schema registry is source of truth — wiki links to it, not vice versa</li>
+<li>Business glossary with version, owner, and review date</li>
+<li>RAG re-index triggered on migration merge</li>
+<li>Entity metadata includes relationships and example queries</li>
+<li>Deprecate — don't duplicate — conflicting documentation</li>
+<li>Few-shot examples loaded dynamically, not hardcoded stale SQL</li>
+<li>Quarterly "context audit" for top 10 AI user questions</li>
+<li>Tribal knowledge → written rule before NL2SQL launch</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>Failure → Fix: Context Debt Paydown</h2>
+<div class="error-box"><h4>❌ Failure</h4>
+<p>NL2SQL launched with strong prompts. Accuracy 95% in demo. After org renamed <code class="inline-code">invoices</code> → <code class="inline-code">billing_invoices</code>, accuracy drops to 60%. Team blames "the model."</p></div>
+<div class="success-box"><h4>✅ Fix (context debt paydown)</h4>
+<ol>
+<li>Schema registry auto-feeds RAG index</li>
+<li>CI eval fails if golden cases break on schema PR</li>
+<li>Glossary entry for every metric in finance NL2SQL</li>
+<li>Ownership: data team maintains entity metadata</li>
+</ol></div>
+</div>
+
+<div class="section">
+<h2>Link to Anthropic's Framing</h2>
+<p>Anthropic describes context engineering as curating what enters the model's limited window from many sources: tools, external data, MCP, message history. <strong>Context debt is what happens when those sources are neglected.</strong></p>
+<p>Prompt engineering optimizes the question. Context engineering optimizes the knowledge. Context debt is the accumulated mess in the knowledge layer.</p>
+</div>
+
+<div class="presentation-tip"><strong>🎤 Senior audience line:</strong> "We spent $X on AI tooling but zero on schema documentation — that's context debt, and the model can't pay it down for us."</div>
+
+<div class="takeaway"><h3>Key Takeaway</h3>
+<p>Context debt is technical debt for the AI age. Pay it down with documentation, schema hygiene, versioned business rules, and fresh retrieval — or accept unreliable AI no matter how good your prompts are.</p></div>
+<div class="chapter-nav"><a href="chapter23.html">← Previous</a><a href="index.html">🏠 Home</a><a href="chapter25.html">Next Chapter →</a></div>
+        </main>
+        <footer class="footer">
+            <p>From Prompt Engineering to Context Engineering — Developer Learning Guide</p>
+            <p>Chapter 24 of 25 · Prepared for Sakib Hasan · June 2026</p>
+        </footer>
+    </div>
+    <script src="js/app.js"></script>
+</body>
+</html>

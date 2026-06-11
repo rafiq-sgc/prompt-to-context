@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 2: Quick Recap of LLMs for Developers</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="reading-progress"></div>
+    <button class="mobile-menu-toggle" onclick="toggleMobileMenu()" aria-label="Toggle menu">☰</button>
+    <div class="container">
+        <header class="header">
+            <h1>Chapter 2: Quick Recap of LLMs for Developers</h1>
+            <p class="subtitle">Advanced: autoregressive generation, failure taxonomy, lost-in-the-middle, ICL vs RAG.</p>
+        </header>
+        <nav class="nav-sidebar" id="nav-sidebar">
+            <div class="nav-brand">CONTEXT ENGINEERING 2026</div>
+            <ul>
+                <li><a href="index.html">🏠 Home</a></li>
+                <li><a href="chapter01.html">🚀 Ch1: Introduction</a></li>
+                <li><a href="chapter02.html" class="active">🧠 Ch2: LLM Recap</a></li>
+                <li><a href="chapter03.html">✍️ Ch3: Prompt Basics</a></li>
+                <li><a href="chapter04.html">🎯 Ch4: Advanced Prompts</a></li>
+                <li><a href="chapter05.html">⚠️ Ch5: Why Prompts Fail</a></li>
+                <li><a href="chapter06.html">🏗️ Ch6: Context Engineering</a></li>
+                <li><a href="chapter07.html">📚 Ch7: RAG</a></li>
+                <li><a href="chapter08.html">🔧 Ch8: Tools & MCP</a></li>
+                <li><a href="chapter09.html">🤖 Ch9: AI Agents</a></li>
+                <li><a href="chapter10.html">👥 Ch10: Multi-Agent</a></li>
+                <li><a href="chapter11.html">🔄 Ch11: AI SDLC</a></li>
+                <li><a href="chapter12.html">⚡ Ch12: Productivity</a></li>
+                <li><a href="chapter13.html">🛠️ Ch13: AI Tools</a></li>
+                <li><a href="chapter14.html">🎨 Ch14: Vibe Coding</a></li>
+                <li><a href="chapter15.html">🗄️ Ch15: NL-to-SQL</a></li>
+                <li><a href="chapter16.html">📊 Ch16: Evals</a></li>
+                <li><a href="chapter17.html">🔒 Ch17: Security</a></li>
+                <li><a href="chapter18.html">🏢 Ch18: Governance</a></li>
+                <li><a href="chapter19.html">🔮 Ch19: Future</a></li>
+                <li><a href="chapter20.html">🎤 Ch20: Present</a></li>
+                <li><a href="chapter21.html">⚖️ Ch21: Prompt vs Context</a></li>
+                <li><a href="chapter22.html">⚡ Ch22: Productivity Paradox</a></li>
+                <li><a href="chapter23.html">👁️ Ch23: Supervisory Eng.</a></li>
+                <li><a href="chapter24.html">📉 Ch24: Context Debt</a></li>
+                <li><a href="chapter25.html">🔬 Ch25: How LLMs Work</a></li>
+            </ul>
+        </nav>
+        <main class="main-content">
+            
+            <div class="chapter-header">
+                <h1>🧠 Chapter 2: Quick Recap of LLMs for Developers</h1>
+                <p class="chapter-meta">Advanced: autoregressive generation, failure taxonomy, lost-in-the-middle, ICL vs RAG.</p>
+            </div><div class="chapter-nav"><a href="chapter01.html">← Previous</a><a href="index.html">🏠 Home</a><a href="chapter03.html">Next Chapter →</a></div>
+<div class="tagline-banner" style="text-align:left;margin-bottom:1.5rem">
+<strong>From Prompt Engineering to Context Engineering</strong><br>
+<span style="font-size:.95rem;color:#4338ca">How Developers Should Build, Use, and Control AI in 2026</span>
+<div style="margin-top:.75rem;font-size:.9rem;color:#334155">
+📍 <strong>Chapter 2</strong> · Phase: <strong>Know the Model</strong><br>
+LLMs predict tokens — they don't verify. This chapter grounds every control layer that follows.
+</div>
+</div>
+<div class="diagram-section">
+<h3>Your Presentation Journey (Chapters 2–10)</h3>
+<div style="overflow-x:auto;padding:.5rem 0;font-size:.82rem;line-height:2"><span style="font-weight:700;color:#4f46e5">Ch2 LLM Recap</span> → <span style="color:#64748b">Ch3 Prompts</span> → <span style="color:#64748b">Ch4 Advanced Prompts</span> → <span style="color:#64748b">Ch5 Why Prompts Fail</span> → <span style="color:#64748b">Ch6 Context Engineering</span> → <span style="color:#64748b">Ch7 RAG</span> → <span style="color:#64748b">Ch8 Tools & MCP</span> → <span style="color:#64748b">Ch9 Agents</span> → <span style="color:#64748b">Ch10 Multi-Agent</span></div>
+<p style="font-size:.88rem;color:#64748b;margin-top:.5rem">Prompting is how we talk to AI. Context engineering is how we make AI useful. Chapters 7–10 show how to <em>build</em> applications (NL2SQL, chatbots, coding assistants) on top.</p>
+</div><div class="objectives"><h3>🎯 Learning Objectives</h3><ul><li>Explain autoregressive generation and why LLMs do not 'know' or 'verify'</li><li>Distinguish hallucination, confabulation, and fluent wrong answers</li><li>Understand context window limits and the 'lost in the middle' effect</li><li>Map LLM capabilities to engineering controls: RAG, tools, evals, human review</li><li>Choose the right mental model when teaching senior developers</li></ul></div>
+<div class="section">
+<h2>Sequel Context: From "How LLMs Work" to "How to Control Them"</h2>
+<p>Your previous presentation covered tokens, transformers, and prediction. This chapter reframes that knowledge for <strong>production engineering</strong>: what the model actually does at runtime, what it cannot do, and why fluent output is the primary risk.</p>
+<div class="info-box"><h4>For Senior Developers</h4>
+<p>Do not teach LLMs as magic brains. Teach them as <strong>conditional text generators</strong> whose output quality is bounded by context quality, model capability, and your verification layer.</p></div>
+</div>
+
+<div class="section">
+<h2>What Actually Happens at Inference Time</h2>
+<p>At generation time, an LLM does <strong>not</strong> search a database, execute your code, or check facts. It computes probability distributions over the next token, conditioned on everything in the current context window.</p>
+<div class="diagram-container"><div class="mermaid">
+flowchart TB
+    subgraph Input
+        SYS[System message]
+        DEV[Developer rules]
+        CTX[Retrieved context]
+        USR[User message]
+    end
+    subgraph Model
+        TOK[Tokenize to IDs]
+        ATT[Transformer layers + attention]
+        LOG[Logits over vocabulary]
+        SMP[Sample / greedy decode]
+    end
+    subgraph Output
+        T1[Token 1]
+        T2[Token 2]
+        TN[Token N ...]
+    end
+    SYS --> TOK
+    DEV --> TOK
+    CTX --> TOK
+    USR --> TOK
+    TOK --> ATT --> LOG --> SMP --> T1
+    T1 --> ATT
+    T2 --> ATT
+    TN --> OUT[Final text / code]
+</div></div>
+<p><strong>Autoregressive</strong> means each generated token becomes part of the input for the next token. Errors early in a SQL query or function signature can cascade into confident-looking broken output.</p>
+</div>
+
+<div class="section">
+<h2>Tokenization Matters for Code</h2>
+<p>Code is split into tokens unpredictably. The same logical string can cost different token counts across models — affecting cost, latency, and what fits in context.</p>
+<div class="code-block"><button class="copy-btn">Copy</button><pre><code># Rough tokenization intuition (not exact per model):
+"student_balance"     → may be 1–3 tokens
+"getUserById"         → often split: get + User + By + Id
+"enrollment_status"   → often 2–3 tokens
+"SELECT * FROM ..."   → SQL keywords often efficient</code></pre></div>
+<table>
+<tr><th>Implication</th><th>Engineering Action</th></tr>
+<tr><td>Long schemas eat context fast</td><td>Retrieve only relevant tables — don't dump full DDL</td></tr>
+<tr><td>Repeated boilerplate wastes tokens</td><td>Put stable rules in system prompt once; vary only task context</td></tr>
+<tr><td>Unicode / odd identifiers</td><td>Normalize schema names in retrieved context</td></tr>
+</table>
+</div>
+
+<div class="section">
+<h2>Three Dangerous Misconceptions (Teach These Explicitly)</h2>
+<table>
+<tr><th>Myth</th><th>Reality</th><th>What Seniors Should Do</th></tr>
+<tr><td>"The model understands my codebase"</td><td>It sees only what you put in context (files, retrieval, tools)</td><td>Explicit @file / RAG / schema injection</td></tr>
+<tr><td>"Longer context = always better"</td><td>Attention dilutes; middle sections get ignored ("lost in the middle")</td><td>Retrieve + rank + compress; keep signal high</td></tr>
+<tr><td>"It said it confidently, so it's correct"</td><td>Fluency and correctness are uncorrelated</td><td>Tests, validators, human review on high-risk output</td></tr>
+</table>
+<div class="diagram-section">
+<h3>Lost in the Middle (Research-Backed Behavior)</h3>
+<div class="diagram-container"><div class="mermaid">
+flowchart LR
+    subgraph Context Window
+        A[Start: System rules ✓ seen]
+        M[Middle: Schema chunk ⚠ often weak]
+        E[End: User question ✓ seen]
+    end
+    A --> M --> E
+</div></div>
+<p>Models reliably use instructions at the <strong>start</strong> and the user query at the <strong>end</strong>. Critical schema placed in the middle of a 80-page dump may be ignored. <strong>Fix:</strong> put safety rules first, user task last, retrieved facts in a dedicated labeled block immediately before the question.</p>
+</div>
+</div>
+
+<div class="section">
+<h2>Taxonomy of Wrong Answers (Not All Failures Are Equal)</h2>
+<table>
+<tr><th>Failure Type</th><th>What It Looks Like</th><th>Example</th><th>Detection</th></tr>
+<tr><td><strong>Hallucination</strong></td><td>Invents facts not in context</td><td>Table <code class="inline-code">student_balance</code> doesn't exist</td><td>Schema validator</td></tr>
+<tr><td><strong>Confabulation</strong></td><td>Fills gaps with plausible narrative</td><td>"This API returns paginated JSON" (it doesn't)</td><td>Read source / run API</td></tr>
+<tr><td><strong>Stale knowledge</strong></td><td>Uses deprecated patterns from training cutoff</td><td><code class="inline-code">datetime.utcnow()</code> in Python 3.12+</td><td>Linters, docs retrieval</td></tr>
+<tr><td><strong>Reasoning slip</strong></td><td>Logic error in multi-step task</td><td>Wrong JOIN condition that "looks right"</td><td>SQL EXPLAIN, unit tests</td></tr>
+<tr><td><strong>Sycophancy</strong></td><td>Agrees with wrong user premise</td><td>"Yes, delete all rows is fine here"</td><td>Negative examples, safety rules</td></tr>
+<tr><td><strong>Scope creep</strong></td><td>Changes unrelated code</td><td>Refactors entire module for one-line fix</td><td>Plan-first, small diffs</td></tr>
+</table>
+</div>
+
+<div class="section">
+<h2>Visual Example: API Hallucination</h2>
+<p><strong>Developer asks:</strong> How do I paginate with our internal <code class="inline-code">CampusSDK</code>?</p>
+<div class="code-block"><button class="copy-btn">Copy</button><pre><code>// ❌ Model output — plausible, wrong
+import { CampusSDK } from '@campus/sdk';
+const page = await CampusSDK.paginate(query, { page: 1, size: 50 });
+// Problem: CampusSDK may not exist or has no paginate() method</code></pre></div>
+<div class="success-box"><h4>✅ Engineering fix</h4>
+<ol>
+<li>Retrieve actual SDK docs or <code class="inline-code">node_modules/@campus/sdk</code> types via RAG / @file</li>
+<li>Ask model to cite which file or doc line it used</li>
+<li>Run TypeScript compiler — immediate feedback</li>
+</ol></div>
+</div>
+
+<div class="section">
+<h2>Model Types in 2026 (Practical, Not Marketing)</h2>
+<table>
+<tr><th>Type</th><th>Behavior</th><th>Best For</th><th>Watch Out For</th></tr>
+<tr><td><strong>Instruct / chat models</strong></td><td>Fast, follows prompts</td><td>Drafts, explanation, NL-to-SQL with RAG</td><td>Skips steps if not asked</td></tr>
+<tr><td><strong>Reasoning models</strong></td><td>More internal deliberation tokens</td><td>Architecture, hard bugs, multi-step analysis</td><td>Higher latency & cost; still can be wrong</td></tr>
+<tr><td><strong>Coding-specialized</strong></td><td>Tuned on code repos</td><td>IDE completion, refactors</td><td>May assume wrong project conventions</td></tr>
+</table>
+<p><strong>Sampling parameters (for seniors):</strong> Low temperature (0–0.3) for SQL, config, and structured output. Higher temperature for brainstorming only. In production pipelines, prefer <strong>deterministic settings + schema-constrained output</strong> over creative sampling.</p>
+</div>
+
+<div class="section">
+<h2>In-Context Learning vs Fine-Tuning vs RAG</h2>
+<div class="diagram-container"><div class="mermaid">
+flowchart TD
+    Q[Need model to know X]
+    Q --> P{Is X in prompt/examples?}
+    P -->|Yes, small & stable| ICL[In-context: few-shot examples]
+    P -->|No, large/private/changing| RAG[RAG: retrieve at query time]
+    P -->|Behavior/style across all tasks| FT[Fine-tuning / adapters]
+    ICL --> V[Still needs verification]
+    RAG --> V
+    FT --> V
+</div></div>
+<table>
+<tr><th>Approach</th><th>When</th><th>Cost</th><th>Freshness</th></tr>
+<tr><td>Few-shot in prompt</td><td>5–10 stable examples (SQL style)</td><td>Token cost per request</td><td>Update examples manually</td></tr>
+<tr><td>RAG</td><td>Large docs, schema, policies</td><td>Index + retrieval infra</td><td>Re-index on change</td></tr>
+<tr><td>Fine-tuning</td><td>Consistent tone, specialized format</td><td>Training pipeline</td><td>Retrain on drift</td></tr>
+</table>
+</div>
+
+<div class="section">
+<h2>SQL Failure Deep Dive (Teaching Demo)</h2>
+<p><strong>User:</strong> Write SQL to show unpaid student balances.</p>
+<div class="code-block"><button class="copy-btn">Copy</button><pre><code>-- ❌ Fluent, confident, unverified
+SELECT * FROM student_balance WHERE status = 'unpaid';</code></pre></div>
+<div class="diagram-section">
+<h3>Assumption Audit (ask audience to fill this table live)</h3>
+<table>
+<tr><th>Assumption the Model Made</th><th>How to Verify</th><th>Likely Reality in Enterprise DB</th></tr>
+<tr><td>Table named <code class="inline-code">student_balance</code></td><td><code class="inline-code">information_schema.tables</code></td><td><code class="inline-code">students</code> + <code class="inline-code">invoices</code> join</td></tr>
+<tr><td>Column <code class="inline-code">status</code></td><td>Schema registry / migrations</td><td><code class="inline-code">paid_status</code> on invoices</td></tr>
+<tr><td>"Unpaid" = status value</td><td>Business glossary</td><td>May include partial payments, holds</td></tr>
+<tr><td><code class="inline-code">SELECT *</code> safe</td><td>Column classification</td><td>May expose SSN, email</td></tr>
+</table>
+</div>
+<div class="quote-block">Fluent output is not verified output. Confidence in writing style ≠ factual correctness.</div>
+</div>
+
+<div class="section">
+<h2>LLM vs Search vs Database (Senior Mental Model)</h2>
+<div class="compare-grid">
+<div class="compare-col good"><h4>LLM</h4><p>Generates likely text from patterns + context. Good for synthesis and drafts.</p></div>
+<div class="compare-col good"><h4>Search / RAG</h4><p>Finds existing trusted documents. Good for facts that already exist.</p></div>
+<div class="compare-col good"><h4>Database / Code execution</h4><p>Ground truth for schema and runtime behavior. Good for verification.</p></div>
+</div>
+<p>Production AI systems combine all three. Prompt-only LLM is the weakest leg alone.</p>
+</div>
+
+<div class="presentation-tip"><strong>🎤 Teach seniors:</strong> Run the SQL assumption audit live. Then show the same question with schema injected — watch how JOIN appears. Bridge directly to Chapter 6.</div>
+
+<div class="section">
+<h2>Want the Full Picture?</h2>
+<p>This chapter is the <strong>production recap</strong>. For the complete reference — transformers, training, inference, sampling parameters, model families, and the best-output playbook — read <a href="chapter25.html"><strong>Chapter 25: How LLM Models Work</strong></a>.</p>
+</div>
+
+
+<div class="section">
+<h2>Training vs Inference — What the Model Actually "Knows"</h2>
+<div class="diagram-container"><div class="mermaid">
+flowchart LR
+    subgraph Training time past
+        TD[Internet + books + code repos] --> W[Model weights frozen]
+    end
+    subgraph Inference time now
+        W --> INF[Your prompt context]
+        INF --> OUT[Output]
+        RAG[RAG / tools] --> INF
+    end
+</div></div>
+<table>
+<tr><th>Source of knowledge</th><th>Freshness</th><th>Your private DB schema?</th><th>Verifiable?</th></tr>
+<tr><td>Training weights</td><td>Cutoff date</td><td>❌ No</td><td>❌ No</td></tr>
+<tr><td>Prompt / context</td><td>What you inject now</td><td>✅ If you paste/retrieve</td><td>⚠️ Only if you validate</td></tr>
+<tr><td>Tool results</td><td>Live query</td><td>✅ Yes</td><td>✅ Yes — ground truth</td></tr>
+</table>
+<p><strong>Teaching line:</strong> The model does not "look up" your database. It predicts text. Your application must supply facts and verify outputs.</p>
+</div>
+
+<div class="section">
+<h2>How Developer Tools Use LLMs (Behind the Scenes)</h2>
+
+<table>
+<tr><th>Tool</th><th>What it really is</th><th>Best for juniors</th><th>Best for seniors</th><th>Failure mode</th></tr>
+<tr><td><strong>ChatGPT</strong></td><td>Chat UI over a remote LLM API</td><td>Learning, quick questions</td><td>Architecture drafts, eval design</td><td>Treating chat as source of truth</td></tr>
+<tr><td><strong>Claude</strong></td><td>Chat + API + long-context models</td><td>Explaining code, writing docs</td><td>Long doc analysis, review</td><td>Pasting prod secrets into chat</td></tr>
+<tr><td><strong>Cursor</strong></td><td>IDE + codebase index + agent loop</td><td>Small edits with @file</td><td>Plan-first multi-file with rules</td><td>Agent refactors without review</td></tr>
+<tr><td><strong>GitHub Copilot</strong></td><td>Inline completion on current file context</td><td>Boilerplate, tests</td><td>Fast typing aid only</td><td>Accepting wrong completions blindly</td></tr>
+<tr><td><strong>Your NL2SQL app</strong></td><td>Custom pipeline: RAG + LLM + validators</td><td>—</td><td>Full control, evals, governance</td><td>Prompt-only without schema RAG</td></tr>
+</table>
+<div class="diagram-container"><div class="mermaid">
+flowchart TB
+    subgraph ChatGPT / Claude
+        U1[User message] --> API1[Remote LLM API]
+        API1 --> R1[Text response]
+    end
+    subgraph Cursor / Copilot
+        U2[User + open files] --> IDX[Codebase index]
+        IDX --> API2[LLM API]
+        API2 --> R2[Edit / completion]
+    end
+    subgraph Your NL2SQL App
+        U3[Natural language] --> PIPE[RAG + validators + LLM]
+        PIPE --> R3[Safe SQL]
+    end
+</div></div>
+<div class="info-box"><h4>For juniors</h4>
+<p>ChatGPT doesn't see your repo unless you paste or upload. Cursor indexes your project — still not "magic understanding"; it's retrieval + context.</p></div>
+<div class="info-box"><h4>For seniors</h4>
+<p>Custom apps beat generic chat when you need <strong>ACL, evals, audit logs, and schema binding</strong>. That's why you build NL2SQL as a pipeline, not a ChatGPT prompt.</p></div>
+</div>
+
+<div class="section">
+<h2>Sampling Parameters Developers Should Know</h2>
+<table>
+<tr><th>Parameter</th><th>Effect</th><th>NL2SQL / production</th><th>Brainstorming in chat</th></tr>
+<tr><td><strong>temperature</strong></td><td>Randomness of token choice</td><td>0–0.2 (deterministic)</td><td>0.7–1.0</td></tr>
+<tr><td><strong>top_p</strong></td><td>Nucleus sampling breadth</td><td>Low / default</td><td>Higher for variety</td></tr>
+<tr><td><strong>max_tokens</strong></td><td>Output length cap</td><td>Set to fit JSON + SQL</td><td>As needed</td></tr>
+<tr><td><strong>stop sequences</strong></td><td>End generation early</td><td>Close JSON reliably</td><td>Rarely needed</td></tr>
+</table>
+</div>
+
+<div class="section">
+<h2>Where LLM Sits in Your NL2SQL Application</h2>
+<div class="diagram-container"><div class="mermaid">
+flowchart LR
+    UI[Chat UI] --> ORCH[Your backend orchestrator]
+    ORCH --> RAG[RAG retrieval]
+    ORCH --> LLM[LLM: generate SQL only]
+    ORCH --> VAL[Validator code]
+    ORCH --> DB[(Database read-only)]
+    RAG --> LLM
+    LLM --> VAL
+    VAL --> DB
+</div></div>
+<p>The LLM is <strong>one component</strong> — not the whole system. Seniors own the boxes around it.</p>
+</div>
+
+<div class="takeaway"><h3>Key Takeaway</h3>
+<p>LLMs are conditional generators, not oracles. Senior engineering means designing context, validation, and ownership around that limitation — not debating model intelligence.</p></div>
+<div class="chapter-nav"><a href="chapter01.html">← Previous</a><a href="index.html">🏠 Home</a><a href="chapter03.html">Next Chapter →</a></div>
+        </main>
+        <footer class="footer">
+            <p>From Prompt Engineering to Context Engineering — Developer Learning Guide</p>
+            <p>Chapter 2 of 25 · Prepared for Sakib Hasan · June 2026</p>
+        </footer>
+    </div>
+    <script src="js/app.js"></script>
+</body>
+</html>

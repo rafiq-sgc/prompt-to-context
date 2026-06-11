@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 3: Prompt Engineering Fundamentals</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="reading-progress"></div>
+    <button class="mobile-menu-toggle" onclick="toggleMobileMenu()" aria-label="Toggle menu">☰</button>
+    <div class="container">
+        <header class="header">
+            <h1>Chapter 3: Prompt Engineering Fundamentals</h1>
+            <p class="subtitle">Advanced: prompts as API contracts, message roles, structured JSON output, token budgets.</p>
+        </header>
+        <nav class="nav-sidebar" id="nav-sidebar">
+            <div class="nav-brand">CONTEXT ENGINEERING 2026</div>
+            <ul>
+                <li><a href="index.html">🏠 Home</a></li>
+                <li><a href="chapter01.html">🚀 Ch1: Introduction</a></li>
+                <li><a href="chapter02.html">🧠 Ch2: LLM Recap</a></li>
+                <li><a href="chapter03.html" class="active">✍️ Ch3: Prompt Basics</a></li>
+                <li><a href="chapter04.html">🎯 Ch4: Advanced Prompts</a></li>
+                <li><a href="chapter05.html">⚠️ Ch5: Why Prompts Fail</a></li>
+                <li><a href="chapter06.html">🏗️ Ch6: Context Engineering</a></li>
+                <li><a href="chapter07.html">📚 Ch7: RAG</a></li>
+                <li><a href="chapter08.html">🔧 Ch8: Tools & MCP</a></li>
+                <li><a href="chapter09.html">🤖 Ch9: AI Agents</a></li>
+                <li><a href="chapter10.html">👥 Ch10: Multi-Agent</a></li>
+                <li><a href="chapter11.html">🔄 Ch11: AI SDLC</a></li>
+                <li><a href="chapter12.html">⚡ Ch12: Productivity</a></li>
+                <li><a href="chapter13.html">🛠️ Ch13: AI Tools</a></li>
+                <li><a href="chapter14.html">🎨 Ch14: Vibe Coding</a></li>
+                <li><a href="chapter15.html">🗄️ Ch15: NL-to-SQL</a></li>
+                <li><a href="chapter16.html">📊 Ch16: Evals</a></li>
+                <li><a href="chapter17.html">🔒 Ch17: Security</a></li>
+                <li><a href="chapter18.html">🏢 Ch18: Governance</a></li>
+                <li><a href="chapter19.html">🔮 Ch19: Future</a></li>
+                <li><a href="chapter20.html">🎤 Ch20: Present</a></li>
+                <li><a href="chapter21.html">⚖️ Ch21: Prompt vs Context</a></li>
+                <li><a href="chapter22.html">⚡ Ch22: Productivity Paradox</a></li>
+                <li><a href="chapter23.html">👁️ Ch23: Supervisory Eng.</a></li>
+                <li><a href="chapter24.html">📉 Ch24: Context Debt</a></li>
+                <li><a href="chapter25.html">🔬 Ch25: How LLMs Work</a></li>
+            </ul>
+        </nav>
+        <main class="main-content">
+            
+            <div class="chapter-header">
+                <h1>✍️ Chapter 3: Prompt Engineering Fundamentals</h1>
+                <p class="chapter-meta">Advanced: prompts as API contracts, message roles, structured JSON output, token budgets.</p>
+            </div><div class="chapter-nav"><a href="chapter02.html">← Previous</a><a href="index.html">🏠 Home</a><a href="chapter04.html">Next Chapter →</a></div>
+<div class="tagline-banner" style="text-align:left;margin-bottom:1.5rem">
+<strong>From Prompt Engineering to Context Engineering</strong><br>
+<span style="font-size:.95rem;color:#4338ca">How Developers Should Build, Use, and Control AI in 2026</span>
+<div style="margin-top:.75rem;font-size:.9rem;color:#334155">
+📍 <strong>Chapter 3</strong> · Phase: <strong>Control Layer 1 — Prompts</strong><br>
+Prompts are how we talk to AI. Learn the contract before building apps on top.
+</div>
+</div>
+<div class="diagram-section">
+<h3>Your Presentation Journey (Chapters 2–10)</h3>
+<div style="overflow-x:auto;padding:.5rem 0;font-size:.82rem;line-height:2"><span style="color:#64748b">Ch2 LLM Recap</span> → <span style="font-weight:700;color:#4f46e5">Ch3 Prompts</span> → <span style="color:#64748b">Ch4 Advanced Prompts</span> → <span style="color:#64748b">Ch5 Why Prompts Fail</span> → <span style="color:#64748b">Ch6 Context Engineering</span> → <span style="color:#64748b">Ch7 RAG</span> → <span style="color:#64748b">Ch8 Tools & MCP</span> → <span style="color:#64748b">Ch9 Agents</span> → <span style="color:#64748b">Ch10 Multi-Agent</span></div>
+<p style="font-size:.88rem;color:#64748b;margin-top:.5rem">Prompting is how we talk to AI. Context engineering is how we make AI useful. Chapters 7–10 show how to <em>build</em> applications (NL2SQL, chatbots, coding assistants) on top.</p>
+</div><div class="objectives"><h3>🎯 Learning Objectives</h3><ul><li>Treat prompts as API contracts with explicit inputs and outputs</li><li>Use system / developer / user message roles correctly</li><li>Design prompts for parseable structured output in production</li><li>Apply token budgeting and constraint ordering</li><li>Build reusable prompt templates for backend, SQL, and review tasks</li></ul></div>
+<div class="section">
+<h2>Prompts Are Requirement Documents — and API Contracts</h2>
+<p>In production, a prompt is not a chat message. It is an <strong>interface</strong> between your application and a non-deterministic component. Senior teams version prompts like code, test them with evals, and define output schemas.</p>
+<div class="diagram-container"><div class="mermaid">
+flowchart LR
+    APP[Your Application] -->|prompt + context| LLM[LLM]
+    LLM -->|structured response| PARSE[Parser / Validator]
+    PARSE -->|valid| ACT[Action]
+    PARSE -->|invalid| RETRY[Retry / fallback / human]
+</div></div>
+</div>
+
+<div class="section">
+<h2>Message Roles (OpenAI / Anthropic / Production APIs)</h2>
+<table>
+<tr><th>Role</th><th>Who sets it</th><th>Stability</th><th>Typical content</th></tr>
+<tr><td><strong>System</strong></td><td>Platform / app owner</td><td>High — rarely changes</td><td>Safety rules, persona, global constraints</td></tr>
+<tr><td><strong>Developer</strong> (OpenAI)</td><td>App developer</td><td>Medium</td><td>App-specific instructions, output schema hints</td></tr>
+<tr><td><strong>User</strong></td><td>End user or upstream service</td><td>Per request</td><td>Task, question, code snippet</td></tr>
+<tr><td><strong>Assistant</strong></td><td>Model (history)</td><td>Conversation</td><td>Prior turns — watch context rot</td></tr>
+<tr><td><strong>Tool</strong></td><td>Your backend</td><td>Per tool call</td><td>Schema lookup results, validator output</td></tr>
+</table>
+<div class="warning-box"><h4>Security note</h4>
+<p>Never let end users override system instructions. User content is <strong>untrusted input</strong> — same as any HTTP request body.</p></div>
+</div>
+
+<div class="section">
+<h2>The Five-Part Framework (Expanded)</h2>
+<div class="diagram-container"><div class="mermaid">
+flowchart TB
+    R[1. Role — expertise & tone]
+    T[2. Task — single clear objective]
+    C[3. Context — schema, code, domain]
+    X[4. Constraints — safety & scope]
+    O[5. Output — format machine-parseable]
+    R --> T --> C --> X --> O
+</div></div>
+
+<h3>Layer-by-layer with production notes</h3>
+<table>
+<tr><th>Layer</th><th>Weak</th><th>Strong</th><th>Senior tip</th></tr>
+<tr><td>Role</td><td>"Be helpful"</td><td>"Senior PostgreSQL engineer, read-only reporting"</td><td>Role sets tone, not facts</td></tr>
+<tr><td>Task</td><td>"Help with SQL"</td><td>"Generate one SELECT for unpaid invoices"</td><td>One task per call in production</td></tr>
+<tr><td>Context</td><td>Nothing</td><td>DDL snippet + business glossary entry</td><td>Label sections: <code class="inline-code">### SCHEMA</code></td></tr>
+<tr><td>Constraints</td><td>"Be safe"</td><td>Explicit deny list: DELETE, DROP, …</td><td>Constraints before examples</td></tr>
+<tr><td>Output</td><td>"Explain"</td><td>JSON schema or fixed headings</td><td>Enables automated validation</td></tr>
+</table>
+</div>
+
+<div class="section">
+<h2>Weak vs Strong: Annotated Comparison</h2>
+<div class="tab-group" data-tab-group="prompt-sql-adv">
+<div class="tab-buttons">
+<button class="active" data-tab="weak">❌ Weak</button>
+<button data-tab="strong">✅ Production-grade</button>
+</div>
+<div class="tab-panel active" data-panel="weak"><p><strong>Problems:</strong> no role, no schema, no safety, no output shape, ambiguous "unpaid".</p><div class="code-block"><button class="copy-btn">Copy</button><pre><code>Write SQL for unpaid invoices.</code></pre></div></div>
+<div class="tab-panel" data-panel="strong"><div class="code-block"><button class="copy-btn">Copy</button><pre><code>You are a senior PostgreSQL reporting engineer.
+
+TASK: Generate exactly one read-only SQL query for unpaid invoices.
+
+CONTEXT:
+### SCHEMA (authoritative — do not invent beyond this)
+students(id INT, full_name TEXT, enrollment_status TEXT)
+invoices(id INT, student_id INT, amount NUMERIC, paid_status TEXT, due_date DATE)
+
+### BUSINESS RULES
+- "Unpaid invoice" means paid_status = 'unpaid' AND due_date < CURRENT_DATE
+- "Active student" means enrollment_status = 'active'
+
+CONSTRAINTS:
+- SELECT only. No INSERT/UPDATE/DELETE/DROP/ALTER/TRUNCATE.
+- Use only tables/columns listed above.
+- If ambiguous, set "clarification_needed": true instead of guessing.
+- Do not use SELECT *.
+
+OUTPUT (JSON only, no markdown):
+{
+  "sql": "...",
+  "tables_used": [],
+  "assumptions": [],
+  "clarification_needed": false,
+  "safety": "read_only"
+}</code></pre></div></div>
+</div>
+<div class="warning-box"><h4>Still not enough alone</h4>
+<p>This prompt improves format and safety — but if the real schema uses <code class="inline-code">billing_invoices</code> instead of <code class="inline-code">invoices</code>, you still need <strong>retrieved schema</strong> (Chapter 6–7). Prompts cannot invent missing facts correctly.</p></div>
+</div>
+
+<div class="section">
+<h2>Structured Output for Production Pipelines</h2>
+<p>Senior teams avoid free-text responses for machine steps. Use JSON schema, tool calling, or constrained decoding.</p>
+<div class="code-block"><button class="copy-btn">Copy</button><pre><code>{
+  "intent": "reporting_sql",
+  "risk_level": "medium",
+  "sql": "SELECT s.id, s.full_name, i.amount FROM students s JOIN invoices i ...",
+  "tables_used": ["students", "invoices"],
+  "columns_used": ["id", "full_name", "amount", "paid_status"],
+  "assumptions": ["unpaid = paid_status 'unpaid' per provided rule"],
+  "clarification_needed": false,
+  "blocked": false,
+  "block_reason": null
+}</code></pre></div>
+<div class="flow-steps">
+<span class="flow-step">LLM returns JSON</span><span class="flow-arrow">→</span>
+<span class="flow-step">Pydantic/Zod validate</span><span class="flow-arrow">→</span>
+<span class="flow-step">SQL parser</span><span class="flow-arrow">→</span>
+<span class="flow-step">Schema checker</span><span class="flow-arrow">→</span>
+<span class="flow-step">Execute or reject</span>
+</div>
+</div>
+
+<div class="section">
+<h2>Constraint Ordering (Order Matters)</h2>
+<div class="diagram-container"><div class="mermaid">
+flowchart TD
+    S1[1. Safety constraints first]
+    S2[2. Scope / what NOT to do]
+    S3[3. Authoritative context]
+    S4[4. Task]
+    S5[5. Output format]
+    S6[6. Examples last]
+    S1 --> S2 --> S3 --> S4 --> S5 --> S6
+</div></div>
+<p>Put <strong>"Do not generate destructive SQL"</strong> before schema and examples. Models weight early instructions heavily. Examples after constraints teach style without overriding safety.</p>
+</div>
+
+<div class="section">
+<h2>Full Backend Code Review Prompt (Copy-Paste Template)</h2>
+<div class="code-block"><button class="copy-btn">Copy</button><pre><code>You are a principal backend engineer performing a production code review.
+
+TASK: Review the code below. Do not rewrite unless I ask in a follow-up.
+
+CONTEXT:
+- Runtime: Node 20, Express 4, PostgreSQL 15
+- This endpoint handles payment webhooks from Stripe
+- PII fields: email, card_last4 (must not appear in logs)
+
+REVIEW DIMENSIONS (address each):
+1. Correctness & edge cases
+2. Security (injection, auth, secrets, IDOR)
+3. Idempotency & replay attacks
+4. Performance under load
+5. Observability (logs, metrics, alerts)
+6. Test gaps
+
+CONSTRAINTS:
+- List findings by severity: CRITICAL / HIGH / MEDIUM / LOW
+- Cite line numbers or symbols
+- Do not assume libraries not shown in the code
+- If unsure, say what evidence you need
+
+OUTPUT FORMAT:
+## Summary (2 sentences)
+## Findings (bullet list with severity)
+## Suggested tests
+## Safe to merge? (yes/no + why)</code></pre></div>
+</div>
+
+<div class="section">
+<h2>Token Budgeting in Prompts</h2>
+<table>
+<tr><th>Section</th><th>Budget priority</th><th>If over budget</th></tr>
+<tr><td>Safety rules</td><td>Never cut</td><td>—</td></tr>
+<tr><td>User question</td><td>Never cut</td><td>—</td></tr>
+<tr><td>Relevant schema</td><td>High</td><td>Truncate to related tables only</td></tr>
+<tr><td>Few-shot examples</td><td>Medium</td><td>Keep 2 best, drop rest</td></tr>
+<tr><td>Chat history</td><td>Low</td><td>Summarize older turns</td></tr>
+</table>
+</div>
+
+<div class="presentation-tip"><strong>🎤 Senior audience exercise:</strong> Give them the weak prompt and ask what production validator would catch zero issues. Then show JSON output + schema validator catching invented columns.</div>
+
+<div class="section">
+<h2>From Chat Message to API Request (Behind the Scenes)</h2>
+<p>When you use ChatGPT, Cursor, or your own app, the same pattern applies: <strong>messages array → API → response</strong>.</p>
+<div class="code-block"><button class="copy-btn">Copy</button><pre><code>{
+  "model": "gpt-4.1",
+  "messages": [
+    { "role": "system", "content": "You are a safe SQL assistant..." },
+    { "role": "user", "content": "Schema: ...\n\nQuestion: Show unpaid invoices" }
+  ],
+  "temperature": 0.1,
+  "response_format": { "type": "json_object" }
+}</code></pre></div>
+<p><strong>Cursor</strong> adds: codebase chunks, open files, rules from <code class="inline-code">.cursor/rules</code>. <strong>Your NL2SQL app</strong> adds: retrieved schema, user ACL, validator after response.</p>
+</div>
+
+<div class="section">
+<h2>Using Chat Models Properly (Junior + Senior)</h2>
+<table>
+<tr><th>Do</th><th>Don't</th></tr>
+<tr><td>One clear task per message</td><td>"Build entire microservice" in one prompt</td></tr>
+<tr><td>Paste relevant schema only</td><td>Dump 500 tables</td></tr>
+<tr><td>Ask for JSON / structured output</td><td>Parse free-text with regex in production</td></tr>
+<tr><td>Say "use only provided context"</td><td>Assume model knows your stack</td></tr>
+<tr><td>Iterate: plan → approve → code</td><td>Accept first output for prod</td></tr>
+</table>
+</div>
+
+<div class="section">
+<h2>Prompt Engineering in Cursor vs Custom API</h2>
+<div class="compare-grid">
+<div class="compare-col good">
+<h4>Cursor (IDE)</h4>
+<ul>
+<li>System: rules + project context</li>
+<li>User: your instruction + @files</li>
+<li>Hidden: index retrieval of related files</li>
+</ul>
+<p>Prompt engineering = <strong>good instructions + right @context</strong></p>
+</div>
+<div class="compare-col good">
+<h4>Custom NL2SQL API</h4>
+<ul>
+<li>System: safety policy (you own)</li>
+<li>Developer: output schema</li>
+<li>User: question only — schema from RAG</li>
+</ul>
+<p>Prompt engineering = <strong>contract + assembly code</strong></p>
+</div>
+</div>
+</div>
+
+<div class="takeaway"><h3>Key Takeaway</h3>
+<p>A production prompt is a versioned contract: roles, labeled context, ordered constraints, and parseable output — not clever natural language.</p></div>
+<div class="chapter-nav"><a href="chapter02.html">← Previous</a><a href="index.html">🏠 Home</a><a href="chapter04.html">Next Chapter →</a></div>
+        </main>
+        <footer class="footer">
+            <p>From Prompt Engineering to Context Engineering — Developer Learning Guide</p>
+            <p>Chapter 3 of 25 · Prepared for Sakib Hasan · June 2026</p>
+        </footer>
+    </div>
+    <script src="js/app.js"></script>
+</body>
+</html>

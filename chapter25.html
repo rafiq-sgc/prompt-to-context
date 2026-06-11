@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 25: How LLM Models Work — Complete Guide</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="reading-progress"></div>
+    <button class="mobile-menu-toggle" onclick="toggleMobileMenu()" aria-label="Toggle menu">☰</button>
+    <div class="container">
+        <header class="header">
+            <h1>Chapter 25: How LLM Models Work — Complete Guide</h1>
+            <p class="subtitle">Architecture, training, inference, parameters, model families, best output playbook.</p>
+        </header>
+        <nav class="nav-sidebar" id="nav-sidebar">
+            <div class="nav-brand">CONTEXT ENGINEERING 2026</div>
+            <ul>
+                <li><a href="index.html">🏠 Home</a></li>
+                <li><a href="chapter01.html">🚀 Ch1: Introduction</a></li>
+                <li><a href="chapter02.html">🧠 Ch2: LLM Recap</a></li>
+                <li><a href="chapter03.html">✍️ Ch3: Prompt Basics</a></li>
+                <li><a href="chapter04.html">🎯 Ch4: Advanced Prompts</a></li>
+                <li><a href="chapter05.html">⚠️ Ch5: Why Prompts Fail</a></li>
+                <li><a href="chapter06.html">🏗️ Ch6: Context Engineering</a></li>
+                <li><a href="chapter07.html">📚 Ch7: RAG</a></li>
+                <li><a href="chapter08.html">🔧 Ch8: Tools & MCP</a></li>
+                <li><a href="chapter09.html">🤖 Ch9: AI Agents</a></li>
+                <li><a href="chapter10.html">👥 Ch10: Multi-Agent</a></li>
+                <li><a href="chapter11.html">🔄 Ch11: AI SDLC</a></li>
+                <li><a href="chapter12.html">⚡ Ch12: Productivity</a></li>
+                <li><a href="chapter13.html">🛠️ Ch13: AI Tools</a></li>
+                <li><a href="chapter14.html">🎨 Ch14: Vibe Coding</a></li>
+                <li><a href="chapter15.html">🗄️ Ch15: NL-to-SQL</a></li>
+                <li><a href="chapter16.html">📊 Ch16: Evals</a></li>
+                <li><a href="chapter17.html">🔒 Ch17: Security</a></li>
+                <li><a href="chapter18.html">🏢 Ch18: Governance</a></li>
+                <li><a href="chapter19.html">🔮 Ch19: Future</a></li>
+                <li><a href="chapter20.html">🎤 Ch20: Present</a></li>
+                <li><a href="chapter21.html">⚖️ Ch21: Prompt vs Context</a></li>
+                <li><a href="chapter22.html">⚡ Ch22: Productivity Paradox</a></li>
+                <li><a href="chapter23.html">👁️ Ch23: Supervisory Eng.</a></li>
+                <li><a href="chapter24.html">📉 Ch24: Context Debt</a></li>
+                <li><a href="chapter25.html" class="active">🔬 Ch25: How LLMs Work</a></li>
+            </ul>
+        </nav>
+        <main class="main-content">
+            
+            <div class="chapter-header">
+                <h1>🔬 Chapter 25: How LLM Models Work — Complete Guide</h1>
+                <p class="chapter-meta">Architecture, training, inference, parameters, model families, best output playbook.</p>
+            </div><div class="chapter-nav"><a href="chapter24.html">← Previous</a><a href="index.html">🏠 Home</a><span></span></div>
+<div class="tagline-banner" style="text-align:left;margin-bottom:1.5rem">
+<strong>From Prompt Engineering to Context Engineering</strong><br>
+<span style="font-size:.95rem;color:#4338ca">How Developers Should Build, Use, and Control AI in 2026</span>
+<div style="margin-top:.75rem;font-size:.9rem;color:#334155">
+📍 <strong>Chapter 25</strong> · Phase: <strong>Reference — How LLM Models Work</strong><br>
+The complete developer guide: architecture, training, inference, parameters, model families, and how to get the best output from any LLM.
+</div>
+</div>
+<div class="diagram-section">
+<h3>LLM Knowledge Path</h3>
+<div style="overflow-x:auto;padding:.5rem 0;font-size:.82rem;line-height:2"><span style="color:#64748b">Ch2 LLM Recap</span> → <span style="font-weight:700;color:#4f46e5">Ch25 LLM Deep Dive</span> → <span style="color:#64748b">Ch3 Prompts</span> → <span style="color:#64748b">Ch6 Context</span> → <span style="color:#64748b">Ch7 RAG</span></div>
+<p style="font-size:.88rem;color:#64748b;margin-top:.5rem"><a href="chapter02.html">Chapter 2</a> = fast recap for seniors. <strong>Chapter 25</strong> = full reference. Then apply via prompts, context, and evals.</p>
+</div><div class="objectives"><h3>🎯 Learning Objectives</h3><ul><li>Explain how LLMs work from tokens through transformers to generated text</li><li>Understand training (pretraining, fine-tuning, alignment) and inference (autoregressive decoding)</li><li>Use sampling parameters and chat roles to control output quality</li><li>Choose the right model type, context size, and deployment pattern for each task</li><li>Apply practical techniques that consistently produce better LLM output</li></ul></div>
+<div class="section">
+<h2>Why This Chapter Exists</h2>
+<p><a href="chapter02.html">Chapter 2</a> gives a <strong>production-focused recap</strong> — what seniors must know to control AI. This chapter is the <strong>complete reference</strong>: how models are built, how they run, what knobs you can turn, and how to get reliably better output.</p>
+<div class="info-box"><h4>Read this chapter if you want to understand…</h4>
+<ul>
+<li>What happens inside the model when you send a prompt</li>
+<li>Why the same prompt gives different answers on different runs</li>
+<li>Which model and settings to pick for SQL vs brainstorming vs code review</li>
+<li>Why context engineering matters more as models get larger</li>
+</ul></div>
+<div class="quote-block">An LLM does not "think." It predicts the next token. Everything else — usefulness, danger, productivity — comes from how you frame the task, supply context, and verify output.</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<div class="section">
+<h2>Part 1 — The Big Picture: Text In, Text Out</h2>
+<div class="diagram-container"><div class="mermaid">
+flowchart TB
+    subgraph You send
+        TXT[Plain text prompt]
+    end
+    subgraph Inside the LLM
+        TOK[1. Tokenize]
+        EMB[2. Embed to vectors]
+        TR[3. Transformer layers]
+        LOG[4. Predict next token logits]
+        SMP[5. Sample one token]
+    end
+    subgraph Loop
+        APP[Append token to context]
+        TR
+    end
+    subgraph You receive
+        OUT[Generated text stream]
+    end
+    TXT --> TOK --> EMB --> TR --> LOG --> SMP --> APP
+    APP --> TR
+    SMP --> OUT
+</div></div>
+<table>
+<tr><th>Stage</th><th>What happens</th><th>Developer implication</th></tr>
+<tr><td><strong>Tokenize</strong></td><td>Text → integer token IDs</td><td>Same meaning, different spelling = different cost</td></tr>
+<tr><td><strong>Embed</strong></td><td>Each token → high-dimensional vector</td><td>Model "sees" patterns, not characters</td></tr>
+<tr><td><strong>Transform</strong></td><td>Layers mix information across all tokens</td><td>Context window = all tokens attend to each other</td></tr>
+<tr><td><strong>Predict</strong></td><td>Probability distribution over ~100k+ possible next tokens</td><td>Output is probabilistic, not deterministic (unless configured)</td></tr>
+<tr><td><strong>Decode loop</strong></td><td>Pick token → append → predict again</td><td>Early mistakes compound into confident wrong answers</td></tr>
+</table>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<div class="section">
+<h2>Part 2 — Tokenization: The Hidden Interface</h2>
+<p>Before any "intelligence," your text becomes a sequence of <strong>tokens</strong>. Tokenization is model-specific — GPT-4, Claude, and Llama do not split text identically.</p>
+<div class="code-block"><button class="copy-btn">Copy</button><pre><code># Same English, different token counts (illustrative):
+"Hello world"           → 2 tokens (common phrase)
+"student_enrollment"    → 2–4 tokens depending on model
+"反"                    → 1 token in multilingual models
+"SELECT"                → often 1 token (frequent in training data)
+"Supercalifragilistic"  → many sub-word tokens</code></pre></div>
+<h3>Common Tokenization Methods</h3>
+<table>
+<tr><th>Method</th><th>How it works</th><th>Example</th></tr>
+<tr><td><strong>BPE</strong> (Byte Pair Encoding)</td><td>Merge frequent character pairs iteratively</td><td><code class="inline-code">enrollment</code> → <code class="inline-code">enroll</code> + <code class="inline-code">ment</code></td></tr>
+<tr><td><strong>SentencePiece</strong></td><td>Language-agnostic subword units</td><td>Used by Llama, many open models</td></tr>
+<tr><td><strong>Tiktoken-style</strong></td><td>Optimized BPE for code + multilingual</td><td>OpenAI GPT family</td></tr>
+</table>
+<h3>Why Tokenization Matters to Developers</h3>
+<ul>
+<li><strong>Cost:</strong> APIs charge per input + output token — long prompts are expensive</li>
+<li><strong>Context limits:</strong> A "200K context" window is 200K <em>tokens</em>, not words (~75K words roughly)</li>
+<li><strong>Code:</strong> CamelCase and snake_case split differently — affects few-shot examples</li>
+<li><strong>JSON:</strong> Whitespace and braces consume tokens — compact schemas help</li>
+<li><strong>Unicode bugs:</strong> Invisible characters can change tokenization and behavior</li>
+</ul>
+<div class="presentation-tip"><strong>🎤 Demo:</strong> Paste the same 500-line file into a tokenizer tool (or ask the model "how many tokens is this?"). Show how schema dumps blow the budget — bridges to <a href="chapter07.html">RAG (Ch 7)</a>.</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<div class="section">
+<h2>Part 3 — Embeddings: Words as Numbers</h2>
+<p>Each token ID maps to an <strong>embedding vector</strong> — typically 1,024 to 16,384 dimensions. Similar meanings cluster nearby in this space (approximately).</p>
+<div class="diagram-container"><div class="mermaid">
+flowchart LR
+    T1["Token: student"] --> V1["Vector: [0.2, -0.8, ...]"]
+    T2["Token: pupil"] --> V2["Vector: [0.19, -0.79, ...]"]
+    T3["Token: banana"] --> V3["Vector: [-0.5, 0.3, ...]"]
+    V1 -.similar.-> V2
+    V1 -.far.-> V3
+</div></div>
+<p><strong>Generative LLMs</strong> use embeddings internally during generation. <strong>Embedding models</strong> (OpenAI <code class="inline-code">text-embedding-3</code>, Cohere, open-source encoders) output vectors you store for <a href="chapter07.html">RAG search</a> — they do not generate text.</p>
+<table>
+<tr><th>Model type</th><th>Input</th><th>Output</th><th>Use case</th></tr>
+<tr><td>Generative LLM</td><td>Text prompt</td><td>More text</td><td>Chat, code, SQL drafts</td></tr>
+<tr><td>Embedding model</td><td>Text chunk</td><td>Fixed-size vector</td><td>Semantic search, RAG index</td></tr>
+<tr><td>Reranker</td><td>Query + candidate docs</td><td>Relevance score</td><td>Improve RAG precision</td></tr>
+</table>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<div class="section">
+<h2>Part 4 — Transformer Architecture (What Seniors Should Know)</h2>
+<p>Modern LLMs are stacks of <strong>transformer decoder blocks</strong>. You do not need to implement them — but you need the mental model.</p>
+<div class="diagram-container"><div class="mermaid">
+flowchart TB
+    subgraph One Transformer Block
+        IN[Token embeddings + position info]
+        ATT[Multi-head self-attention]
+        ADD1[Residual + layer norm]
+        FFN[Feed-forward network]
+        ADD2[Residual + layer norm]
+        OUT[Output to next layer]
+    end
+    IN --> ATT --> ADD1 --> FFN --> ADD2 --> OUT
+</div></div>
+
+<h3>Self-Attention — "Which tokens matter for this token?"</h3>
+<p>Every token can <strong>attend to</strong> every other token in the context window. When generating SQL, the model weighs relationships between <code class="inline-code">SELECT</code>, table names in your schema chunk, and the user question — simultaneously.</p>
+<ul>
+<li><strong>Query, Key, Value:</strong> Internal mechanism for computing relevance weights between token pairs</li>
+<li><strong>Multi-head:</strong> Multiple attention patterns in parallel (syntax, semantics, long-range links)</li>
+<li><strong>Causal mask:</strong> During generation, future tokens are hidden — model only sees past tokens</li>
+</ul>
+
+<h3>Scale: Parameters and Layers</h3>
+<table>
+<tr><th>Term</th><th>Meaning</th><th>Practical note</th></tr>
+<tr><td><strong>Parameters</strong></td><td>Learned weights (billions)</td><td>Larger ≠ always better for your task; fit and latency matter</td></tr>
+<tr><td><strong>Layers</strong></td><td>Depth of transformer stack</td><td>More depth = more abstraction capacity</td></tr>
+<tr><td><strong>Hidden dimension</strong></td><td>Width of internal representations</td><td>Affects memory during inference</td></tr>
+<tr><td><strong>Context length</strong></td><td>Max tokens in one request</td><td>Long context costs more compute (attention is O(n²) naively)</td></tr>
+</table>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<div class="section">
+<h2>Part 5 — How Models Are Trained (Three Phases)</h2>
+<div class="diagram-container"><div class="mermaid">
+flowchart LR
+    P1[Phase 1: Pretraining]
+    P2[Phase 2: Supervised Fine-Tuning]
+    P3[Phase 3: Alignment RLHF/DPO]
+    P1 --> P2 --> P3 --> DEPLOY[Deployed Chat Model]
+</div></div>
+
+<h3>Phase 1 — Pretraining</h3>
+<p>Model reads massive text corpora (web, books, code, papers) and learns to predict the next token. It absorbs grammar, facts (with cutoff date), coding patterns, and reasoning <em>style</em> — but no instruction-following yet.</p>
+
+<h3>Phase 2 — Supervised Fine-Tuning (SFT)</h3>
+<p>Human-curated examples: (instruction, ideal response) pairs. Teaches the model to act as a helpful assistant, follow formats, refuse some requests, write code in blocks.</p>
+
+<h3>Phase 3 — Alignment (RLHF / DPO / similar)</h3>
+<p>Human raters rank outputs; model is adjusted to prefer helpful, harmless, honest responses. This is why chat models behave differently from raw base models.</p>
+
+<table>
+<tr><th>Phase</th><th>What the model learns</th><th>What it does NOT fix</th></tr>
+<tr><td>Pretraining</td><td>Language, world patterns, code syntax</td><td>Your private schema, today's API docs</td></tr>
+<tr><td>SFT</td><td>Instruction following, chat format</td><td>Guaranteed factual accuracy</td></tr>
+<tr><td>Alignment</td><td>Helpful tone, safety refusals</td><td>Hallucination elimination</td></tr>
+</table>
+<div class="quote-block">Training teaches <em>plausible</em> text. Your job as a developer is to supply <em>true</em> context and verify <em>correct</em> behavior.</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<div class="section">
+<h2>Part 6 — Inference: How Text Is Generated at Runtime</h2>
+
+<h3>Autoregressive Decoding</h3>
+<p>The model generates one token at a time. Each new token is appended to the input; the full sequence is re-processed (with optimizations). This is why:</p>
+<ul>
+<li>Long answers cost more (more forward passes)</li>
+<li>Stopping early saves money (<code class="inline-code">max_tokens</code>)</li>
+<li>A wrong token early can derail an entire SQL query</li>
+</ul>
+
+<h3>KV Cache (Why First Token Is Slowest)</h3>
+<p>During generation, key/value tensors from previous tokens are cached so they are not recomputed. First token pays full context cost; subsequent tokens are cheaper per step.</p>
+
+<h3>Batching and Throughput</h3>
+<p>APIs batch many user requests on GPUs. Your latency depends on queue depth, model size, output length, and provider load — not just your prompt quality.</p>
+
+<div class="diagram-container"><div class="mermaid">
+sequenceDiagram
+    participant Dev as Developer
+    participant API as LLM API
+    participant GPU as Model on GPU
+    Dev->>API: Prompt (system + user + context)
+    API->>GPU: Tokenize + prefill context
+    loop Until stop token or max_tokens
+        GPU->>GPU: Predict next token distribution
+        GPU->>GPU: Sample / pick token
+        GPU->>API: Stream token
+        API->>Dev: SSE chunk
+    end
+</div></div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<div class="section">
+<h2>Part 7 — Context Window and Position</h2>
+<p>The <strong>context window</strong> is the maximum tokens the model can process in one request (input + output combined on most APIs).</p>
+<table>
+<tr><th>Context size (2026 typical)</th><th>Good for</th><th>Risk</th></tr>
+<tr><td>8K–32K</td><td>Single-file edits, short RAG</td><td>Large repos need chunking</td></tr>
+<tr><td>128K–200K</td><td>Long docs, big schemas</td><td>"Lost in the middle" — see <a href="chapter02.html">Ch 2</a></td></tr>
+<tr><td>1M+ (select models)</td><td>Whole codebases, legal docs</td><td>Cost, latency, attention dilution</td></tr>
+</table>
+<p><strong>Positional encoding</strong> tells the model where each token sits in the sequence. Extended-context models use techniques (RoPE scaling, etc.) to generalize beyond original training length — with varying quality at the extremes.</p>
+<div class="success-box"><h4>Best practice</h4>
+<p>Put <strong>rules first</strong>, <strong>retrieved facts in labeled blocks</strong>, <strong>user task last</strong>. Do not dump 100 pages and hope — rank and compress (<a href="chapter06.html">Ch 6</a>).</p></div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<div class="section">
+<h2>Part 8 — Model Families in 2026 (Practical Guide)</h2>
+<table>
+<tr><th>Family</th><th>Examples</th><th>Strengths</th><th>Typical use</th></tr>
+<tr><td><strong>OpenAI GPT</strong></td><td>GPT-4o, o-series reasoning</td><td>Ecosystem, tool use, multimodal</td><td>General chat, agents, APIs</td></tr>
+<tr><td><strong>Anthropic Claude</strong></td><td>Claude Sonnet, Opus</td><td>Long context, careful writing</td><td>Docs, review, long analysis</td></tr>
+<tr><td><strong>Google Gemini</strong></td><td>Gemini Pro/Flash</td><td>Multimodal, Google integration</td><td>Mixed media, workspace</td></tr>
+<tr><td><strong>Meta Llama</strong></td><td>Llama 3.x open weights</td><td>Self-host, customize, privacy</td><td>On-prem, fine-tune, air-gap</td></tr>
+<tr><td><strong>Mistral / Qwen / DeepSeek</strong></td><td>Open + hosted variants</td><td>Cost, speed, code</td><td>High-volume pipelines</td></tr>
+<tr><td><strong>Coding-specialized</strong></td><td>Codex-style, DeepSeek-Coder</td><td>IDE completion, diffs</td><td>Cursor, Copilot backends</td></tr>
+</table>
+
+<h3>Chat vs Base vs Reasoning Models</h3>
+<table>
+<tr><th>Type</th><th>Behavior</th><th>When to use</th><th>Settings</th></tr>
+<tr><td><strong>Base model</strong></td><td>Continues text; weak instruction following</td><td>Rare for app devs; research</td><td>Custom fine-tunes only</td></tr>
+<tr><td><strong>Instruct / chat</strong></td><td>Follows system + user messages</td><td>Most production apps</td><td>Low temperature for SQL/code</td></tr>
+<tr><td><strong>Reasoning</strong></td><td>Internal chain-of-thought tokens before answer</td><td>Hard bugs, architecture, math</td><td>Higher latency; still verify</td></tr>
+</table>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<div class="section">
+<h2>Part 9 — Parameters That Control Output Quality</h2>
+<p>These are the knobs between your prompt and the final text. Production apps often fix them per task type.</p>
+<table>
+<tr><th>Parameter</th><th>What it does</th><th>Low value effect</th><th>High value effect</th><th>Recommended</th></tr>
+<tr><td><strong>temperature</strong></td><td>Randomness of token choice</td><td>Deterministic, repetitive</td><td>Creative, unstable</td><td>0–0.3 for SQL/code; 0.7+ for brainstorming</td></tr>
+<tr><td><strong>top_p</strong> (nucleus)</td><td>Sample from smallest set with cumulative prob p</td><td>Narrow vocabulary</td><td>Wild variations</td><td>0.9 default; lower for structure</td></tr>
+<tr><td><strong>top_k</strong></td><td>Only consider top k tokens</td><td>Safe, boring</td><td>More surprise</td><td>Often unused if top_p set</td></tr>
+<tr><td><strong>max_tokens</strong></td><td>Cap output length</td><td>Truncated answers</td><td>Runaway cost</td><td>Set per task; SQL needs less than essays</td></tr>
+<tr><td><strong>stop sequences</strong></td><td>Halt at delimiter</td><td>—</td><td>—</td><td><code class="inline-code">```</code>, <code class="inline-code">;</code> for SQL blocks</td></tr>
+<tr><td><strong>frequency_penalty</strong></td><td>Discourage repetition</td><td>Loops ("the the the")</td><td>May avoid needed terms</td><td>Slight positive for long prose</td></tr>
+<tr><td><strong>presence_penalty</strong></td><td>Encourage new topics</td><td>Stays on rail</td><td>Drifts off task</td><td>Use carefully in agents</td></tr>
+<tr><td><strong>seed</strong> (if supported)</td><td>Reproducible sampling</td><td>Same output on retry</td><td>—</td><td>Evals and regression tests</td></tr>
+</table>
+<div class="code-block"><button class="copy-btn">Copy</button><pre><code>// Example API request shape (conceptual)
+{
+  "model": "gpt-4o",
+  "messages": [
+    {"role": "system", "content": "You write PostgreSQL only. No DML."},
+    {"role": "user", "content": "Revenue by department for Q1 2026"}
+  ],
+  "temperature": 0.1,
+  "max_tokens": 500,
+  "response_format": {"type": "json_object"}
+}</code></pre></div>
+<div class="warning-box"><h4>⚠️ Common mistake</h4>
+<p>Using high temperature for production SQL or JSON because "the model seems more creative." Creativity increases <strong>wrong</strong> outputs. Use structure + low temperature + schema validation instead.</p></div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<div class="section">
+<h2>Part 10 — Chat Format: Roles and Messages</h2>
+<p>Chat models are trained on <strong>multi-turn message lists</strong>, not a single blob of text.</p>
+<table>
+<tr><th>Role</th><th>Purpose</th><th>Example content</th></tr>
+<tr><td><strong>system</strong></td><td>Stable rules, persona, constraints</td><td>"You are a SQL assistant. Read-only. PostgreSQL."</td></tr>
+<tr><td><strong>developer</strong> (OpenAI)</td><td>App-level instructions (higher priority in some APIs)</td><td>Tool policies, output schema</td></tr>
+<tr><td><strong>user</strong></td><td>End-user task or question</td><td>"Show unpaid invoices by campus"</td></tr>
+<tr><td><strong>assistant</strong></td><td>Prior model turns in conversation</td><td>History for follow-up questions</td></tr>
+<tr><td><strong>tool</strong></td><td>Results from function calls</td><td>JSON from <code class="inline-code">run_sql</code> or API</td></tr>
+</table>
+<p><strong>Multi-turn memory:</strong> The API is stateless — you resend full message history each call (or use provider-side threads). Long chats eat context and dilute early instructions. Summarize or trim old turns in production.</p>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<div class="section">
+<h2>Part 11 — How to Get the Best Output (Developer Playbook)</h2>
+<p>Better output is not luck — it is <strong>task design</strong> aligned with how LLMs actually work.</p>
+
+<h3>The OUTPUT Framework</h3>
+<table>
+<tr><th>Letter</th><th>Principle</th><th>Action</th></tr>
+<tr><td><strong>O</strong></td><td>Objective</td><td>One clear goal per request; split mega-tasks</td></tr>
+<tr><td><strong>U</strong></td><td>Understand context</td><td>Paste schema, types, errors — not "you know my project"</td></tr>
+<tr><td><strong>T</strong></td><td>Template output</td><td>JSON schema, SQL-only, numbered steps, diff format</td></tr>
+<tr><td><strong>P</strong></td><td>Parameters</td><td>Low temperature for facts; max_tokens sized to task</td></tr>
+<tr><td><strong>U</strong></td><td>Use examples</td><td>1–3 few-shot pairs for style and edge cases</td></tr>
+<tr><td><strong>T</strong></td><td>Test and iterate</td><td>Eval set; compare prompts; measure don't guess</td></tr>
+</table>
+
+<h3>Techniques Ranked by Impact</h3>
+<table>
+<tr><th>Technique</th><th>Impact</th><th>Example</th></tr>
+<tr><td>Supply ground truth context (RAG, @file)</td><td>★★★★★</td><td>Inject <code class="inline-code">CREATE TABLE</code> for relevant tables only</td></tr>
+<tr><td>Constrain output format</td><td>★★★★★</td><td>"Return JSON: {sql, tables_used, assumptions}"</td></tr>
+<tr><td>Plan before code</td><td>★★★★☆</td><td>"List steps; wait for approval; then implement"</td></tr>
+<tr><td>Few-shot examples</td><td>★★★★☆</td><td>2 correct SQL examples matching your style</td></tr>
+<tr><td>Chain-of-thought (when needed)</td><td>★★★☆☆</td><td>"Think step by step" for hard logic — hide steps in prod</td></tr>
+<tr><td>Self-critique pass</td><td>★★★☆☆</td><td>"Review your SQL for injection and missing JOINs"</td></tr>
+<tr><td>Bigger model</td><td>★★☆☆☆</td><td>Helps; does not replace context or evals</td></tr>
+</table>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<div class="section">
+<h2>Part 12 — Weak vs Strong: Same Model, Different Results</h2>
+<div class="tab-group" data-tab-group="llm-quality">
+<div class="tab-buttons">
+<button class="active" data-tab="weak">Weak prompt</button>
+<button data-tab="strong">Strong prompt + context</button>
+</div>
+<div class="tab-panel active" data-panel="weak"><p><strong>Task:</strong> Fix the login bug.</p>
+<div class="code-block"><pre><code>Fix the login bug.</code></pre></div>
+<p><strong>Result:</strong> Model guesses auth library, changes random files, invents <code class="inline-code">loginHandler_v2</code>, may break OAuth flow.</p></div>
+<div class="tab-panel" data-panel="strong"><p><strong>Task:</strong> Same bug, with context and constraints.</p>
+<div class="code-block"><pre><code>@file src/auth/login.ts @file src/auth/session.ts
+
+Bug: Users with SSO see 401 after redirect. Repro: Google login only.
+Do NOT change session TTL or unrelated files.
+1. List hypotheses
+2. Propose minimal fix
+3. Add one test case</code></pre></div>
+<p><strong>Result:</strong> Targeted analysis, cites actual code paths, smaller diff, test included.</p></div>
+</div>
+<p>Same model. Same temperature. Different <strong>information and structure</strong> → different quality.</p>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<div class="section">
+<h2>Part 13 — Structured and Constrained Output</h2>
+<p>Free-form text is hardest to parse reliably. Production systems constrain the output space.</p>
+<ul>
+<li><strong>JSON mode / schema:</strong> API enforces valid JSON matching a schema</li>
+<li><strong>Grammar / regex sampling:</strong> Force valid SQL subset or enum values</li>
+<li><strong>Tool calling:</strong> Model picks from defined functions with typed args</li>
+<li><strong>Post-validation:</strong> Parse → validate → retry with error message</li>
+</ul>
+<div class="code-block"><button class="copy-btn">Copy</button><pre><code># Retry loop pattern (simplified)
+for attempt in range(3):
+    response = llm.generate(prompt, temperature=0.1)
+    sql = extract_sql(response)
+    err = validate_sql(sql, schema, acl_rules)
+    if err is None:
+        break
+    prompt += f"\nPrevious SQL failed: {err}. Fix only the error."
+# Never trust first token stream blindly</code></pre></div>
+<p>See <a href="chapter08.html">Ch 8 (Tools)</a>, <a href="chapter16.html">Ch 16 (Evals)</a>, and <a href="chapter15.html">Ch 15 (NL2SQL)</a> for full pipelines.</p>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<div class="section">
+<h2>Part 14 — Multimodal and Specialized Models</h2>
+<table>
+<tr><th>Modality</th><th>Input</th><th>Use case</th><th>Caveat</th></tr>
+<tr><td>Vision</td><td>Images + text</td><td>UI mockups → code, diagram OCR</td><td>May misread small text</td></tr>
+<tr><td>Audio</td><td>Speech</td><td>Meeting notes, voice agents</td><td>PII in recordings</td></tr>
+<tr><td>Code-specific</td><td>Code-heavy prompts</td><td>IDE completion, refactors</td><td>Wrong project conventions</td></tr>
+<tr><td>Embedding-only</td><td>Text chunks</td><td>RAG index, dedup, clustering</td><td>Not for generation</td></tr>
+</table>
+<p>Multimodal models still run on the same core idea: tokens in → tokens out, with other modalities encoded into the token stream.</p>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<div class="section">
+<h2>Part 15 — Limitations You Cannot Prompt Away</h2>
+<table>
+<tr><th>Limitation</th><th>Why</th><th>Engineering response</th></tr>
+<tr><td>No live data</td><td>Weights frozen at training</td><td>RAG, tools, APIs</td></tr>
+<tr><td>No true verification</td><td>Predicts text, doesn't execute</td><td>Run code/SQL, unit tests</td></tr>
+<tr><td>Hallucination</td><td>Confident = high probability, not true</td><td>Schema validators, citations</td></tr>
+<tr><td>Knowledge cutoff</td><td>Training data date</td><td>Docs retrieval, web tools (with governance)</td></tr>
+<tr><td>Non-determinism</td><td>Sampling</td><td>Low temp, seeds, evals</td></tr>
+<tr><td>Attention limits</td><td>Finite context, dilution</td><td>Retrieve, don't dump</td></tr>
+<tr><td>No persistent memory (by default)</td><td>Stateless API</td><td>Your DB, session store, MCP</td></tr>
+</table>
+<div class="quote-block">Every limitation maps to a chapter in this guide: context (6), RAG (7), tools (8), agents (9), evals (16), security (17).</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<div class="section">
+<h2>Part 16 — Choosing the Right Model (Decision Tree)</h2>
+<div class="diagram-container"><div class="mermaid">
+flowchart TD
+    START[New AI task]
+    START --> PRIV{Private / regulated data?}
+    PRIV -->|Yes| LOCAL[Self-host or VPC-hosted open model]
+    PRIV -->|No| LAT{Need lowest latency?}
+    LAT -->|Yes| FAST[Smaller / flash tier model]
+    LAT -->|No| HARD{Multi-step reasoning?}
+    HARD -->|Yes| REASON[Reasoning-tier model]
+    HARD -->|No| LONG{Context &gt; 100K tokens?}
+    LONG -->|Yes| LONGCTX[Long-context flagship]
+    LONG -->|No| CHAT[Standard instruct chat model]
+    LOCAL --> EVAL[Always: evals + guardrails]
+    FAST --> EVAL
+    REASON --> EVAL
+    LONGCTX --> EVAL
+    CHAT --> EVAL
+</div></div>
+<table>
+<tr><th>Task</th><th>Model bias</th><th>Key setting</th></tr>
+<tr><td>NL2SQL production</td><td>Strong instruct + your RAG</td><td>temp 0–0.2, JSON/SQL schema</td></tr>
+<tr><td>IDE autocomplete</td><td>Small, fast code model</td><td>Inline, partial context</td></tr>
+<tr><td>Architecture review</td><td>Large reasoning or flagship</td><td>Plan-first prompt, high context</td></tr>
+<tr><td>High-volume classification</td><td>Small cheap model</td><td>Fixed labels, few-shot</td></tr>
+<tr><td>On-prem air-gap</td><td>Llama / Mistral self-hosted</td><td>Fine-tune + local RAG</td></tr>
+</table>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<div class="section">
+<h2>Part 17 — Cost, Latency, and Caching</h2>
+<table>
+<tr><th>Factor</th><th>Drives cost up</th><th>Optimization</th></tr>
+<tr><td>Input tokens</td><td>Huge system prompts, full repo dumps</td><td>RAG, summarize history, cache system prompt</td></tr>
+<tr><td>Output tokens</td><td>Verbose chain-of-thought in prod</td><td>Cap max_tokens; ask for bullet answers</td></tr>
+<tr><td>Model tier</td><td>Flagship for every request</td><td>Route: small model first, escalate if uncertain</td></tr>
+<tr><td>Reasoning models</td><td>Hidden thinking tokens billed</td><td>Reserve for hard tasks only</td></tr>
+</table>
+<p><strong>Prompt caching</strong> (where providers support it): identical long system prefixes are billed at reduced rate — structure prompts with stable prefix + variable suffix.</p>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<div class="section">
+<h2>Part 18 — Deployment Patterns</h2>
+<table>
+<tr><th>Pattern</th><th>Description</th><th>Pros</th><th>Cons</th></tr>
+<tr><td><strong>Hosted API</strong></td><td>OpenAI, Anthropic, etc.</td><td>Best models, no GPU ops</td><td>Data governance, cost at scale</td></tr>
+<tr><td><strong>Cloud VPC</strong></td><td>Provider in your network</td><td>Compliance, isolation</td><td>Still third-party weights</td></tr>
+<tr><td><strong>Self-hosted open weights</strong></td><td>Llama on your GPUs</td><td>Full control, air-gap</td><td>Ops burden, may lag flagship quality</td></tr>
+<tr><td><strong>Edge / local</strong></td><td>Ollama, LM Studio on laptop</td><td>Privacy, offline</td><td>Weaker models, limited context</td></tr>
+</table>
+<p>See <a href="chapter18.html">Ch 18 (Governance)</a> before sending production data to any endpoint.</p>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<div class="section">
+<h2>Part 19 — Benchmarks: What They Mean (and Don't)</h2>
+<table>
+<tr><th>Benchmark</th><th>Measures</th><th>Trust for your app?</th></tr>
+<tr><td>MMLU / GPQA</td><td>General knowledge Q&A</td><td>Loose correlation only</td></tr>
+<tr><td>HumanEval / SWE-bench</td><td>Code generation / repo fixes</td><td>Better for coding tools</td></tr>
+<tr><td>Custom eval set</td><td>Your SQL, your policies</td><td>★ Only one that matters</td></tr>
+</table>
+<p>Leaderboard scores do not predict success on <em>your</em> schema, <em>your</em> auth rules, or <em>your</em> team's prompts. Build a golden dataset (<a href="chapter16.html">Ch 16</a>).</p>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<div class="section">
+<h2>Part 20 — Daily Habits for Better LLM Results</h2>
+<ul class="checklist">
+<li>Start with the smallest model that might work — upgrade only when evals fail</li>
+<li>Put stable instructions in system message; put changing facts in retrieved context</li>
+<li>Ask for assumptions explicitly: "List assumptions before SQL"</li>
+<li>Never merge AI code you cannot explain in one sentence</li>
+<li>Use @file / RAG instead of describing code from memory</li>
+<li>Set temperature 0–0.3 for anything that runs in production</li>
+<li>Log prompts, context version, model ID, and parameters for debugging</li>
+<li>Re-run critical tasks with a second model or human review</li>
+<li>Treat the model as a fast intern — skilled supervision required (<a href="chapter23.html">Ch 23</a>)</li>
+</ul>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════ -->
+<div class="section">
+<h2>Part 21 — Map to the Rest of This Guide</h2>
+<table>
+<tr><th>This chapter (LLM internals)</th><th>Next chapter (what to do about it)</th></tr>
+<tr><td>Token limits</td><td><a href="chapter06.html">Ch 6</a> Context engineering</td></tr>
+<tr><td>No private knowledge</td><td><a href="chapter07.html">Ch 7</a> RAG</td></tr>
+<tr><td>Can't execute tools natively</td><td><a href="chapter08.html">Ch 8</a> Tools & MCP</td></tr>
+<tr><td>Multi-step tasks</td><td><a href="chapter09.html">Ch 9</a> Agents</td></tr>
+<tr><td>Prompt quality</td><td><a href="chapter03.html">Ch 3–4</a> Prompt engineering</td></tr>
+<tr><td>Why prompts fail alone</td><td><a href="chapter05.html">Ch 5</a> Failure modes</td></tr>
+<tr><td>Measuring quality</td><td><a href="chapter16.html">Ch 16</a> Evals</td></tr>
+<tr><td>Bad context in = bad out</td><td><a href="chapter24.html">Ch 24</a> Context debt</td></tr>
+</table>
+</div>
+
+<div class="presentation-tip"><strong>🎤 For your presentation:</strong> Use Part 1 diagram + Part 12 weak/strong tab demo. Say: "The model didn't get smarter — we gave it better tokens in and better constraints out."</div>
+
+<div class="takeaway"><h3>Key Takeaway</h3>
+<p>LLMs predict the next token from patterns in training plus everything in your context window. Best output comes from <strong>right model</strong>, <strong>right parameters</strong>, <strong>right context</strong>, and <strong>verification</strong> — not from treating the model as an infallible expert. Master the machine; then master the system around it.</p></div>
+<div class="chapter-nav"><a href="chapter24.html">← Previous</a><a href="index.html">🏠 Home</a><span></span></div>
+        </main>
+        <footer class="footer">
+            <p>From Prompt Engineering to Context Engineering — Developer Learning Guide</p>
+            <p>Chapter 25 of 25 · Prepared for Sakib Hasan · June 2026</p>
+        </footer>
+    </div>
+    <script src="js/app.js"></script>
+</body>
+</html>

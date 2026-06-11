@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 14: Vibe Coding — Benefits and Dark Side</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="reading-progress"></div>
+    <button class="mobile-menu-toggle" onclick="toggleMobileMenu()" aria-label="Toggle menu">☰</button>
+    <div class="container">
+        <header class="header">
+            <h1>Chapter 14: Vibe Coding — Benefits and Dark Side</h1>
+            <p class="subtitle">Prototype vs production mode, auth case study, responsible checklist.</p>
+        </header>
+        <nav class="nav-sidebar" id="nav-sidebar">
+            <div class="nav-brand">CONTEXT ENGINEERING 2026</div>
+            <ul>
+                <li><a href="index.html">🏠 Home</a></li>
+                <li><a href="chapter01.html">🚀 Ch1: Introduction</a></li>
+                <li><a href="chapter02.html">🧠 Ch2: LLM Recap</a></li>
+                <li><a href="chapter03.html">✍️ Ch3: Prompt Basics</a></li>
+                <li><a href="chapter04.html">🎯 Ch4: Advanced Prompts</a></li>
+                <li><a href="chapter05.html">⚠️ Ch5: Why Prompts Fail</a></li>
+                <li><a href="chapter06.html">🏗️ Ch6: Context Engineering</a></li>
+                <li><a href="chapter07.html">📚 Ch7: RAG</a></li>
+                <li><a href="chapter08.html">🔧 Ch8: Tools & MCP</a></li>
+                <li><a href="chapter09.html">🤖 Ch9: AI Agents</a></li>
+                <li><a href="chapter10.html">👥 Ch10: Multi-Agent</a></li>
+                <li><a href="chapter11.html">🔄 Ch11: AI SDLC</a></li>
+                <li><a href="chapter12.html">⚡ Ch12: Productivity</a></li>
+                <li><a href="chapter13.html">🛠️ Ch13: AI Tools</a></li>
+                <li><a href="chapter14.html" class="active">🎨 Ch14: Vibe Coding</a></li>
+                <li><a href="chapter15.html">🗄️ Ch15: NL-to-SQL</a></li>
+                <li><a href="chapter16.html">📊 Ch16: Evals</a></li>
+                <li><a href="chapter17.html">🔒 Ch17: Security</a></li>
+                <li><a href="chapter18.html">🏢 Ch18: Governance</a></li>
+                <li><a href="chapter19.html">🔮 Ch19: Future</a></li>
+                <li><a href="chapter20.html">🎤 Ch20: Present</a></li>
+                <li><a href="chapter21.html">⚖️ Ch21: Prompt vs Context</a></li>
+                <li><a href="chapter22.html">⚡ Ch22: Productivity Paradox</a></li>
+                <li><a href="chapter23.html">👁️ Ch23: Supervisory Eng.</a></li>
+                <li><a href="chapter24.html">📉 Ch24: Context Debt</a></li>
+                <li><a href="chapter25.html">🔬 Ch25: How LLMs Work</a></li>
+            </ul>
+        </nav>
+        <main class="main-content">
+            
+            <div class="chapter-header">
+                <h1>🎨 Chapter 14: Vibe Coding — Benefits and Dark Side</h1>
+                <p class="chapter-meta">Prototype vs production mode, auth case study, responsible checklist.</p>
+            </div><div class="chapter-nav"><a href="chapter13.html">← Previous</a><a href="index.html">🏠 Home</a><a href="chapter15.html">Next Chapter →</a></div>
+<div class="tagline-banner" style="text-align:left;margin-bottom:1.5rem">
+<strong>From Prompt Engineering to Context Engineering</strong><br>
+<span style="font-size:.95rem;color:#4338ca">How Developers Should Build, Use, and Control AI in 2026</span>
+<div style="margin-top:.75rem;font-size:.9rem;color:#334155">
+📍 <strong>Chapter 14</strong> · Phase: <strong>Use — Speed vs Discipline</strong><br>
+Vibe coding is describing what you want and accepting AI output with minimal review. Fast for prototypes — dangerous for production.
+</div>
+</div>
+<div class="diagram-section">
+<h3>Production & Delivery Journey (Chapters 11–20)</h3>
+<div style="overflow-x:auto;padding:.5rem 0;font-size:.82rem;line-height:2"><span style="color:#64748b">Ch11 SDLC</span> → <span style="color:#64748b">Ch12 Workflow</span> → <span style="color:#64748b">Ch13 Tools</span> → <span style="font-weight:700;color:#4f46e5">Ch14 Vibe Coding</span> → <span style="color:#64748b">Ch15 NL-to-SQL</span> → <span style="color:#64748b">Ch16 Evals</span> → <span style="color:#64748b">Ch17 Security</span> → <span style="color:#64748b">Ch18 Governance</span> → <span style="color:#64748b">Ch19 Future</span> → <span style="color:#64748b">Ch20 Present</span></div>
+<p style="font-size:.88rem;color:#64748b;margin-top:.5rem">Chapters 2–10 taught you to <em>build</em> AI systems. Chapters 11–20 teach you to <em>use, measure, secure, govern</em>, and <em>present</em> them professionally.</p>
+</div><div class="objectives"><h3>🎯 Learning Objectives</h3><ul><li>Define vibe coding and where it legitimately helps</li><li>Recognize the dark side: debt, security, skill erosion</li><li>Apply the responsible vibe coding checklist</li><li>Distinguish prototype mode from production mode</li><li>Teach juniors when to slow down</li></ul></div>
+<div class="section">
+<h2>What Is Vibe Coding?</h2>
+<p>Coined in the 2025–2026 AI coding wave: you <strong>describe the vibe</strong> ("make a dashboard like Notion") and accept generated code with minimal review. Works until it doesn't.</p>
+<div class="diagram-container"><div class="mermaid">
+flowchart LR
+    subgraph Vibe coding loop
+        V[Describe vibe] --> G[AI generates]
+        G --> A[Accept if looks OK]
+        A --> S[Ship]
+    end
+    subgraph Engineering loop
+        V2[Requirements] --> P2[Plan] --> G2[Generate] --> R2[Review] --> T2[Test] --> S2[Ship]
+    end
+</div></div>
+<div class="quote-block">The risk is not bad-looking code. The risk is good-looking wrong code.</div>
+</div>
+
+<div class="section">
+<h2>Where Vibe Coding Is OK</h2>
+<table>
+<tr><th>Scenario</th><th>Risk level</th><th>Why OK</th><th>Still do</th></tr>
+<tr><td>Personal prototype</td><td>Low</td><td>No users</td><td>Learn from code after</td></tr>
+<tr><td>UI mock / hackathon</td><td>Low</td><td>Throwaway</td><td>Don't reuse in prod</td></tr>
+<tr><td>Learning new framework</td><td>Low</td><td>Educational</td><td>Ask AI to explain output</td></tr>
+<tr><td>Internal tool, 5 users</td><td>Medium</td><td>Limited blast radius</td><td>Basic tests + review</td></tr>
+<tr><td>Customer-facing API</td><td>High</td><td>—</td><td>Full SDLC workflow</td></tr>
+<tr><td>NL2SQL on real data</td><td>Critical</td><td>—</td><td>Never vibe — use pipeline</td></tr>
+</table>
+</div>
+
+<div class="section">
+<h2>The Dark Side (Visual)</h2>
+<div class="diagram-container"><div class="mermaid">
+mindmap
+  root((Vibe Coding Risks))
+    Security
+      SQL injection
+      Auth bypass
+      Secrets in code
+    Quality
+      Hidden bugs
+      No edge cases
+      Wrong business logic
+    Team
+      Unreviewable PRs
+      Skill erosion
+      Inconsistent patterns
+    Ops
+      Silent tech debt
+      Debug impossible
+      Incident at 2am
+</div></div>
+</div>
+
+<div class="section">
+<h2>Case Study: Vibe Coded Auth</h2>
+<div class="tab-group" data-tab-group="vibe-auth">
+<div class="tab-buttons">
+<button class="active" data-tab="weak">❌ Vibe coded (demo works)</button>
+<button data-tab="strong">✅ Engineering fix</button>
+</div>
+<div class="tab-panel active" data-panel="weak"><div class="code-block"><button class="copy-btn">Copy</button><pre><code>// AI-generated auth — looks fine in demo
+export function login(token: string) {
+  localStorage.setItem('token', token);
+  return jwt.decode(token); // no verify!
+}
+// Problems: no signature verify, XSS via localStorage,
+// no expiry check, decode ≠ authenticate</code></pre></div></div>
+<div class="tab-panel" data-panel="strong"><div class="code-block"><button class="copy-btn">Copy</button><pre><code>// After review-first + security checklist
+export async function login(token: string) {
+  const payload = await verifyJwt(token, publicKey);
+  if (payload.exp < Date.now() / 1000) throw new ExpiredError();
+  setHttpOnlyCookie('session', token);
+  return payload;
+}</code></pre></div></div>
+</div>
+</div>
+
+<div class="section">
+<h2>Responsible Vibe Coding Checklist</h2>
+<ul class="checklist">
+<li>I can explain every line I'm merging</li>
+<li>Security-sensitive paths manually reviewed</li>
+<li>Tests exist and pass</li>
+<li>Linter + SAST scanner run</li>
+<li>Small PR (&lt; 400 lines changed)</li>
+<li>No production DB writes from AI SQL</li>
+<li>Not used for auth, payments, or PII without senior review</li>
+<li>Documented assumptions and limitations</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>Prototype vs Production Mode</h2>
+<div class="compare-grid">
+<div class="compare-col good">
+<h4>🎨 Prototype mode</h4>
+<p>Vibe OK with bounds: local only, fake data, delete in a week.</p>
+</div>
+<div class="compare-col good">
+<h4>🏭 Production mode</h4>
+<p>Ch 11–12 workflow: plan, review, test, evals, governance.</p>
+</div>
+</div>
+</div>
+
+<div class="presentation-tip"><strong>🎤 Audience hook:</strong> "Who has shipped something that worked in demo but failed in prod?" — then introduce vibe coding vs discipline. Juniors relate; seniors nod.</div>
+<div class="takeaway"><h3>Key Takeaway</h3>
+<p>Vibe coding for speed. Engineering discipline for survival. Know which mode you're in before you prompt.</p></div>
+<div class="chapter-nav"><a href="chapter13.html">← Previous</a><a href="index.html">🏠 Home</a><a href="chapter15.html">Next Chapter →</a></div>
+        </main>
+        <footer class="footer">
+            <p>From Prompt Engineering to Context Engineering — Developer Learning Guide</p>
+            <p>Chapter 14 of 25 · Prepared for Sakib Hasan · June 2026</p>
+        </footer>
+    </div>
+    <script src="js/app.js"></script>
+</body>
+</html>

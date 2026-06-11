@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 8: Tool Use, Function Calling, and MCP</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="reading-progress"></div>
+    <button class="mobile-menu-toggle" onclick="toggleMobileMenu()" aria-label="Toggle menu">☰</button>
+    <div class="container">
+        <header class="header">
+            <h1>Chapter 8: Tool Use, Function Calling, and MCP</h1>
+            <p class="subtitle">Function calling flow, MCP, tool permissions, ChatGPT/Cursor/Claude tool models.</p>
+        </header>
+        <nav class="nav-sidebar" id="nav-sidebar">
+            <div class="nav-brand">CONTEXT ENGINEERING 2026</div>
+            <ul>
+                <li><a href="index.html">🏠 Home</a></li>
+                <li><a href="chapter01.html">🚀 Ch1: Introduction</a></li>
+                <li><a href="chapter02.html">🧠 Ch2: LLM Recap</a></li>
+                <li><a href="chapter03.html">✍️ Ch3: Prompt Basics</a></li>
+                <li><a href="chapter04.html">🎯 Ch4: Advanced Prompts</a></li>
+                <li><a href="chapter05.html">⚠️ Ch5: Why Prompts Fail</a></li>
+                <li><a href="chapter06.html">🏗️ Ch6: Context Engineering</a></li>
+                <li><a href="chapter07.html">📚 Ch7: RAG</a></li>
+                <li><a href="chapter08.html" class="active">🔧 Ch8: Tools & MCP</a></li>
+                <li><a href="chapter09.html">🤖 Ch9: AI Agents</a></li>
+                <li><a href="chapter10.html">👥 Ch10: Multi-Agent</a></li>
+                <li><a href="chapter11.html">🔄 Ch11: AI SDLC</a></li>
+                <li><a href="chapter12.html">⚡ Ch12: Productivity</a></li>
+                <li><a href="chapter13.html">🛠️ Ch13: AI Tools</a></li>
+                <li><a href="chapter14.html">🎨 Ch14: Vibe Coding</a></li>
+                <li><a href="chapter15.html">🗄️ Ch15: NL-to-SQL</a></li>
+                <li><a href="chapter16.html">📊 Ch16: Evals</a></li>
+                <li><a href="chapter17.html">🔒 Ch17: Security</a></li>
+                <li><a href="chapter18.html">🏢 Ch18: Governance</a></li>
+                <li><a href="chapter19.html">🔮 Ch19: Future</a></li>
+                <li><a href="chapter20.html">🎤 Ch20: Present</a></li>
+                <li><a href="chapter21.html">⚖️ Ch21: Prompt vs Context</a></li>
+                <li><a href="chapter22.html">⚡ Ch22: Productivity Paradox</a></li>
+                <li><a href="chapter23.html">👁️ Ch23: Supervisory Eng.</a></li>
+                <li><a href="chapter24.html">📉 Ch24: Context Debt</a></li>
+                <li><a href="chapter25.html">🔬 Ch25: How LLMs Work</a></li>
+            </ul>
+        </nav>
+        <main class="main-content">
+            
+            <div class="chapter-header">
+                <h1>🔧 Chapter 8: Tool Use, Function Calling, and MCP</h1>
+                <p class="chapter-meta">Function calling flow, MCP, tool permissions, ChatGPT/Cursor/Claude tool models.</p>
+            </div><div class="chapter-nav"><a href="chapter07.html">← Previous</a><a href="index.html">🏠 Home</a><a href="chapter09.html">Next Chapter →</a></div>
+<div class="tagline-banner" style="text-align:left;margin-bottom:1.5rem">
+<strong>From Prompt Engineering to Context Engineering</strong><br>
+<span style="font-size:.95rem;color:#4338ca">How Developers Should Build, Use, and Control AI in 2026</span>
+<div style="margin-top:.75rem;font-size:.9rem;color:#334155">
+📍 <strong>Chapter 8</strong> · Phase: <strong>Build — Let the Model Verify, Not Guess</strong><br>
+Tools turn chat models into applications. Function calling is how ChatGPT plugins, Cursor agents, and NL2SQL validators actually <em>do</em> things.
+</div>
+</div>
+<div class="diagram-section">
+<h3>Your Presentation Journey (Chapters 2–10)</h3>
+<div style="overflow-x:auto;padding:.5rem 0;font-size:.82rem;line-height:2"><span style="color:#64748b">Ch2 LLM Recap</span> → <span style="color:#64748b">Ch3 Prompts</span> → <span style="color:#64748b">Ch4 Advanced Prompts</span> → <span style="color:#64748b">Ch5 Why Prompts Fail</span> → <span style="color:#64748b">Ch6 Context Engineering</span> → <span style="color:#64748b">Ch7 RAG</span> → <span style="font-weight:700;color:#4f46e5">Ch8 Tools & MCP</span> → <span style="color:#64748b">Ch9 Agents</span> → <span style="color:#64748b">Ch10 Multi-Agent</span></div>
+<p style="font-size:.88rem;color:#64748b;margin-top:.5rem">Prompting is how we talk to AI. Context engineering is how we make AI useful. Chapters 7–10 show how to <em>build</em> applications (NL2SQL, chatbots, coding assistants) on top.</p>
+</div><div class="objectives"><h3>🎯 Learning Objectives</h3><ul><li>Trace function calling from API request to tool execution and back</li><li>Map tool risk levels to permission design for NL2SQL and coding agents</li><li>Explain MCP and why IDEs are becoming tool orchestrators</li><li>Compare how ChatGPT, Claude, Cursor, and Copilot expose tools</li><li>Build a minimal tool layer for schema lookup and SQL validation</li></ul></div>
+<div class="section">
+<h2>Behind the Scenes: Function Calling</h2>
+<p>The model does <strong>not</strong> execute code. Your application does. The model outputs a <strong>structured tool call request</strong>; your backend runs it and returns the result as a new message.</p>
+<div class="diagram-container"><div class="mermaid">
+sequenceDiagram
+    participant App as Your App
+    participant API as LLM API
+    participant Tool as Your Backend Tool
+    App->>API: messages + tool definitions
+    API-->>App: tool_call: validate_sql(sql)
+    App->>Tool: execute validate_sql
+    Tool-->>App: {read_only: true, errors: []}
+    App->>API: tool result message
+    API-->>App: final natural language + safe SQL
+</div></div>
+<div class="code-block"><button class="copy-btn">Copy</button><pre><code>// Tool definition (OpenAI-style)
+{
+  "name": "get_schema",
+  "description": "Look up table columns and foreign keys",
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "table_name": { "type": "string" },
+      "include_relationships": { "type": "boolean" }
+    },
+    "required": ["table_name"]
+  }
+}</code></pre></div>
+</div>
+
+<div class="section">
+<h2>Text-Only vs Tool-Augmented Applications</h2>
+<div class="compare-grid">
+<div class="compare-col bad">
+<h4>❌ Chat-only NL2SQL</h4>
+<p>Model invents <code class="inline-code">invoice_status</code> column.</p>
+<p>No way to verify until production error.</p>
+</div>
+<div class="compare-col good">
+<h4>✅ Tool-augmented NL2SQL</h4>
+<ol>
+<li><code class="inline-code">search_schema("unpaid invoices")</code> → real tables</li>
+<li>Model drafts SQL</li>
+<li><code class="inline-code">validate_sql(sql)</code> → parser + ACL check</li>
+<li>Human approves → read-only execute</li>
+</ol>
+</div>
+</div>
+</div>
+
+<div class="section">
+<h2>Tool Catalog for Application Builders</h2>
+<table>
+<tr><th>Tool</th><th>NL2SQL use</th><th>Coding agent use</th><th>Risk</th></tr>
+<tr><td><code class="inline-code">search_schema</code></td><td>Find tables/columns</td><td>—</td><td>Medium</td></tr>
+<tr><td><code class="inline-code">validate_sql</code></td><td>Parse + deny DML</td><td>—</td><td>Low</td></tr>
+<tr><td><code class="inline-code">search_code</code></td><td>—</td><td>Find symbols, usages</td><td>Medium</td></tr>
+<tr><td><code class="inline-code">read_file</code></td><td>—</td><td>Inspect implementation</td><td>Medium</td></tr>
+<tr><td><code class="inline-code">run_tests</code></td><td>—</td><td>Verify changes</td><td>Medium-High</td></tr>
+<tr><td><code class="inline-code">execute_sql</code></td><td>Run read-only query</td><td>—</td><td>High</td></tr>
+<tr><td><code class="inline-code">write_file</code></td><td>—</td><td>Modify codebase</td><td>High</td></tr>
+</table>
+</div>
+
+<div class="section">
+<h2>Permission Model (Non-Negotiable)</h2>
+<div class="diagram-container"><div class="mermaid">
+quadrantChart
+    title Tool Risk vs Permission Strictness
+    x-axis Low Permission --> High Permission
+    y-axis Low Risk --> High Risk
+    quadrant-1 Never auto-run
+    quadrant-2 Human approval required
+    quadrant-3 Read-only OK
+    quadrant-4 Audit only
+    validate_sql: [0.2, 0.15]
+    search_docs: [0.35, 0.25]
+    execute_sql: [0.75, 0.85]
+    deploy: [0.95, 0.95]
+</div></div>
+<div class="info-box"><h4>Principle</h4>
+<p>Text generation is low risk. Tool execution is high risk. An AI that can be wrong <strong>and</strong> execute is an incident waiting to happen.</p></div>
+</div>
+
+<div class="section">
+<h2>MCP — Model Context Protocol (2026 Ecosystem)</h2>
+<p>MCP standardizes how AI clients (Cursor, Claude Desktop, custom apps) connect to <strong>tools and data sources</strong> through a common protocol — like USB for AI integrations.</p>
+<div class="diagram-container"><div class="mermaid">
+flowchart LR
+    IDE[Cursor / Claude / Custom App] --> MCP[MCP Client]
+    MCP --> S1[GitHub server]
+    MCP --> S2[Postgres schema server]
+    MCP --> S3[Jira server]
+    MCP --> S4[Custom NL2SQL server]
+</div></div>
+<p><strong>For developers:</strong> You don't need to master every MCP detail. You need the mental model: <em>future AI apps are orchestrators of typed tool connections</em>, not chat windows.</p>
+</div>
+
+<div class="section">
+<h2>How Each Tool Uses "Tools" Behind the Scenes</h2>
+<table>
+<tr><th>Product</th><th>Tool-like behavior</th><th>What juniors should do</th><th>What seniors should control</th></tr>
+<tr><td>ChatGPT</td><td>Browsing, code interpreter, custom GPT actions</td><td>Don't paste secrets; verify outputs</td><td>Know data leaves your network</td></tr>
+<tr><td>Claude</td><td>Computer use, MCP connectors, artifacts</td><td>Use Projects for stable context</td><td>Approve high-risk connector scopes</td></tr>
+<tr><td>Cursor</td><td>Terminal, file edit, web search, MCP</td><td>@file scope; small tasks</td><td>Rules, deny lists, review diffs</td></tr>
+<tr><td>Copilot</td><td>Limited workspace context</td><td>Tab-complete only</td><td>Don't rely for architecture</td></tr>
+</table>
+</div>
+
+<div class="section">
+<h2>Build a Minimal NL2SQL Tool Layer (Pseudo-Code)</h2>
+<div class="code-block"><button class="copy-btn">Copy</button><pre><code>TOOLS = [
+    {"name": "search_schema", "fn": search_schema, "risk": "medium"},
+    {"name": "validate_sql", "fn": validate_sql, "risk": "low"},
+    # execute_sql requires human approval gate
+]
+
+def handle_turn(user_id, question):
+    messages = assemble_context(user_id, question)
+    response = llm.chat(messages, tools=TOOLS)
+
+    while response.tool_calls:
+        for call in response.tool_calls:
+            if call.name == "execute_sql":
+                raise PermissionError("Requires approval workflow")
+            result = TOOLS[call.name].fn(**call.arguments, user_id=user_id)
+            messages.append(tool_result(call.id, result))
+        response = llm.chat(messages, tools=TOOLS)
+
+    return validate_and_return(response)</code></pre></div>
+</div>
+
+<div class="section">
+<h2>Failure → Fix</h2>
+<div class="error-box"><h4>❌ Failure: Model calls execute_sql with destructive query</h4>
+<p>Tool had no validator; DB role was not read-only.</p></div>
+<div class="success-box"><h4>✅ Fix stack</h4>
+<ol>
+<li>Remove execute from model tools — separate approval service</li>
+<li><code class="inline-code">validate_sql</code> blocks non-SELECT</li>
+<li>DB connection uses read-only role</li>
+<li>Log every tool call with user_id</li>
+</ol></div>
+</div>
+
+<div class="takeaway"><h3>Key Takeaway</h3>
+<p>Tools are how you <em>control</em> AI in 2026 apps. Build typed, permissioned, logged tools — whether in custom NL2SQL or via MCP in Cursor.</p></div>
+<div class="chapter-nav"><a href="chapter07.html">← Previous</a><a href="index.html">🏠 Home</a><a href="chapter09.html">Next Chapter →</a></div>
+        </main>
+        <footer class="footer">
+            <p>From Prompt Engineering to Context Engineering — Developer Learning Guide</p>
+            <p>Chapter 8 of 25 · Prepared for Sakib Hasan · June 2026</p>
+        </footer>
+    </div>
+    <script src="js/app.js"></script>
+</body>
+</html>

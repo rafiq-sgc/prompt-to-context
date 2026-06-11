@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 1: From AI User to AI-Native Developer</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="reading-progress"></div>
+    <button class="mobile-menu-toggle" onclick="toggleMobileMenu()" aria-label="Toggle menu">☰</button>
+    <div class="container">
+        <header class="header">
+            <h1>Chapter 1: From AI User to AI-Native Developer</h1>
+            <p class="subtitle">Understand the shift from casual AI usage to professional AI-assisted development.</p>
+        </header>
+        <nav class="nav-sidebar" id="nav-sidebar">
+            <div class="nav-brand">CONTEXT ENGINEERING 2026</div>
+            <ul>
+                <li><a href="index.html">🏠 Home</a></li>
+                <li><a href="chapter01.html" class="active">🚀 Ch1: Introduction</a></li>
+                <li><a href="chapter02.html">🧠 Ch2: LLM Recap</a></li>
+                <li><a href="chapter03.html">✍️ Ch3: Prompt Basics</a></li>
+                <li><a href="chapter04.html">🎯 Ch4: Advanced Prompts</a></li>
+                <li><a href="chapter05.html">⚠️ Ch5: Why Prompts Fail</a></li>
+                <li><a href="chapter06.html">🏗️ Ch6: Context Engineering</a></li>
+                <li><a href="chapter07.html">📚 Ch7: RAG</a></li>
+                <li><a href="chapter08.html">🔧 Ch8: Tools & MCP</a></li>
+                <li><a href="chapter09.html">🤖 Ch9: AI Agents</a></li>
+                <li><a href="chapter10.html">👥 Ch10: Multi-Agent</a></li>
+                <li><a href="chapter11.html">🔄 Ch11: AI SDLC</a></li>
+                <li><a href="chapter12.html">⚡ Ch12: Productivity</a></li>
+                <li><a href="chapter13.html">🛠️ Ch13: AI Tools</a></li>
+                <li><a href="chapter14.html">🎨 Ch14: Vibe Coding</a></li>
+                <li><a href="chapter15.html">🗄️ Ch15: NL-to-SQL</a></li>
+                <li><a href="chapter16.html">📊 Ch16: Evals</a></li>
+                <li><a href="chapter17.html">🔒 Ch17: Security</a></li>
+                <li><a href="chapter18.html">🏢 Ch18: Governance</a></li>
+                <li><a href="chapter19.html">🔮 Ch19: Future</a></li>
+                <li><a href="chapter20.html">🎤 Ch20: Present</a></li>
+                <li><a href="chapter21.html">⚖️ Ch21: Prompt vs Context</a></li>
+                <li><a href="chapter22.html">⚡ Ch22: Productivity Paradox</a></li>
+                <li><a href="chapter23.html">👁️ Ch23: Supervisory Eng.</a></li>
+                <li><a href="chapter24.html">📉 Ch24: Context Debt</a></li>
+                <li><a href="chapter25.html">🔬 Ch25: How LLMs Work</a></li>
+            </ul>
+        </nav>
+        <main class="main-content">
+            
+            <div class="chapter-header">
+                <h1>🚀 Chapter 1: From AI User to AI-Native Developer</h1>
+                <p class="chapter-meta">Understand the shift from casual AI usage to professional AI-assisted development.</p>
+            </div><div class="chapter-nav"><a href="index.html">← Previous</a><a href="index.html">🏠 Home</a><a href="chapter02.html">Next Chapter →</a></div><div class="objectives"><h3>🎯 Learning Objectives</h3><ul><li>Define what an AI-native developer is vs a casual AI user</li><li>Map the six new developer roles in an AI-augmented workflow</li><li>Compare traditional SDLC with AI-augmented SDLC</li><li>Understand that engineering ownership remains human</li></ul></div>
+<div class="section">
+<h2>The Central Shift</h2>
+<p>In the previous generation, developers converted requirements into source code manually. AI does not remove design, testing, review, or deployment — it changes <strong>where effort goes</strong>: more planning, reviewing, validating, and controlling; less blank-page typing.</p>
+<div class="quote-block">AI does not remove engineering responsibility. It increases the importance of engineering judgment.</div>
+<div class="diagram-section">
+<h3>Traditional vs AI-Augmented Workflow</h3>
+<div class="diagram-container"><div class="mermaid">
+flowchart LR
+    subgraph Traditional
+    R1[Requirement] --> D1[Design] --> C1[Code] --> T1[Test] --> RV1[Review] --> DP1[Deploy]
+    end
+    subgraph AI-Augmented
+    R2[Requirement] --> CL[AI Clarification] --> AD[AI Design] --> GD[AI Draft] --> HR[Human Review]
+    HR --> EV[Tests & Evals] --> RF[Refinement] --> DP2[Deploy]
+    end
+</div></div>
+</div>
+</div>
+
+<div class="section">
+<h2>The New Developer Role</h2>
+<table>
+<tr><th>Role</th><th>What You Do</th><th>Failure If Missing</th></tr>
+<tr><td>Problem framer</td><td>Define the real problem before asking AI</td><td>AI solves the wrong problem fast</td></tr>
+<tr><td>Context designer</td><td>Supply schema, rules, examples, constraints</td><td>Hallucinated tables, wrong business logic</td></tr>
+<tr><td>Reviewer</td><td>Check correctness, security, maintainability</td><td>Believable wrong code ships</td></tr>
+<tr><td>Evaluator</td><td>Build tests and evals for AI behavior</td><td>Prompt changes break silently</td></tr>
+<tr><td>Controller</td><td>Decide what AI can access and execute</td><td>Data leaks, destructive SQL</td></tr>
+<tr><td>Teacher</td><td>Help team use AI responsibly</td><td>Shadow AI, inconsistent quality</td></tr>
+</table>
+</div>
+
+<div class="section">
+<h2>Casual vs Professional AI Usage</h2>
+<div class="compare-grid">
+<div class="compare-col bad">
+<h4>❌ Casual Usage</h4>
+<ul>
+<li>"Write this feature."</li>
+<li>"Fix this error."</li>
+<li>Paste entire codebase without plan</li>
+<li>Merge without reading generated code</li>
+</ul>
+</div>
+<div class="compare-col good">
+<h4>✅ Professional Usage</h4>
+<ul>
+<li>Understand code → plan → minimal change → tests → review</li>
+<li>Design full environment: context, tools, guardrails, evals</li>
+<li>Reject output when risk is too high</li>
+<li>Know when <em>not</em> to use AI</li>
+</ul>
+</div>
+</div>
+<div class="presentation-tip"><strong>🎤 Demo for audience:</strong> Ask: "If AI-generated SQL exposes student SSNs, who is responsible?" Answer: still the developer and organization.</div>
+</div>
+
+<div class="takeaway"><h3>Key Takeaway</h3>
+<p>The best developers combine software engineering judgment with AI capability. Generated output ≠ verified output.</p></div>
+<div class="chapter-nav"><a href="index.html">← Previous</a><a href="index.html">🏠 Home</a><a href="chapter02.html">Next Chapter →</a></div>
+        </main>
+        <footer class="footer">
+            <p>From Prompt Engineering to Context Engineering — Developer Learning Guide</p>
+            <p>Chapter 1 of 25 · Prepared for Sakib Hasan · June 2026</p>
+        </footer>
+    </div>
+    <script src="js/app.js"></script>
+</body>
+</html>

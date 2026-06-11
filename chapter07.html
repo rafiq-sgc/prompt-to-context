@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 7: Retrieval-Augmented Generation</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="reading-progress"></div>
+    <button class="mobile-menu-toggle" onclick="toggleMobileMenu()" aria-label="Toggle menu">☰</button>
+    <div class="container">
+        <header class="header">
+            <h1>Chapter 7: Retrieval-Augmented Generation</h1>
+            <p class="subtitle">Embeddings, chunking, hybrid search, NL2SQL indexing, RAG failures and fixes.</p>
+        </header>
+        <nav class="nav-sidebar" id="nav-sidebar">
+            <div class="nav-brand">CONTEXT ENGINEERING 2026</div>
+            <ul>
+                <li><a href="index.html">🏠 Home</a></li>
+                <li><a href="chapter01.html">🚀 Ch1: Introduction</a></li>
+                <li><a href="chapter02.html">🧠 Ch2: LLM Recap</a></li>
+                <li><a href="chapter03.html">✍️ Ch3: Prompt Basics</a></li>
+                <li><a href="chapter04.html">🎯 Ch4: Advanced Prompts</a></li>
+                <li><a href="chapter05.html">⚠️ Ch5: Why Prompts Fail</a></li>
+                <li><a href="chapter06.html">🏗️ Ch6: Context Engineering</a></li>
+                <li><a href="chapter07.html" class="active">📚 Ch7: RAG</a></li>
+                <li><a href="chapter08.html">🔧 Ch8: Tools & MCP</a></li>
+                <li><a href="chapter09.html">🤖 Ch9: AI Agents</a></li>
+                <li><a href="chapter10.html">👥 Ch10: Multi-Agent</a></li>
+                <li><a href="chapter11.html">🔄 Ch11: AI SDLC</a></li>
+                <li><a href="chapter12.html">⚡ Ch12: Productivity</a></li>
+                <li><a href="chapter13.html">🛠️ Ch13: AI Tools</a></li>
+                <li><a href="chapter14.html">🎨 Ch14: Vibe Coding</a></li>
+                <li><a href="chapter15.html">🗄️ Ch15: NL-to-SQL</a></li>
+                <li><a href="chapter16.html">📊 Ch16: Evals</a></li>
+                <li><a href="chapter17.html">🔒 Ch17: Security</a></li>
+                <li><a href="chapter18.html">🏢 Ch18: Governance</a></li>
+                <li><a href="chapter19.html">🔮 Ch19: Future</a></li>
+                <li><a href="chapter20.html">🎤 Ch20: Present</a></li>
+                <li><a href="chapter21.html">⚖️ Ch21: Prompt vs Context</a></li>
+                <li><a href="chapter22.html">⚡ Ch22: Productivity Paradox</a></li>
+                <li><a href="chapter23.html">👁️ Ch23: Supervisory Eng.</a></li>
+                <li><a href="chapter24.html">📉 Ch24: Context Debt</a></li>
+                <li><a href="chapter25.html">🔬 Ch25: How LLMs Work</a></li>
+            </ul>
+        </nav>
+        <main class="main-content">
+            
+            <div class="chapter-header">
+                <h1>📚 Chapter 7: Retrieval-Augmented Generation</h1>
+                <p class="chapter-meta">Embeddings, chunking, hybrid search, NL2SQL indexing, RAG failures and fixes.</p>
+            </div><div class="chapter-nav"><a href="chapter06.html">← Previous</a><a href="index.html">🏠 Home</a><a href="chapter08.html">Next Chapter →</a></div>
+<div class="tagline-banner" style="text-align:left;margin-bottom:1.5rem">
+<strong>From Prompt Engineering to Context Engineering</strong><br>
+<span style="font-size:.95rem;color:#4338ca">How Developers Should Build, Use, and Control AI in 2026</span>
+<div style="margin-top:.75rem;font-size:.9rem;color:#334155">
+📍 <strong>Chapter 7</strong> · Phase: <strong>Build — Connect AI to Facts</strong><br>
+RAG is how NL2SQL, doc chatbots, and Cursor-style codebase search get <em>real</em> schema and docs into the model — not guesses from training data.
+</div>
+</div>
+<div class="diagram-section">
+<h3>Your Presentation Journey (Chapters 2–10)</h3>
+<div style="overflow-x:auto;padding:.5rem 0;font-size:.82rem;line-height:2"><span style="color:#64748b">Ch2 LLM Recap</span> → <span style="color:#64748b">Ch3 Prompts</span> → <span style="color:#64748b">Ch4 Advanced Prompts</span> → <span style="color:#64748b">Ch5 Why Prompts Fail</span> → <span style="color:#64748b">Ch6 Context Engineering</span> → <span style="font-weight:700;color:#4f46e5">Ch7 RAG</span> → <span style="color:#64748b">Ch8 Tools & MCP</span> → <span style="color:#64748b">Ch9 Agents</span> → <span style="color:#64748b">Ch10 Multi-Agent</span></div>
+<p style="font-size:.88rem;color:#64748b;margin-top:.5rem">Prompting is how we talk to AI. Context engineering is how we make AI useful. Chapters 7–10 show how to <em>build</em> applications (NL2SQL, chatbots, coding assistants) on top.</p>
+</div><div class="objectives"><h3>🎯 Learning Objectives</h3><ul><li>Explain embeddings and retrieval behind the scenes</li><li>Design chunking and indexing for schema, docs, and code</li><li>Build RAG for NL2SQL: entity metadata, joins, business rules</li><li>Apply hybrid search, re-ranking, and permission-aware retrieval</li><li>Diagnose RAG failures and fix with engineering — not more prompting</li></ul></div>
+<div class="section">
+<h2>Why RAG Exists: The Inference-Time Fact Gap</h2>
+<p>At inference, the model only sees: <strong>weights (frozen training)</strong> + <strong>your prompt context</strong>. It cannot query your database, read Confluence, or see yesterday's migration unless you <strong>retrieve and inject</strong> that text.</p>
+<div class="diagram-container"><div class="mermaid">
+flowchart TB
+    subgraph Without RAG
+        Q1[User: unpaid students SQL] --> M1[LLM guesses schema]
+        M1 --> W1[Wrong table names]
+    end
+    subgraph With RAG
+        Q2[Same question] --> R[Retriever finds students + invoices DDL]
+        R --> M2[LLM + retrieved schema]
+        M2 --> W2[Correct JOIN path]
+    end
+</div></div>
+<div class="quote-block">RAG does not make the model smarter. It gives the model the <em>right facts at the right time</em>.</div>
+</div>
+
+<div class="section">
+<h2>Behind the Scenes: How Retrieval Works</h2>
+<div class="diagram-container"><div class="mermaid">
+flowchart LR
+    DOC[Documents / Schema / Code] --> CH[Chunk text]
+    CH --> EMB[Embedding model]
+    EMB --> VDB[(Vector index)]
+    Q[User query] --> QEMB[Embed query]
+    QEMB --> SIM[Cosine similarity search]
+    VDB --> SIM
+    SIM --> TOP[Top-K chunks]
+    TOP --> RERANK[Optional re-ranker]
+    RERANK --> CTX[Inject into LLM prompt]
+    CTX --> GEN[Generate answer]
+</div></div>
+<h3>What is an embedding?</h3>
+<p>An embedding model converts text into a numeric vector. Similar meaning → vectors close together. "unpaid invoices" retrieves chunks about <code class="inline-code">paid_status</code> even if the word "unpaid" never appears in the chunk.</p>
+<div class="info-box"><h4>Junior mental model</h4>
+<p>Embeddings are <strong>semantic search</strong>, not keyword search. "Active enrollees" can match "enrollment_status = 'active'".</p></div>
+</div>
+
+<div class="section">
+<h2>Chunking Strategies (Critical for NL2SQL)</h2>
+<table>
+<tr><th>Source</th><th>Bad chunking</th><th>Good chunking</th><th>Why</th></tr>
+<tr><td>Table DDL</td><td>Split mid-column list</td><td>One chunk = full table + FKs</td><td>Model needs complete column list</td></tr>
+<tr><td>Business glossary</td><td>Whole PDF pages</td><td>One term = one definition chunk</td><td>"Revenue" retrieves exact rule</td></tr>
+<tr><td>Example SQL pairs</td><td>Mixed unrelated queries</td><td>One NL question + one SQL per chunk</td><td>Few-shot retrieval stays clean</td></tr>
+<tr><td>API docs</td><td>Arbitrary 512 tokens</td><td>One endpoint per chunk</td><td>Method signature stays intact</td></tr>
+</table>
+<div class="code-block"><button class="copy-btn">Copy</button><pre><code># Example: NL2SQL schema chunk (one entity)
+ENTITY: students
+TABLE: students(id, full_name, enrollment_status, program_id)
+RELATIONSHIPS: invoices.student_id → students.id
+BUSINESS: active_student = enrollment_status = 'active'
+EXAMPLE: "active students" → SELECT id, full_name FROM students WHERE enrollment_status='active'</code></pre></div>
+</div>
+
+<div class="section">
+<h2>Building RAG for NL2SQL (Step by Step)</h2>
+<div class="flow-steps">
+<span class="flow-step">1. Index schema metadata</span><span class="flow-arrow">→</span>
+<span class="flow-step">2. Index business rules</span><span class="flow-arrow">→</span>
+<span class="flow-step">3. Index example query pairs</span><span class="flow-arrow">→</span>
+<span class="flow-step">4. On question: retrieve top-K</span><span class="flow-arrow">→</span>
+<span class="flow-step">5. Filter by user permissions</span><span class="flow-arrow">→</span>
+<span class="flow-step">6. Inject + generate SQL</span>
+</div>
+<div class="diagram-container"><div class="mermaid">
+flowchart TD
+    U[User: Show unpaid invoices for active students] --> RW[Query rewrite optional]
+    RW --> H[Hybrid search: BM25 + vectors]
+    H --> F[Metadata filter: domain=finance, role=analyst]
+    F --> RR[Re-rank top 20 → keep top 5]
+    RR --> ASM[Assemble SCHEMA + RULES + EXAMPLES blocks]
+    ASM --> LLM[LLM generates SQL]
+    LLM --> VAL[Schema validator]
+</div></div>
+</div>
+
+<div class="section">
+<h2>Hybrid Search: Why Vectors Alone Fail</h2>
+<div class="compare-grid">
+<div class="compare-col bad">
+<h4>❌ Vector-only</h4>
+<p>User asks for table <code class="inline-code">gl_account</code> — embedding may return "general ledger policy" doc instead of DDL.</p>
+</div>
+<div class="compare-col good">
+<h4>✅ Hybrid (BM25 + vectors)</h4>
+<p>Keyword match on <code class="inline-code">gl_account</code> + semantic match on "account balance" → correct schema chunk wins.</p>
+</div>
+</div>
+<p><strong>Senior rule:</strong> For exact identifiers (table names, API paths, error codes), always combine keyword + semantic retrieval.</p>
+</div>
+
+<div class="section">
+<h2>RAG in Developer Tools (How Cursor / ChatGPT Differ)</h2>
+
+<table>
+<tr><th>Tool</th><th>What it really is</th><th>Best for juniors</th><th>Best for seniors</th><th>Failure mode</th></tr>
+<tr><td><strong>ChatGPT</strong></td><td>Chat UI over a remote LLM API</td><td>Learning, quick questions</td><td>Architecture drafts, eval design</td><td>Treating chat as source of truth</td></tr>
+<tr><td><strong>Claude</strong></td><td>Chat + API + long-context models</td><td>Explaining code, writing docs</td><td>Long doc analysis, review</td><td>Pasting prod secrets into chat</td></tr>
+<tr><td><strong>Cursor</strong></td><td>IDE + codebase index + agent loop</td><td>Small edits with @file</td><td>Plan-first multi-file with rules</td><td>Agent refactors without review</td></tr>
+<tr><td><strong>GitHub Copilot</strong></td><td>Inline completion on current file context</td><td>Boilerplate, tests</td><td>Fast typing aid only</td><td>Accepting wrong completions blindly</td></tr>
+<tr><td><strong>Your NL2SQL app</strong></td><td>Custom pipeline: RAG + LLM + validators</td><td>—</td><td>Full control, evals, governance</td><td>Prompt-only without schema RAG</td></tr>
+</table>
+<table>
+<tr><th>Tool</th><th>Retrieval mechanism</th><th>What you control</th></tr>
+<tr><td>ChatGPT + files</td><td>Upload / paste into context</td><td>What you attach per chat</td></tr>
+<tr><td>Claude Projects</td><td>Project knowledge base</td><td>Docs you upload to project</td></tr>
+<tr><td>Cursor</td><td>Codebase index + @file/@folder</td><td>.cursorignore, rules, explicit @ refs</td></tr>
+<tr><td>Custom NL2SQL</td><td>Your vector DB + schema registry</td><td>Chunking, ACL, evals — full ownership</td></tr>
+</table>
+</div>
+
+<div class="section">
+<h2>Failure → Fix: RAG Case Studies</h2>
+<table>
+<tr><th>Failure</th><th>Symptom</th><th>Root cause</th><th>Fix</th></tr>
+<tr><td>Wrong chunk wins</td><td>SQL uses HR table for finance query</td><td>No metadata filter</td><td>Filter by domain / entity type</td></tr>
+<tr><td>Missing JOIN</td><td>Single-table query for multi-table intent</td><td>Relationship not in retrieved chunk</td><td>Include FK graph in schema chunks</td></tr>
+<tr><td>Stale schema</td><td>Column renamed last sprint</td><td>Index not updated</td><td>CI re-index on migration merge</td></tr>
+<tr><td>Data leak</td><td>Salary table in context for intern</td><td>No ACL on retriever</td><td>Filter chunks by user role</td></tr>
+<tr><td>Prompt injection in doc</td><td>Model ignores safety rules</td><td>Malicious wiki page retrieved</td><td>Untrusted data labeling (Ch 17)</td></tr>
+</table>
+</div>
+
+<div class="section">
+<h2>Advanced RAG Checklist (Production 2026)</h2>
+<ul class="checklist">
+<li>Chunk by meaning, not token count alone</li>
+<li>Hybrid search for identifiers + semantics</li>
+<li>Re-ranker after vector search</li>
+<li>Metadata: version, domain, permission tags</li>
+<li>Permission filter before generation</li>
+<li>Citation: log which chunk_ids were used</li>
+<li>Eval set: measure retrieval recall@K</li>
+<li>Re-index pipeline tied to schema migrations</li>
+</ul>
+</div>
+
+<div class="presentation-tip"><strong>🎤 Demo:</strong> Same NL2SQL question — (1) no RAG, (2) RAG with wrong chunk, (3) RAG with correct schema chunk. Three outputs, one slide. Juniors see "magic"; seniors see pipeline design.</div>
+<div class="takeaway"><h3>Key Takeaway</h3>
+<p>RAG is the bridge from prompt engineering to context engineering for any app that needs private or current facts — especially NL2SQL.</p></div>
+<div class="chapter-nav"><a href="chapter06.html">← Previous</a><a href="index.html">🏠 Home</a><a href="chapter08.html">Next Chapter →</a></div>
+        </main>
+        <footer class="footer">
+            <p>From Prompt Engineering to Context Engineering — Developer Learning Guide</p>
+            <p>Chapter 7 of 25 · Prepared for Sakib Hasan · June 2026</p>
+        </footer>
+    </div>
+    <script src="js/app.js"></script>
+</body>
+</html>

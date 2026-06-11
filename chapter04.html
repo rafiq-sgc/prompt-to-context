@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 4: Advanced Prompting Techniques</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="reading-progress"></div>
+    <button class="mobile-menu-toggle" onclick="toggleMobileMenu()" aria-label="Toggle menu">☰</button>
+    <div class="container">
+        <header class="header">
+            <h1>Chapter 4: Advanced Prompting Techniques</h1>
+            <p class="subtitle">Advanced: workflow state machine, ReAct, rubrics, pattern matrix, IDE patterns.</p>
+        </header>
+        <nav class="nav-sidebar" id="nav-sidebar">
+            <div class="nav-brand">CONTEXT ENGINEERING 2026</div>
+            <ul>
+                <li><a href="index.html">🏠 Home</a></li>
+                <li><a href="chapter01.html">🚀 Ch1: Introduction</a></li>
+                <li><a href="chapter02.html">🧠 Ch2: LLM Recap</a></li>
+                <li><a href="chapter03.html">✍️ Ch3: Prompt Basics</a></li>
+                <li><a href="chapter04.html" class="active">🎯 Ch4: Advanced Prompts</a></li>
+                <li><a href="chapter05.html">⚠️ Ch5: Why Prompts Fail</a></li>
+                <li><a href="chapter06.html">🏗️ Ch6: Context Engineering</a></li>
+                <li><a href="chapter07.html">📚 Ch7: RAG</a></li>
+                <li><a href="chapter08.html">🔧 Ch8: Tools & MCP</a></li>
+                <li><a href="chapter09.html">🤖 Ch9: AI Agents</a></li>
+                <li><a href="chapter10.html">👥 Ch10: Multi-Agent</a></li>
+                <li><a href="chapter11.html">🔄 Ch11: AI SDLC</a></li>
+                <li><a href="chapter12.html">⚡ Ch12: Productivity</a></li>
+                <li><a href="chapter13.html">🛠️ Ch13: AI Tools</a></li>
+                <li><a href="chapter14.html">🎨 Ch14: Vibe Coding</a></li>
+                <li><a href="chapter15.html">🗄️ Ch15: NL-to-SQL</a></li>
+                <li><a href="chapter16.html">📊 Ch16: Evals</a></li>
+                <li><a href="chapter17.html">🔒 Ch17: Security</a></li>
+                <li><a href="chapter18.html">🏢 Ch18: Governance</a></li>
+                <li><a href="chapter19.html">🔮 Ch19: Future</a></li>
+                <li><a href="chapter20.html">🎤 Ch20: Present</a></li>
+                <li><a href="chapter21.html">⚖️ Ch21: Prompt vs Context</a></li>
+                <li><a href="chapter22.html">⚡ Ch22: Productivity Paradox</a></li>
+                <li><a href="chapter23.html">👁️ Ch23: Supervisory Eng.</a></li>
+                <li><a href="chapter24.html">📉 Ch24: Context Debt</a></li>
+                <li><a href="chapter25.html">🔬 Ch25: How LLMs Work</a></li>
+            </ul>
+        </nav>
+        <main class="main-content">
+            
+            <div class="chapter-header">
+                <h1>🎯 Chapter 4: Advanced Prompting Techniques</h1>
+                <p class="chapter-meta">Advanced: workflow state machine, ReAct, rubrics, pattern matrix, IDE patterns.</p>
+            </div><div class="chapter-nav"><a href="chapter03.html">← Previous</a><a href="index.html">🏠 Home</a><a href="chapter05.html">Next Chapter →</a></div>
+<div class="tagline-banner" style="text-align:left;margin-bottom:1.5rem">
+<strong>From Prompt Engineering to Context Engineering</strong><br>
+<span style="font-size:.95rem;color:#4338ca">How Developers Should Build, Use, and Control AI in 2026</span>
+<div style="margin-top:.75rem;font-size:.9rem;color:#334155">
+📍 <strong>Chapter 4</strong> · Phase: <strong>Control Layer 2 — Workflow</strong><br>
+Advanced patterns slow the model down and match risk — in chat, Cursor, or your API.
+</div>
+</div>
+<div class="diagram-section">
+<h3>Your Presentation Journey (Chapters 2–10)</h3>
+<div style="overflow-x:auto;padding:.5rem 0;font-size:.82rem;line-height:2"><span style="color:#64748b">Ch2 LLM Recap</span> → <span style="color:#64748b">Ch3 Prompts</span> → <span style="font-weight:700;color:#4f46e5">Ch4 Advanced Prompts</span> → <span style="color:#64748b">Ch5 Why Prompts Fail</span> → <span style="color:#64748b">Ch6 Context Engineering</span> → <span style="color:#64748b">Ch7 RAG</span> → <span style="color:#64748b">Ch8 Tools & MCP</span> → <span style="color:#64748b">Ch9 Agents</span> → <span style="color:#64748b">Ch10 Multi-Agent</span></div>
+<p style="font-size:.88rem;color:#64748b;margin-top:.5rem">Prompting is how we talk to AI. Context engineering is how we make AI useful. Chapters 7–10 show how to <em>build</em> applications (NL2SQL, chatbots, coding assistants) on top.</p>
+</div><div class="objectives"><h3>🎯 Learning Objectives</h3><ul><li>Select the right advanced pattern for task type and risk level</li><li>Apply plan-first, review-first, and decomposition on real code tasks</li><li>Use few-shot, negative examples, and rubrics in production prompts</li><li>Understand Chain-of-Thought, ReAct, and when extra reasoning helps or hurts</li><li>Run live comparisons senior developers can replicate in Cursor/Claude</li></ul></div>
+<div class="section">
+<h2>Advanced Prompting = Workflow Control</h2>
+<p>Default model behavior: <strong>answer immediately</strong>. Senior workflow: force phases — clarify → plan → critique → implement → verify. You are designing a state machine, not a single message.</p>
+<div class="diagram-container"><div class="mermaid">
+stateDiagram-v2
+    [*] --> Clarify
+    Clarify --> Plan : requirements clear
+    Clarify --> Clarify : ask user
+    Plan --> Review : plan approved
+    Review --> Implement : risks accepted
+    Implement --> Verify
+    Verify --> [*] : pass
+    Verify --> Implement : tests fail
+</div></div>
+</div>
+
+<div class="section">
+<h2>Pattern Selection Matrix (Senior Reference)</h2>
+<table>
+<tr><th>Pattern</th><th>Task type</th><th>Risk</th><th>Latency</th><th>Key phrase</th></tr>
+<tr><td>Ask-before-answering</td><td>Ambiguous requirements</td><td>Medium</td><td>+1 turn</td><td>"List missing info first"</td></tr>
+<tr><td>Plan-first</td><td>Multi-file features</td><td>High</td><td>+1–2 turns</td><td>"Do not write code yet"</td></tr>
+<tr><td>Review-first</td><td>Legacy / security code</td><td>High</td><td>+1 turn</td><td>"Diagnose before fix"</td></tr>
+<tr><td>Decomposition</td><td>Large refactors</td><td>High</td><td>Multi-step</td><td>"Break into steps 1..N"</td></tr>
+<tr><td>Few-shot</td><td>NL-to-SQL, formatting</td><td>Medium</td><td>Token cost</td><td>2–5 input/output pairs</td></tr>
+<tr><td>Negative examples</td><td>Safety boundaries</td><td>Critical</td><td>Low</td><td>"Bad vs good with reason"</td></tr>
+<tr><td>Rubric</td><td>QA / evals</td><td>Medium</td><td>+1 turn</td><td>"Score 0–5 per dimension"</td></tr>
+<tr><td>Verification</td><td>SQL, payments, auth</td><td>Critical</td><td>+1 turn</td><td>"Self-check against requirements"</td></tr>
+<tr><td>Multiple options</td><td>Architecture</td><td>Medium</td><td>Higher tokens</td><td>"3 options + trade-offs"</td></tr>
+</table>
+</div>
+
+<div class="section">
+<h2>Pattern 1: Plan-First (Real Refactor Example)</h2>
+<p><strong>Task:</strong> Add rate limiting to the public API.</p>
+<div class="tab-group" data-tab-group="plan-first">
+<div class="tab-buttons">
+<button class="active" data-tab="weak">❌ Direct codegen</button>
+<button data-tab="strong">✅ Plan-first</button>
+</div>
+<div class="tab-panel active" data-panel="weak"><div class="code-block"><button class="copy-btn">Copy</button><pre><code>Add rate limiting to our API.</code></pre></div></div>
+<div class="tab-panel" data-panel="strong"><div class="code-block"><button class="copy-btn">Copy</button><pre><code>Do not write code yet.
+
+Requirement: Add rate limiting to public REST API.
+
+Deliver:
+1. Current flow summary (which files handle requests)
+2. Rate limit strategy options (in-memory vs Redis vs gateway)
+3. Recommended approach for our scale (10k RPM)
+4. Files to change (exact paths if inferable)
+5. Risks: false positives, Redis SPOF, bypass paths
+6. Test plan: unit + integration + load edge cases
+
+Wait for my approval before implementation.</code></pre></div></div>
+</div>
+<div class="success-box"><h4>Why seniors win with this</h4>
+<p>Plan surfaces <strong>gateway vs app-level</strong> decision before 400 lines of wrong code exist. Review happens when change is cheap.</p></div>
+</div>
+
+<div class="section">
+<h2>Pattern 2: Review-First (Security-Critical)</h2>
+<div class="code-block"><button class="copy-btn">Copy</button><pre><code>Act as a senior security-focused reviewer.
+
+Review ONLY — do not rewrite.
+
+Check:
+- SQL injection (parameterization)
+- AuthZ: can user A access user B's data?
+- Secrets in code or logs
+- Race conditions on payment state
+- Error messages leaking internals
+
+Output:
+| Severity | Location | Issue | Exploit scenario | Fix direction |</code></pre></div>
+<div class="diagram-section">
+<h3>Review-first vs Fix-first outcomes</h3>
+<div class="diagram-container"><div class="mermaid">
+flowchart LR
+    subgraph Fix-first
+        F1[Prompt: fix this] --> F2[Large diff] --> F3[Hidden regressions]
+    end
+    subgraph Review-first
+        R1[Prompt: list risks] --> R2[Prioritized list] --> R3[Targeted fix]
+    end
+</div></div>
+</div>
+</div>
+
+<div class="section">
+<h2>Pattern 3: Few-Shot + Negative (NL-to-SQL Pair)</h2>
+<p>Few-shot teaches <strong>style and boundaries</strong> more reliably than abstract rules alone.</p>
+<div class="code-block"><button class="copy-btn">Copy</button><pre><code>### EXAMPLES (follow exactly)
+
+User: Show active students
+SQL: SELECT id, full_name FROM students WHERE enrollment_status = 'active' LIMIT 100;
+
+User: Show unpaid invoices
+SQL: SELECT id, amount, due_date FROM invoices WHERE paid_status = 'unpaid' LIMIT 100;
+
+User: Delete inactive students
+Response: BLOCKED — destructive request. Offer: SELECT id, full_name FROM students WHERE enrollment_status = 'inactive' LIMIT 100;
+
+---
+Now handle:
+User: Show active students with unpaid invoices over $500</code></pre></div>
+</div>
+
+<div class="section">
+<h2>Pattern 4: Chain-of-Thought (When to Use)</h2>
+<div class="compare-grid">
+<div class="compare-col good">
+<h4>✅ Use explicit reasoning when</h4>
+<ul>
+<li>Multi-step logic (complex JOINs, tax rules)</li>
+<li>Debugging with competing hypotheses</li>
+<li>Architecture trade-off analysis</li>
+<li>Teaching juniors (show reasoning chain)</li>
+</ul>
+</div>
+<div class="compare-col bad">
+<h4>❌ Skip or hide reasoning when</h4>
+<ul>
+<li>Simple template generation</li>
+<li>Latency-sensitive production path</li>
+<li>Reasoning leaks sensitive context in logs</li>
+<li>Model already uses internal reasoning tokens</li>
+</ul>
+</div>
+</div>
+<div class="code-block"><button class="copy-btn">Copy</button><pre><code>Think step by step internally, but return ONLY the final JSON.
+
+Steps you must perform (do not print):
+1. Identify tables needed
+2. Map business terms to columns
+3. Check for destructive intent
+4. Validate all columns exist in provided schema
+5. Add LIMIT if not aggregate</code></pre></div>
+</div>
+
+<div class="section">
+<h2>Pattern 5: ReAct (Reason + Act) — Bridge to Agents</h2>
+<p>ReAct interleaves <strong>thought → tool call → observation</strong>. Foundation for agents (Chapter 9).</p>
+<div class="diagram-container"><div class="mermaid">
+sequenceDiagram
+    participant M as Model
+    participant T as search_schema
+    M->>M: Need invoice table name
+    M->>T: search_schema("unpaid invoices")
+    T-->>M: invoices, students, paid_status
+    M->>M: Generate SQL with verified tables
+</div></div>
+<div class="code-block"><button class="copy-btn">Copy</button><pre><code>You may call tools. Format:
+Thought: [what you need]
+Action: search_schema("active students invoices")
+Observation: [tool result]
+...
+Final Answer: [SQL or clarification]</code></pre></div>
+</div>
+
+<div class="section">
+<h2>Pattern 6: Rubric Scoring (Eval-Ready)</h2>
+<div class="code-block"><button class="copy-btn">Copy</button><pre><code>Score the SQL answer on each dimension 0–5:
+
+| Dimension    | 0 = fail | 5 = perfect |
+|--------------|----------|-------------|
+| Correctness  | Wrong tables | Matches schema & intent |
+| Safety       | DELETE present | Read-only, no secrets |
+| Performance  | Full table scan | Filtered, LIMIT present |
+| Clarity      | No explanation | Clear assumptions |
+
+Return scores + one paragraph improvement plan.</code></pre></div>
+<p>Use rubric output to build <strong>automated eval thresholds</strong> (Chapter 16): e.g. Safety &lt; 5 → block deploy.</p>
+</div>
+
+<div class="section">
+<h2>Pattern 7: Verification / Self-Check</h2>
+<div class="code-block"><button class="copy-btn">Copy</button><pre><code>After generating SQL, run this checklist before responding:
+
+[ ] Every table in FROM/JOIN exists in SCHEMA
+[ ] Every column exists on that table
+[ ] No forbidden keywords (INSERT, UPDATE, DELETE, DROP)
+[ ] Matches business rule for "unpaid"
+[ ] LIMIT present unless aggregate
+[ ] If any check fails, explain which failed and do not return SQL</code></pre></div>
+</div>
+
+<div class="section">
+<h2>Pattern 8: Multiple Options (Architecture)</h2>
+<div class="code-block"><button class="copy-btn">Copy</button><pre><code>Propose 3 designs for caching user permissions.
+
+For each: diagram (text), pros, cons, complexity, failure modes, ops burden.
+Recommend one for 50-engineer team on AWS.
+Do not implement — decision record only.</code></pre></div>
+</div>
+
+<div class="section">
+<h2>IDE-Specific: Cursor / Claude Code Patterns (2026)</h2>
+<table>
+<tr><th>Technique</th><th>Usage</th></tr>
+<tr><td><code class="inline-code">@file</code> / <code class="inline-code">@folder</code></td><td>Pin exact context — reduces hallucinated paths</td></tr>
+<tr><td><code class="inline-code">.cursor/rules</code></td><td>Project conventions persist across sessions</td></tr>
+<tr><td>Small scoped prompts</td><td>"Only edit auth/middleware.ts step 2" — prevents scope creep</td></tr>
+<tr><td>Agent vs Ask mode</td><td>Ask for plan; Agent for execution after approval</td></tr>
+</table>
+</div>
+
+<div class="presentation-tip"><strong>🎤 Live demo script:</strong> (1) "Fix auth bug" → large messy diff. (2) Same bug with review-first → 3 precise findings. (3) Plan-first on feature → approved plan → minimal implementation. ~5 minutes, high impact.</div>
+
+<div class="section">
+<h2>Pattern → Tool Mapping (What to Use Where)</h2>
+<table>
+<tr><th>Pattern</th><th>ChatGPT / Claude</th><th>Cursor</th><th>NL2SQL pipeline</th></tr>
+<tr><td>Plan-first</td><td>✅ Before any code ask</td><td>✅ Agent mode step 1</td><td>✅ Before SQL gen in risky domains</td></tr>
+<tr><td>Review-first</td><td>✅ Paste PR diff</td><td>✅ Ask mode on @file</td><td>⚠️ Separate validator agent/code</td></tr>
+<tr><td>Few-shot</td><td>✅ In prompt</td><td>✅ In rules/examples</td><td>✅ Retrieved example pairs (RAG)</td></tr>
+<tr><td>Verification</td><td>✅ Self-check prompt</td><td>✅ + run tests</td><td>✅ Mandatory code validator</td></tr>
+<tr><td>ReAct / tools</td><td>✅ Advanced GPT tools</td><td>✅ Agent tools</td><td>✅ search_schema, validate_sql</td></tr>
+</table>
+</div>
+
+<div class="section">
+<h2>Behind the Scenes: Why "Plan First" Changes Model Behavior</h2>
+<p>Without plan-first, the model optimizes for <strong>immediate plausible completion</strong> (lowest loss next tokens for "here is code"). With plan-first, you force allocation of context tokens to <strong>structure before syntax</strong> — reducing wrong-file edits and scope creep.</p>
+<div class="diagram-container"><div class="mermaid">
+flowchart LR
+    subgraph Without plan
+        Q1[Fix bug] --> G1[Generate code immediately]
+        G1 --> R1[Large risky diff]
+    end
+    subgraph With plan
+        Q2[Fix bug] --> P2[Plan + risks + tests]
+        P2 --> A2[Human OK]
+        A2 --> G2[Minimal targeted code]
+    end
+</div></div>
+</div>
+
+<div class="section">
+<h2>Failure → Fix: Advanced Prompting</h2>
+<div class="error-box"><h4>❌ Failure</h4>
+<p>Developer uses few-shot examples from old schema after migration. Model copies <code class="inline-code">status</code> column that was renamed.</p></div>
+<div class="success-box"><h4>✅ Fix</h4>
+<ol>
+<li>Retrieve few-shot examples dynamically (RAG), don't hardcode in prompt</li>
+<li>Validator checks columns against live schema</li>
+<li>Eval regression on schema change</li>
+</ol></div>
+</div>
+
+<div class="takeaway"><h3>Key Takeaway</h3>
+<p>Advanced prompting is workflow design. Seniors choose patterns based on risk and task shape — not longer prompts.</p></div>
+<div class="chapter-nav"><a href="chapter03.html">← Previous</a><a href="index.html">🏠 Home</a><a href="chapter05.html">Next Chapter →</a></div>
+        </main>
+        <footer class="footer">
+            <p>From Prompt Engineering to Context Engineering — Developer Learning Guide</p>
+            <p>Chapter 4 of 25 · Prepared for Sakib Hasan · June 2026</p>
+        </footer>
+    </div>
+    <script src="js/app.js"></script>
+</body>
+</html>
