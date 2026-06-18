@@ -44,6 +44,12 @@
                 <li><a href="chapter23.html">👁️ Ch23: Supervisory Eng.</a></li>
                 <li><a href="chapter24.html">📉 Ch24: Context Debt</a></li>
                 <li><a href="chapter25.html">🔬 Ch25: How LLMs Work</a></li>
+                <li><a href="chapter26.html">🔀 Ch26: NL2SQL Pipeline</a></li>
+                <li><a href="chapter27.html">📋 Ch27: Prompt Audit</a></li>
+                <li><a href="chapter28.html">🧱 Ch28: 9 Layers</a></li>
+                <li><a href="chapter29.html">🗺️ Ch29: Roadmap</a></li>
+                <li><a href="chapter30.html">🏆 Ch30: Master Script</a></li>
+                <li><a href="chapter31.html">💥 Ch31: AI Failures</a></li>
             </ul>
         </nav>
         <main class="main-content">
@@ -247,6 +253,38 @@ flowchart TD
 
 <div class="presentation-tip"><strong>🎤 Senior discussion:</strong> "Have you shipped a feature where AI was right in chat but wrong against real data?" — bridges to context engineering as engineering discipline, not prompt hacks.</div>
 
+<div class="section" style="border-left:4px solid #dc2626;padding-left:1rem;margin-bottom:1.5rem">
+<h2>WHY · WHEN · HOW — The Three Questions (Presentation Core)</h2>
+<p>Every AI failure answers three questions. Teach your audience to ask these before blaming "the model."</p>
+<div class="diagram-container"><div class="mermaid">
+flowchart LR
+    subgraph WHY["WHY (root cause)"]
+        W1[Predicts tokens not truth]
+        W2[Missing or wrong context]
+        W3[No verification layer]
+    end
+    subgraph WHEN["WHEN (trigger)"]
+        T1[Fact not in prompt]
+        T2[Ambiguous terms]
+        T3[User over-trusts output]
+    end
+    subgraph HOW["HOW (symptom)"]
+        H1[Fluent wrong SQL]
+        H2[Confident bad code]
+        H3[Silent data leak]
+    end
+    WHY --> WHEN --> HOW
+    HOW --> FIX[FIX: context + validator + habit]
+</div></div>
+<table>
+<tr><th>Question</th><th>Example (NL2SQL)</th><th>Example (daily Cursor)</th></tr>
+<tr><td><strong>WHY?</strong></td><td>No schema in context → guesses table names</td><td>No @file → guesses wrong module</td></tr>
+<tr><td><strong>WHEN?</strong></td><td>Every NL query without hybrid_search</td><td>Vague "fix bug" + Agent mode</td></tr>
+<tr><td><strong>HOW?</strong></td><td>SQL runs but wrong JOIN / wrong columns</td><td>8-file refactor, tests fail</td></tr>
+</table>
+<p>→ Full failure playbook with real examples: <a href="chapter31.html"><strong>Chapter 31</strong></a></p>
+</div>
+
 <div class="section">
 <h2>The Presentation Bridge: Prompt Engineering → Context Engineering</h2>
 <div class="diagram-container"><div class="mermaid">
@@ -291,7 +329,7 @@ flowchart LR
         </main>
         <footer class="footer">
             <p>From Prompt Engineering to Context Engineering — Developer Learning Guide</p>
-            <p>Chapter 5 of 25 · Prepared for Sakib Hasan · June 2026</p>
+            <p>Chapter 5 of 31 · Prepared for Sakib Hasan · June 2026</p>
         </footer>
     </div>
     <script src="js/app.js"></script>

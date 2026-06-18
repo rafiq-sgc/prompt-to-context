@@ -112,6 +112,50 @@ def journey_map_advanced(highlight: int) -> str:
 </div>"""
 
 
+def journey_map_failures(highlight: int = 31) -> str:
+    """Visual map for failure-focused presentation arc."""
+    steps = [
+        (5, "Why Prompts Fail", "Failure taxonomy"),
+        (31, "Why/When/How", "Presentation core"),
+        (6, "Context Fix", "Engineering solutions"),
+        (26, "NL2SQL Real", "Your app examples"),
+        (12, "Daily Success", "Best habits"),
+    ]
+    items = []
+    for num, label, _ in steps:
+        style = "font-weight:700;color:#dc2626" if num == highlight else "color:#64748b"
+        items.append(f'<span style="{style}">Ch{num} {label}</span>')
+    flow = " → ".join(items)
+    return f"""
+<div class="diagram-section">
+<h3>Failure → Solution → Success Path</h3>
+<div style="overflow-x:auto;padding:.5rem 0;font-size:.82rem;line-height:2">{flow}</div>
+<p style="font-size:.88rem;color:#64748b;margin-top:.5rem"><strong>Chapter 31</strong> is the presentation centerpiece: why AI fails, when it fails, how to fix it, and how to use AI successfully in daily life and production.</p>
+</div>"""
+
+
+def journey_map_nl2sql_capstone(highlight: int) -> str:
+    """Visual map of chapters 26–30 — CampusCom NL2SQL deep dive."""
+    steps = [
+        (26, "Pipeline E2E", "message.py orchestration"),
+        (27, "Prompt Audit", "Every LLM call inventoried"),
+        (28, "9 Layers", "Mapped to your codebase"),
+        (29, "Roadmap", "Gaps & improvements"),
+        (30, "Master Script", "45-min talk + IDE setup"),
+    ]
+    items = []
+    for num, label, _ in steps:
+        style = "font-weight:700;color:#4f46e5" if num == highlight else "color:#64748b"
+        items.append(f'<span style="{style}">Ch{num} {label}</span>')
+    flow = " → ".join(items)
+    return f"""
+<div class="diagram-section">
+<h3>NL2SQL Deep Dive (Chapters 26–30)</h3>
+<div style="overflow-x:auto;padding:.5rem 0;font-size:.82rem;line-height:2">{flow}</div>
+<p style="font-size:.88rem;color:#64748b;margin-top:.5rem">Chapters 1–25 teach patterns. <strong>Chapters 26–30</strong> apply every concept to the <em>CampusCom NL2SQL</em> codebase you ship in production.</p>
+</div>"""
+
+
 def tool_stack_table() -> str:
     return """
 <table>

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 26: NL2SQL Pipeline — Message Endpoint E2E</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="reading-progress"></div>
+    <button class="mobile-menu-toggle" onclick="toggleMobileMenu()" aria-label="Toggle menu">☰</button>
+    <div class="container">
+        <header class="header">
+            <h1>Chapter 26: NL2SQL Pipeline — Message Endpoint E2E</h1>
+            <p class="subtitle">CampusCom message.py orchestration: intent → disambiguation → RAG → agent → validator.</p>
+        </header>
+        <nav class="nav-sidebar" id="nav-sidebar">
+            <div class="nav-brand">CONTEXT ENGINEERING 2026</div>
+            <ul>
+                <li><a href="index.html">🏠 Home</a></li>
+                <li><a href="chapter01.html">🚀 Ch1: Introduction</a></li>
+                <li><a href="chapter02.html">🧠 Ch2: LLM Recap</a></li>
+                <li><a href="chapter03.html">✍️ Ch3: Prompt Basics</a></li>
+                <li><a href="chapter04.html">🎯 Ch4: Advanced Prompts</a></li>
+                <li><a href="chapter05.html">⚠️ Ch5: Why Prompts Fail</a></li>
+                <li><a href="chapter06.html">🏗️ Ch6: Context Engineering</a></li>
+                <li><a href="chapter07.html">📚 Ch7: RAG</a></li>
+                <li><a href="chapter08.html">🔧 Ch8: Tools & MCP</a></li>
+                <li><a href="chapter09.html">🤖 Ch9: AI Agents</a></li>
+                <li><a href="chapter10.html">👥 Ch10: Multi-Agent</a></li>
+                <li><a href="chapter11.html">🔄 Ch11: AI SDLC</a></li>
+                <li><a href="chapter12.html">⚡ Ch12: Productivity</a></li>
+                <li><a href="chapter13.html">🛠️ Ch13: AI Tools</a></li>
+                <li><a href="chapter14.html">🎨 Ch14: Vibe Coding</a></li>
+                <li><a href="chapter15.html">🗄️ Ch15: NL-to-SQL</a></li>
+                <li><a href="chapter16.html">📊 Ch16: Evals</a></li>
+                <li><a href="chapter17.html">🔒 Ch17: Security</a></li>
+                <li><a href="chapter18.html">🏢 Ch18: Governance</a></li>
+                <li><a href="chapter19.html">🔮 Ch19: Future</a></li>
+                <li><a href="chapter20.html">🎤 Ch20: Present</a></li>
+                <li><a href="chapter21.html">⚖️ Ch21: Prompt vs Context</a></li>
+                <li><a href="chapter22.html">⚡ Ch22: Productivity Paradox</a></li>
+                <li><a href="chapter23.html">👁️ Ch23: Supervisory Eng.</a></li>
+                <li><a href="chapter24.html">📉 Ch24: Context Debt</a></li>
+                <li><a href="chapter25.html">🔬 Ch25: How LLMs Work</a></li>
+                <li><a href="chapter26.html" class="active">🔀 Ch26: NL2SQL Pipeline</a></li>
+                <li><a href="chapter27.html">📋 Ch27: Prompt Audit</a></li>
+                <li><a href="chapter28.html">🧱 Ch28: 9 Layers</a></li>
+                <li><a href="chapter29.html">🗺️ Ch29: Roadmap</a></li>
+                <li><a href="chapter30.html">🏆 Ch30: Master Script</a></li>
+                <li><a href="chapter31.html">💥 Ch31: AI Failures</a></li>
+            </ul>
+        </nav>
+        <main class="main-content">
+            
+            <div class="chapter-header">
+                <h1>🔀 Chapter 26: NL2SQL Pipeline — Message Endpoint E2E</h1>
+                <p class="chapter-meta">CampusCom message.py orchestration: intent → disambiguation → RAG → agent → validator.</p>
+            </div><div class="chapter-nav"><a href="chapter25.html">← Previous</a><a href="index.html">🏠 Home</a><a href="chapter27.html">Next Chapter →</a></div>
+<div class="tagline-banner" style="text-align:left;margin-bottom:1.5rem">
+<strong>From Prompt Engineering to Context Engineering</strong><br>
+<span style="font-size:.95rem;color:#4338ca">How Developers Should Build, Use, and Control AI in 2026</span>
+<div style="margin-top:.75rem;font-size:.9rem;color:#334155">
+📍 <strong>Chapter 26</strong> · Phase: <strong>NL2SQL Deep Dive — Pipeline</strong><br>
+Your real production path: <code>app/routers/message.py</code> from user question to streamed SQL response. This is the architecture you demo to seniors.
+</div>
+</div>
+<div class="diagram-section">
+<h3>NL2SQL Deep Dive (Chapters 26–30)</h3>
+<div style="overflow-x:auto;padding:.5rem 0;font-size:.82rem;line-height:2"><span style="font-weight:700;color:#4f46e5">Ch26 Pipeline E2E</span> → <span style="color:#64748b">Ch27 Prompt Audit</span> → <span style="color:#64748b">Ch28 9 Layers</span> → <span style="color:#64748b">Ch29 Roadmap</span> → <span style="color:#64748b">Ch30 Master Script</span></div>
+<p style="font-size:.88rem;color:#64748b;margin-top:.5rem">Chapters 1–25 teach patterns. <strong>Chapters 26–30</strong> apply every concept to the <em>CampusCom NL2SQL</em> codebase you ship in production.</p>
+</div><div class="objectives"><h3>🎯 Learning Objectives</h3><ul><li>Trace the full NL2SQL request path from HTTP to database</li><li>Identify which steps use an LLM vs deterministic code</li><li>Explain where context is assembled before each model call</li><li>Map each stage to prompt engineering vs context engineering</li><li>Use this flow as your live presentation backbone</li></ul></div>
+<div class="section">
+<h2>Why Start Here</h2>
+<p>Chapters 1–25 teach patterns with generic examples. <strong>Chapter 26 onward uses your actual CampusCom NL2SQL application</strong> — the system you build every day. Seniors want to see a real pipeline, not a toy diagram.</p>
+<div class="quote-block">The message endpoint is not "an LLM call." It is an orchestration layer that decides <em>when</em> to call models, <em>what context</em> to inject, and <em>what code</em> must never be delegated to AI.</div>
+</div>
+
+<div class="section">
+<h2>End-to-End Flow (Your Code)</h2>
+<div class="diagram-container"><div class="mermaid">
+flowchart TD
+    POST["POST /messages/"] --> CONV[Get or create Conversation]
+    CONV --> UM[Save user Message]
+    UM --> KP{key_phrase_id set?}
+    KP -->|yes| SKIP_INT[Skip intent — force SQL]
+    KP -->|no| INT["determine_intent() — LLM #1"]
+    INT --> ROUTE{datasource?}
+    ROUTE -->|sql| PERM{user.query permission?}
+    ROUTE -->|docs| DOCS[ask_question_proxy — external RAG]
+    ROUTE -->|other| REJECT[Static refusal message]
+    PERM -->|no| DENY1[Permission message]
+    PERM -->|yes| DIS{Disambiguation needed?}
+    DIS -->|matched terms| DISAM["SemanticPhraseMatcherTool — LLM #2"]
+    DISAM --> CLARIFY[Stream clarification UI]
+    DIS -->|no| HS[hybrid_search — embeddings, not LLM]
+    HS --> POL[get_user_permissions + evaluate_nl_governed_access]
+    POL -->|blocked| DENY2[Governed access message]
+    POL -->|ok| AGENT["run_db_agent() — LLM #3 ReAct agent"]
+    AGENT --> VAL[validate_and_rewrite_sql — deterministic]
+    VAL -->|BLOCK| BLOCK[User-facing block message]
+    VAL -->|PASS/REWRITE| EXEC[Execute SQL on Databricks]
+    EXEC --> STREAM[Stream data + ai_response + usage]
+</div></div>
+<p><strong>File map:</strong> orchestration in <code class="inline-code">app/routers/message.py</code> · intent in <code class="inline-code">llm/intent.py</code> · disambiguation in <code class="inline-code">llm/tools.py</code> · retrieval in <code class="inline-code">embedding/utils.py</code> · agent in <code class="inline-code">llm/sql_agent.py</code> · validator in <code class="inline-code">llm/sql_validator.py</code>.</p>
+</div>
+
+<div class="section">
+<h2>Step-by-Step: What Happens on Each Request</h2>
+<table>
+<tr><th>Step</th><th>Component</th><th>LLM?</th><th>Context injected</th></tr>
+<tr><td>1</td><td>Conversation + user message saved</td><td>❌</td><td>Stores <code>chat_data.message</code> for audit</td></tr>
+<tr><td>2</td><td>Intent routing</td><td>✅</td><td>System rules + 26 few-shot pairs + user question</td></tr>
+<tr><td>3</td><td>Permission gate (<code>current_user.query</code>)</td><td>❌</td><td>User role flags — before any SQL LLM</td></tr>
+<tr><td>4</td><td>Key-phrase disambiguation</td><td>✅</td><td>Canonical terms list + user query</td></tr>
+<tr><td>5</td><td>Hybrid search</td><td>❌ (embeddings)</td><td>Top tables, entities, metadata text</td></tr>
+<tr><td>6</td><td>Security policy compile</td><td>❌</td><td>Entities, tables, governed rules per user</td></tr>
+<tr><td>7</td><td>NL governed access check</td><td>❌</td><td>NL query + policy — blocks before agent</td></tr>
+<tr><td>8</td><td>SQL ReAct agent</td><td>✅</td><td>System prefix + schema tools + metadata + ACL block</td></tr>
+<tr><td>9</td><td>SQL validator + rewrite</td><td>❌</td><td>Policy, runtime columns, identity placeholders</td></tr>
+<tr><td>10</td><td>Execute + stream</td><td>❌</td><td>Validated SQL only — never raw LLM output</td></tr>
+</table>
+<div class="info-box"><h4>Key design principle already in your app</h4>
+<p><strong>Security is deterministic.</strong> The LLM drafts SQL; <code class="inline-code">validate_and_rewrite_sql</code> has final authority. This is correct context engineering — the model proposes, code disposes.</p></div>
+</div>
+
+<div class="section">
+<h2>Two Paths: SQL vs Docs</h2>
+<div class="compare-grid">
+<div class="compare-col">
+<h4>🗄️ SQL path (your core product)</h4>
+<ul>
+<li>Full context pipeline: retrieval → policy → agent → validator</li>
+<li>Three LLM touchpoints (intent, disambiguation, SQL agent)</li>
+<li>Streaming loaders: ambiguity check, SQL construction, query execution</li>
+</ul>
+</div>
+<div class="compare-col good">
+<h4>📚 Docs path</h4>
+<ul>
+<li><code>ask_question_proxy</code> — external help/training RAG</li>
+<li>Separate permission: <code>current_user.ask_question_api</code></li>
+<li>Teaches audience: one app, multiple AI backends by intent</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div class="section">
+<h2>Disambiguation: Context Across Turns</h2>
+<p>When ambiguous key phrases match, the API streams clarification chunks and saves <code>conversation.disambiguation</code>. On follow-up, the client sends <code>key_phrase_id</code> and optionally <code>original_prompt</code>:</p>
+<div class="code-block"><button class="copy-btn">Copy</button><pre><code># message.py — recombining context after user clarifies
+if chat_data.original_prompt:
+    msg = chat_data.original_prompt + " " + chat_data.message
+else:
+    msg = chat_data.message
+
+# hybrid_search + run_db_agent use the recombined msg</code></pre></div>
+<p><strong>Presentation point:</strong> This is context engineering for multi-turn NL2SQL — not chat history in the LLM, but <em>structured state</em> the orchestrator controls.</p>
+</div>
+
+<div class="section">
+<h2>Streaming Protocol (Demo-Friendly)</h2>
+<p>Your endpoint streams XML-tagged chunks — great for UI and for explaining layers in a talk:</p>
+<table>
+<tr><th>Tag</th><th>Meaning</th><th>When to show in demo</th></tr>
+<tr><td><code>&lt;loader&gt;</code></td><td>Progress step</td><td>"Watch the pipeline think"</td></tr>
+<tr><td><code>&lt;sql_query&gt;</code></td><td>Drafted SQL</td><td>"Model proposed this"</td></tr>
+<tr><td><code>&lt;data&gt;</code></td><td>Result JSON</td><td>"Only after validator passed"</td></tr>
+<tr><td><code>&lt;message&gt;</code></td><td>User-facing status</td><td>Blocks, permissions, errors</td></tr>
+<tr><td><code>&lt;ai_response&gt;</code></td><td>Reasoning summary</td><td>"Human must still read this"</td></tr>
+</table>
+</div>
+
+<div class="presentation-tip"><strong>🎤 Live demo script (2 min):</strong> Ask a reporting question → point at intent loader → show hybrid search narrowing tables in logs → show SQL draft → explain validator rewrite → show data. Say: "Three LLM calls, four deterministic guardrails."</div>
+<div class="takeaway"><h3>Key Takeaway</h3>
+<p>Your message endpoint is a <strong>context orchestrator</strong>. Prompt engineering lives inside each LLM step; context engineering is the full path including retrieval, policy, and validation.</p></div>
+<div class="chapter-nav"><a href="chapter25.html">← Previous</a><a href="index.html">🏠 Home</a><a href="chapter27.html">Next Chapter →</a></div>
+        </main>
+        <footer class="footer">
+            <p>From Prompt Engineering to Context Engineering — Developer Learning Guide</p>
+            <p>Chapter 26 of 31 · Prepared for Sakib Hasan · June 2026</p>
+        </footer>
+    </div>
+    <script src="js/app.js"></script>
+</body>
+</html>

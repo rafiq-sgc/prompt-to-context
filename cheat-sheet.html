@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Failures Cheat Sheet — Printable</title>
+    <style>
+        @page { size: A4; margin: 10mm; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            font-size: 9.5pt;
+            line-height: 1.35;
+            color: #1e293b;
+            background: #f1f5f9;
+            padding: 1rem;
+        }
+        .sheet {
+            max-width: 210mm;
+            margin: 0 auto;
+            background: #fff;
+            padding: 10mm 12mm;
+            box-shadow: 0 4px 20px rgba(0,0,0,.1);
+        }
+        .no-print {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+        .no-print button, .no-print a {
+            display: inline-block;
+            padding: .5rem 1.25rem;
+            margin: .25rem;
+            font-size: .9rem;
+            border-radius: 8px;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+        }
+        .btn-print { background: #4f46e5; color: #fff; }
+        .btn-back { background: #e2e8f0; color: #1e293b; }
+
+        header {
+            border-bottom: 3px solid #4f46e5;
+            padding-bottom: 6px;
+            margin-bottom: 8px;
+        }
+        header h1 { font-size: 14pt; color: #4f46e5; }
+        header p { font-size: 8.5pt; color: #64748b; margin-top: 2px; }
+
+        .tagline {
+            background: linear-gradient(90deg, #eef2ff, #ecfdf5);
+            border-left: 4px solid #dc2626;
+            padding: 5px 8px;
+            margin-bottom: 8px;
+            font-size: 8.5pt;
+            font-weight: 600;
+        }
+
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
+        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-bottom: 8px; }
+
+        h2 {
+            font-size: 9pt;
+            text-transform: uppercase;
+            letter-spacing: .04em;
+            color: #4f46e5;
+            border-bottom: 1px solid #e2e8f0;
+            margin-bottom: 4px;
+            padding-bottom: 2px;
+        }
+        h2.red { color: #dc2626; }
+
+        table { width: 100%; border-collapse: collapse; font-size: 8pt; margin-bottom: 6px; }
+        th, td { border: 1px solid #e2e8f0; padding: 3px 5px; text-align: left; vertical-align: top; }
+        th { background: #f8fafc; font-weight: 600; }
+
+        .box {
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            padding: 5px 6px;
+            background: #fafafa;
+        }
+        .box strong { display: block; font-size: 8.5pt; margin-bottom: 2px; }
+        .box ul { margin-left: 14px; font-size: 8pt; }
+        .box li { margin-bottom: 1px; }
+
+        .flow {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 3px;
+            font-size: 7.5pt;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+        .flow span {
+            background: #eef2ff;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+        .flow .arrow { background: none; color: #94a3b8; padding: 0; }
+
+        .quotes { font-size: 8pt; }
+        .quotes li { margin-bottom: 3px; list-style: none; padding-left: 10px; border-left: 2px solid #4f46e5; }
+
+        .checklist { columns: 2; font-size: 8pt; list-style: none; }
+        .checklist li::before { content: "☐ "; }
+
+        .timing td:first-child { font-weight: 600; white-space: nowrap; width: 28px; }
+
+        code { font-family: Consolas, monospace; font-size: 7.5pt; background: #f1f5f9; padding: 0 3px; }
+
+        footer {
+            margin-top: 6px;
+            padding-top: 4px;
+            border-top: 1px solid #e2e8f0;
+            font-size: 7pt;
+            color: #94a3b8;
+            text-align: center;
+        }
+
+        @media print {
+            body { background: #fff; padding: 0; }
+            .sheet { box-shadow: none; padding: 0; max-width: none; }
+            .no-print { display: none !important; }
+            h2 { page-break-after: avoid; }
+            table { page-break-inside: avoid; }
+        }
+    </style>
+</head>
+<body>
+    <div class="no-print">
+        <button class="btn-print" onclick="window.print()">🖨️ Print / Save as PDF</button>
+        <a class="btn-back" href="index.html">← Back to Guide</a>
+        <a class="btn-back" href="chapter31.html">Chapter 31</a>
+    </div>
+
+    <article class="sheet">
+        <header>
+            <h1>From Prompt Engineering to Context Engineering</h1>
+            <p>One-page cheat sheet · AI Failures: Why · When · How → Fix → Success · Sakib Hasan · June 2026</p>
+        </header>
+
+        <p class="tagline">AI fails at the <em>fact boundary</em>, not the grammar boundary. Every failure → one fix → one eval → team memory.</p>
+
+        <div class="flow">
+            <span>WHY</span><span class="arrow">→</span>
+            <span>WHEN</span><span class="arrow">→</span>
+            <span>HOW</span><span class="arrow">→</span>
+            <span>FIX</span><span class="arrow">→</span>
+            <span>SUCCESS</span><span class="arrow">→</span>
+            <span>EVAL</span>
+        </div>
+
+        <div class="grid-3">
+            <div class="box">
+                <strong>WHY (5 roots)</strong>
+                <ul>
+                    <li>Predicts tokens, not truth</li>
+                    <li>Missing context (schema, ACL)</li>
+                    <li>Wrong/stale context</li>
+                    <li>No review / no tests</li>
+                    <li>Injection / untrusted RAG</li>
+                </ul>
+            </div>
+            <div class="box">
+                <strong>WHEN (triggers)</strong>
+                <ul>
+                    <li>Facts not in prompt</li>
+                    <li>Ambiguous business terms</li>
+                    <li>After schema/metadata change</li>
+                    <li>Long chat (context rot)</li>
+                    <li>Over-trust + no validator</li>
+                </ul>
+            </div>
+            <div class="box">
+                <strong>HOW (symptoms)</strong>
+                <ul>
+                    <li>Fluent wrong SQL/code</li>
+                    <li>Confident bad JOINs</li>
+                    <li>Scope creep (8-file diff)</li>
+                    <li>PII / policy bypass</li>
+                    <li>Demo OK, prod broken</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="grid-2">
+            <div>
+                <h2 class="red">Failure → Fix → Success (NL2SQL)</h2>
+                <table>
+                    <tr><th>Failure</th><th>Fix (your app)</th><th>✓ Success</th></tr>
+                    <tr><td>Wrong tables</td><td><code>hybrid_search</code> + <code>sql_db_schema</code></td><td>Real columns</td></tr>
+                    <tr><td>Ambiguous term</td><td><code>SemanticPhraseMatcherTool</code></td><td>User confirms</td></tr>
+                    <tr><td>sql vs docs</td><td><code>determine_intent()</code> few-shots</td><td>Right route</td></tr>
+                    <tr><td>PII in SQL</td><td><code>validate_and_rewrite_sql</code></td><td>BLOCK/REWRITE</td></tr>
+                    <tr><td>Follow-up lost</td><td><code>original_prompt</code> + disambiguation</td><td>Clear intent</td></tr>
+                </table>
+
+                <h2>CampusCom Pipeline (message.py)</h2>
+                <p style="font-size:7.5pt">POST → intent → perm → disambiguate? → hybrid_search → policy → <code>run_db_agent</code> → validator → execute → stream</p>
+                <p style="font-size:7.5pt;margin-top:3px"><strong>3 LLM calls</strong> · <strong>4 code guardrails</strong> · Security = deterministic, never LLM</p>
+            </div>
+            <div>
+                <h2>Daily Life — Best AI Use</h2>
+                <table>
+                    <tr><th>Task</th><th>Tool</th><th>Never</th></tr>
+                    <tr><td>Learn / explain</td><td>ChatGPT, Claude</td><td>Treat as prod truth</td></tr>
+                    <tr><td>Edit codebase</td><td>Cursor + @file</td><td>Agent w/o plan</td></tr>
+                    <tr><td>Company data SQL</td><td>Internal NL2SQL</td><td>Paste prod in chat</td></tr>
+                    <tr><td>Quick complete</td><td>Copilot</td><td>Tab-accept blind</td></tr>
+                </table>
+
+                <h2>6-Stage Workflow</h2>
+                <p style="font-size:7.5pt"><strong>Understand → Plan → Generate → Review → Test → Document</strong> — skip a stage, pay later.</p>
+
+                <h2>Daily Checklist</h2>
+                <ul class="checklist">
+                    <li>One-sentence task?</li>
+                    <li>Minimum @context attached?</li>
+                    <li>Right tool for job?</li>
+                    <li>Plan before code?</li>
+                    <li>Read every line of output?</li>
+                    <li>Tests run before merge?</li>
+                    <li>No prod secrets in chat?</li>
+                    <li>No blind SQL execute?</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="grid-2">
+            <div>
+                <h2>Two Scenarios</h2>
+                <table>
+                    <tr><th></th><th>A: Daily work</th><th>B: NL2SQL app</th></tr>
+                    <tr><td>Orchestrator</td><td>You</td><td>Code pipeline</td></tr>
+                    <tr><td>Validator</td><td>You + tests</td><td><code>validate_and_rewrite_sql</code></td></tr>
+                    <tr><td>Prompt role</td><td>Primary lever</td><td>One of 9 layers</td></tr>
+                </table>
+            </div>
+            <div>
+                <h2>45-Min Talk Timing</h2>
+                <table class="timing">
+                    <tr><td>0–5</td><td>Hook: believable wrong SQL</td></tr>
+                    <tr><td>5–12</td><td>WHY + WHEN (mindmap)</td></tr>
+                    <tr><td>12–22</td><td>HOW + FIX (6 real failures)</td></tr>
+                    <tr><td>22–35</td><td>Live demo: naive SQL → your app</td></tr>
+                    <tr><td>35–40</td><td>Daily success + checklist</td></tr>
+                    <tr><td>40–45</td><td>Failure→eval loop · Q&A</td></tr>
+                </table>
+            </div>
+        </div>
+
+        <h2>Memorize These Lines</h2>
+        <ul class="quotes">
+            <li>Prompting is how we talk to AI. Context engineering is how we make AI useful.</li>
+            <li>The danger is not bad code — it is <em>believable</em> code.</li>
+            <li>In daily life, you are the validator. In production, the code is the validator.</li>
+            <li>Every production failure is a free test case — if you capture it.</li>
+            <li>We did not fix AI with "be more accurate." We engineered context.</li>
+        </ul>
+
+        <footer>Full guide: prompt-to-context · Ch 31 (failures) · Ch 26–30 (NL2SQL) · Ch 30 (script) · github.com/rafiq-sgc</footer>
+    </article>
+</body>
+</html>

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 29: NL2SQL Improvements Roadmap</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="reading-progress"></div>
+    <button class="mobile-menu-toggle" onclick="toggleMobileMenu()" aria-label="Toggle menu">☰</button>
+    <div class="container">
+        <header class="header">
+            <h1>Chapter 29: NL2SQL Improvements Roadmap</h1>
+            <p class="subtitle">Prioritized fixes, senior Q&A, eval CI, follow-up context, context debt.</p>
+        </header>
+        <nav class="nav-sidebar" id="nav-sidebar">
+            <div class="nav-brand">CONTEXT ENGINEERING 2026</div>
+            <ul>
+                <li><a href="index.html">🏠 Home</a></li>
+                <li><a href="chapter01.html">🚀 Ch1: Introduction</a></li>
+                <li><a href="chapter02.html">🧠 Ch2: LLM Recap</a></li>
+                <li><a href="chapter03.html">✍️ Ch3: Prompt Basics</a></li>
+                <li><a href="chapter04.html">🎯 Ch4: Advanced Prompts</a></li>
+                <li><a href="chapter05.html">⚠️ Ch5: Why Prompts Fail</a></li>
+                <li><a href="chapter06.html">🏗️ Ch6: Context Engineering</a></li>
+                <li><a href="chapter07.html">📚 Ch7: RAG</a></li>
+                <li><a href="chapter08.html">🔧 Ch8: Tools & MCP</a></li>
+                <li><a href="chapter09.html">🤖 Ch9: AI Agents</a></li>
+                <li><a href="chapter10.html">👥 Ch10: Multi-Agent</a></li>
+                <li><a href="chapter11.html">🔄 Ch11: AI SDLC</a></li>
+                <li><a href="chapter12.html">⚡ Ch12: Productivity</a></li>
+                <li><a href="chapter13.html">🛠️ Ch13: AI Tools</a></li>
+                <li><a href="chapter14.html">🎨 Ch14: Vibe Coding</a></li>
+                <li><a href="chapter15.html">🗄️ Ch15: NL-to-SQL</a></li>
+                <li><a href="chapter16.html">📊 Ch16: Evals</a></li>
+                <li><a href="chapter17.html">🔒 Ch17: Security</a></li>
+                <li><a href="chapter18.html">🏢 Ch18: Governance</a></li>
+                <li><a href="chapter19.html">🔮 Ch19: Future</a></li>
+                <li><a href="chapter20.html">🎤 Ch20: Present</a></li>
+                <li><a href="chapter21.html">⚖️ Ch21: Prompt vs Context</a></li>
+                <li><a href="chapter22.html">⚡ Ch22: Productivity Paradox</a></li>
+                <li><a href="chapter23.html">👁️ Ch23: Supervisory Eng.</a></li>
+                <li><a href="chapter24.html">📉 Ch24: Context Debt</a></li>
+                <li><a href="chapter25.html">🔬 Ch25: How LLMs Work</a></li>
+                <li><a href="chapter26.html">🔀 Ch26: NL2SQL Pipeline</a></li>
+                <li><a href="chapter27.html">📋 Ch27: Prompt Audit</a></li>
+                <li><a href="chapter28.html">🧱 Ch28: 9 Layers</a></li>
+                <li><a href="chapter29.html" class="active">🗺️ Ch29: Roadmap</a></li>
+                <li><a href="chapter30.html">🏆 Ch30: Master Script</a></li>
+                <li><a href="chapter31.html">💥 Ch31: AI Failures</a></li>
+            </ul>
+        </nav>
+        <main class="main-content">
+            
+            <div class="chapter-header">
+                <h1>🗺️ Chapter 29: NL2SQL Improvements Roadmap</h1>
+                <p class="chapter-meta">Prioritized fixes, senior Q&A, eval CI, follow-up context, context debt.</p>
+            </div><div class="chapter-nav"><a href="chapter28.html">← Previous</a><a href="index.html">🏠 Home</a><a href="chapter30.html">Next Chapter →</a></div>
+<div class="tagline-banner" style="text-align:left;margin-bottom:1.5rem">
+<strong>From Prompt Engineering to Context Engineering</strong><br>
+<span style="font-size:.95rem;color:#4338ca">How Developers Should Build, Use, and Control AI in 2026</span>
+<div style="margin-top:.75rem;font-size:.9rem;color:#334155">
+📍 <strong>Chapter 29</strong> · Phase: <strong>NL2SQL Deep Dive — Improvements</strong><br>
+Honest gap analysis and prioritized improvements — what to fix before the next release and what to say when seniors ask hard questions.
+</div>
+</div>
+<div class="diagram-section">
+<h3>NL2SQL Deep Dive (Chapters 26–30)</h3>
+<div style="overflow-x:auto;padding:.5rem 0;font-size:.82rem;line-height:2"><span style="color:#64748b">Ch26 Pipeline E2E</span> → <span style="color:#64748b">Ch27 Prompt Audit</span> → <span style="color:#64748b">Ch28 9 Layers</span> → <span style="font-weight:700;color:#4f46e5">Ch29 Roadmap</span> → <span style="color:#64748b">Ch30 Master Script</span></div>
+<p style="font-size:.88rem;color:#64748b;margin-top:.5rem">Chapters 1–25 teach patterns. <strong>Chapters 26–30</strong> apply every concept to the <em>CampusCom NL2SQL</em> codebase you ship in production.</p>
+</div><div class="objectives"><h3>🎯 Learning Objectives</h3><ul><li>Prioritize NL2SQL improvements by impact and effort</li><li>Separate quick wins from architectural investments</li><li>Connect each gap to a chapter in this guide</li><li>Prepare answers for senior developer Q&A</li><li>Turn weaknesses into a credible engineering roadmap</li></ul></div>
+<div class="section">
+<h2>Current State Summary</h2>
+<div class="overview-cards">
+<div class="card"><h3>✅ Strengths</h3>
+<ul>
+<li>Task-specific model routing</li>
+<li>Hybrid search before generation</li>
+<li>Deterministic SQL validator (not LLM security)</li>
+<li>Pre-agent permission + governed NL checks</li>
+<li>Structured outputs (intent, disambiguation, response JSON)</li>
+<li>Streaming UX with pipeline visibility</li>
+<li>Usage tracking per request</li>
+</ul></div>
+<div class="card"><h3>⚠️ Gaps</h3>
+<ul>
+<li>Limited multi-turn context for SQL agent</li>
+<li>No eval CI gate on prompt/RAG changes</li>
+<li>Retrieval heuristics vs pure semantic ranking</li>
+<li>Intent router lacks conversation context</li>
+<li>Legacy LLM permission tool (fail-open) unused in main path</li>
+</ul></div>
+</div>
+</div>
+
+<div class="section">
+<h2>Prioritized Roadmap</h2>
+<table>
+<tr><th>Priority</th><th>Improvement</th><th>Impact</th><th>Effort</th><th>Guide ref</th></tr>
+<tr><td>P0</td><td>Golden eval suite in CI (intent, retrieval, SQL safety)</td><td>🔴 High</td><td>Medium</td><td>Ch 16</td></tr>
+<tr><td>P0</td><td>Retrieval eval: correct tables in top-K for 100 benchmark questions</td><td>🔴 High</td><td>Medium</td><td>Ch 7, 16</td></tr>
+<tr><td>P1</td><td>Structured follow-up context (last SQL + entities, not full chat)</td><td>🟠 High</td><td>Medium</td><td>Ch 6, 28 L5</td></tr>
+<tr><td>P1</td><td>Intent router: optional previous turn + last datasource</td><td>🟠 Medium</td><td>Low</td><td>Ch 4, 27</td></tr>
+<tr><td>P2</td><td>Replace retrieval heuristics with metadata-driven entity linking</td><td>🟠 Medium</td><td>High</td><td>Ch 24</td></tr>
+<tr><td>P2</td><td>Prompt version registry + A/B metrics in usage_tracker</td><td>🟡 Medium</td><td>Low</td><td>Ch 16, 18</td></tr>
+<tr><td>P3</td><td>Remove or harden legacy SecureSQLQueryTool fail-open path</td><td>🟡 Low</td><td>Low</td><td>Ch 17</td></tr>
+<tr><td>P3</td><td>Re-ranker on hybrid_search top-20 → top-5</td><td>🟡 Medium</td><td>Medium</td><td>Ch 7</td></tr>
+</table>
+</div>
+
+<div class="section">
+<h2>Improvement #1 — Eval CI (P0)</h2>
+<p><strong>Problem:</strong> Prompt or embedding changes can silently break production SQL quality.</p>
+<p><strong>Fix:</strong> Minimum eval categories:</p>
+<ul>
+<li><strong>Intent:</strong> 50 labeled sql/docs/other questions (from your few-shots + production logs)</li>
+<li><strong>Retrieval:</strong> expected tables for each benchmark question</li>
+<li><strong>SQL safety:</strong> no DML, tables ⊆ allowed, validator never PASS on shielded columns</li>
+<li><strong>Regression:</strong> golden NL→SQL pairs after validator</li>
+</ul>
+<div class="code-block"><button class="copy-btn">Copy</button><pre><code># Example CI step (conceptual)
+- name: NL2SQL evals
+  run: pytest tests/evals/ --min-pass-rate 0.92
+  # Block deploy if intent accuracy or retrieval recall drops</code></pre></div>
+</div>
+
+<div class="section">
+<h2>Improvement #2 — Follow-Up Context (P1)</h2>
+<p><strong>Problem:</strong> User asks "show unpaid invoices by student" then "same for faculty" — agent lacks structured prior context.</p>
+<p><strong>Fix pattern:</strong></p>
+<div class="code-block"><button class="copy-btn">Copy</button><pre><code># Orchestrator-owned session bundle (not raw chat dump)
+session_context = {
+    "last_sql": previous_message.sql_query,
+    "last_entities": ["invoice", "student"],
+    "disambiguation_resolved": conversation.disambiguation,
+}
+# Inject summary into system prefix or prefixed HumanMessage</code></pre></div>
+</div>
+
+<div class="section">
+<h2>Improvement #3 — Context Debt in Retrieval (P2)</h2>
+<p>Move special cases from Python heuristics into indexed metadata:</p>
+<table>
+<tr><th>Today (code)</th><th>Tomorrow (metadata)</th></tr>
+<tr><td><code>table.startswith("std_")</code> boosts student entity</td><td>Entity tag on every table chunk in vector index</td></tr>
+<tr><td>Manual entity score thresholds</td><td>Graph edges: entity → tables in embedding metadata</td></tr>
+<tr><td>Synonyms only in entity row</td><td>Glossary chunks: "active student" → enrollment rule</td></tr>
+</table>
+</div>
+
+<div class="section">
+<h2>Senior Q&A — Prepared Answers</h2>
+<table>
+<tr><th>Question</th><th>Answer</th></tr>
+<tr><td>"Why not one GPT call?"</td><td>Security, retrieval, and cost require layers — one call can't enforce ACL in code.</td></tr>
+<tr><td>"Is the LLM our security boundary?"</td><td>No. <code>validate_and_rewrite_sql</code> is. LLM proposes only.</td></tr>
+<tr><td>"ChatGPT with schema paste?"</td><td>No audit, no ACL, no evals — fine for dev, not for campus data.</td></tr>
+<tr><td>"How do you measure quality?"</td><td>usage_tracker today; eval CI is P0 on roadmap (Ch 16).</td></tr>
+<tr><td>"Biggest risk?"</td><td>Believable wrong SQL that passes casual review — mitigated by validator + human reasoning UI.</td></tr>
+</table>
+</div>
+
+<div class="takeaway"><h3>Key Takeaway</h3>
+<p>Showing a roadmap makes you credible. Winners don't claim perfection — they show <strong>layered engineering with a measured next step.</strong></p></div>
+<div class="chapter-nav"><a href="chapter28.html">← Previous</a><a href="index.html">🏠 Home</a><a href="chapter30.html">Next Chapter →</a></div>
+        </main>
+        <footer class="footer">
+            <p>From Prompt Engineering to Context Engineering — Developer Learning Guide</p>
+            <p>Chapter 29 of 31 · Prepared for Sakib Hasan · June 2026</p>
+        </footer>
+    </div>
+    <script src="js/app.js"></script>
+</body>
+</html>

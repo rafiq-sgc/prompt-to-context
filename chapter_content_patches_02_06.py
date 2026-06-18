@@ -177,6 +177,38 @@ flowchart LR
 """
 
 PATCHES_02_06["05"] = """
+<div class="section" style="border-left:4px solid #dc2626;padding-left:1rem;margin-bottom:1.5rem">
+<h2>WHY · WHEN · HOW — The Three Questions (Presentation Core)</h2>
+<p>Every AI failure answers three questions. Teach your audience to ask these before blaming "the model."</p>
+<div class="diagram-container"><div class="mermaid">
+flowchart LR
+    subgraph WHY["WHY (root cause)"]
+        W1[Predicts tokens not truth]
+        W2[Missing or wrong context]
+        W3[No verification layer]
+    end
+    subgraph WHEN["WHEN (trigger)"]
+        T1[Fact not in prompt]
+        T2[Ambiguous terms]
+        T3[User over-trusts output]
+    end
+    subgraph HOW["HOW (symptom)"]
+        H1[Fluent wrong SQL]
+        H2[Confident bad code]
+        H3[Silent data leak]
+    end
+    WHY --> WHEN --> HOW
+    HOW --> FIX[FIX: context + validator + habit]
+</div></div>
+<table>
+<tr><th>Question</th><th>Example (NL2SQL)</th><th>Example (daily Cursor)</th></tr>
+<tr><td><strong>WHY?</strong></td><td>No schema in context → guesses table names</td><td>No @file → guesses wrong module</td></tr>
+<tr><td><strong>WHEN?</strong></td><td>Every NL query without hybrid_search</td><td>Vague "fix bug" + Agent mode</td></tr>
+<tr><td><strong>HOW?</strong></td><td>SQL runs but wrong JOIN / wrong columns</td><td>8-file refactor, tests fail</td></tr>
+</table>
+<p>→ Full failure playbook with real examples: <a href="chapter31.html"><strong>Chapter 31</strong></a></p>
+</div>
+
 <div class="section">
 <h2>The Presentation Bridge: Prompt Engineering → Context Engineering</h2>
 <div class="diagram-container"><div class="mermaid">

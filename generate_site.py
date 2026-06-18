@@ -4,7 +4,7 @@
 from pathlib import Path
 
 OUTPUT = Path(__file__).parent
-TOTAL = 25
+TOTAL = 31
 
 CHAPTERS = [
     ("01", "🚀", "Introduction", "From AI User to AI-Native Developer",
@@ -57,6 +57,18 @@ CHAPTERS = [
      "Bad docs → bad AI — sources, NL2SQL examples, team checklist, culture link."),
     ("25", "🔬", "How LLMs Work", "How LLM Models Work — Complete Guide",
      "Architecture, training, inference, parameters, model families, best output playbook."),
+    ("26", "🔀", "NL2SQL Pipeline", "NL2SQL Pipeline — Message Endpoint E2E",
+     "CampusCom message.py orchestration: intent → disambiguation → RAG → agent → validator."),
+    ("27", "📋", "Prompt Audit", "Every LLM Call — Prompt Inventory",
+     "Intent, disambiguation, SQL agent, permissions: prompts, models, context, gaps."),
+    ("28", "🧱", "9 Layers", "Nine Context Layers — NL2SQL Mapped",
+     "Layer-by-layer maturity rating for your production NL2SQL application."),
+    ("29", "🗺️", "Roadmap", "NL2SQL Improvements Roadmap",
+     "Prioritized fixes, senior Q&A, eval CI, follow-up context, context debt."),
+    ("30", "🏆", "Master Script", "Presentation Master Script + IDE Setup",
+     "45-minute winning talk, two-scenario framework, Cursor setup, live demo scripts."),
+    ("31", "💥", "AI Failures", "AI Failures — Why, When, How → Success",
+     "Presentation centerpiece: failure taxonomy, real NL2SQL examples, fixes, daily AI best practices."),
 ]
 
 
@@ -172,6 +184,11 @@ def generate_index():
 
             <div class="overview-cards">
                 <div class="card">
+                    <div class="card-icon">💥</div>
+                    <h3>Failure → Success</h3>
+                    <p>Chapter 31: Why, when, and how AI fails — with real NL2SQL examples, visual diagrams, fixes, and the best way to use AI in daily life.</p>
+                </div>
+                <div class="card">
                     <div class="card-icon">⚠️</div>
                     <h3>Failure-First Learning</h3>
                     <p>Every chapter shows how AI fails in real projects — hallucinated SQL, prompt injection, vibe coding debt — then how to fix it.</p>
@@ -212,6 +229,14 @@ def generate_index():
                         <h3>Pass 4 — Advanced & Reference (Chapters 21–25)</h3>
                         <p>Prompt vs context, productivity paradox, supervisory engineering, context debt, and the complete LLM models reference.</p>
                     </div>
+                    <div class="path-phase" style="border-left-color:#059669">
+                        <h3>Pass 5 — CampusCom NL2SQL (Chapters 26–30)</h3>
+                        <p>Your real codebase: message endpoint E2E, every LLM prompt audited, nine context layers mapped, improvement roadmap, and 45-minute presentation master script.</p>
+                    </div>
+                    <div class="path-phase" style="border-left-color:#dc2626">
+                        <h3>Pass 6 — Failure → Success (Chapter 31) ⭐ Presentation core</h3>
+                        <p><strong>Start here if your talk is failure-focused:</strong> Why, when, and how AI fails — with real NL2SQL and daily-life examples, fixes, and the best way to use AI successfully.</p>
+                    </div>
                 </div>
             </div>
 
@@ -223,11 +248,11 @@ def generate_index():
 
             <div class="quick-start">
                 <h2>🚀 Start Learning</h2>
-                <p>Read sequentially, or jump to <strong>Ch 25</strong> (how LLMs work), <strong>Ch 21</strong> (prompt vs context), Ch 15 (NL2SQL), or Ch 5 (why AI fails).</p>
+                <p>Failure-focused presentation? Start at <strong>Ch 31</strong>. Print the <a href="cheat-sheet.html"><strong>one-page cheat sheet</strong></a> for speaker notes.</p>
                 <div class="button-group">
-                    <a href="chapter01.html" class="btn btn-primary">Chapter 1 →</a>
-                    <a href="chapter25.html" class="btn btn-secondary">How LLMs Work</a>
-                    <a href="chapter21.html" class="btn btn-secondary">Prompt vs Context</a>
+                    <a href="chapter31.html" class="btn btn-primary">AI Failures (Ch 31) →</a>
+                    <a href="cheat-sheet.html" class="btn btn-secondary">🖨️ Cheat Sheet</a>
+                    <a href="chapter26.html" class="btn btn-secondary">NL2SQL Pipeline</a>
                 </div>
             </div>
 

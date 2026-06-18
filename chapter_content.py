@@ -86,6 +86,11 @@ flowchart LR
 <div class="presentation-tip"><strong>🎤 Demo for audience:</strong> Ask: "If AI-generated SQL exposes student SSNs, who is responsible?" Answer: still the developer and organization.</div>
 </div>
 
+<div class="section" style="border:2px solid #dc2626;border-radius:8px;padding:1.25rem;background:#fef2f2">
+<h2>⭐ Failure-Focused Presentation?</h2>
+<p>If your talk centers on <strong>why AI fails, when it fails, how to fix it, and how to succeed in daily life</strong>, start with <a href="chapter31.html"><strong>Chapter 31</strong></a> — then Ch 5, Ch 26, and Ch 12.</p>
+</div>
+
 <div class="takeaway"><h3>Key Takeaway</h3>
 <p>The best developers combine software engineering judgment with AI capability. Generated output ≠ verified output.</p></div>
 """
@@ -1386,3 +1391,11 @@ CHAPTER_BODIES.update(CHAPTER_BODIES_22_24)
 # Chapter 25 — How LLM Models Work (complete reference)
 from chapter_content_25 import CHAPTER_BODIES_25  # noqa: E402
 CHAPTER_BODIES.update(CHAPTER_BODIES_25)
+
+# Chapters 26–30 — CampusCom NL2SQL deep dive (audit + presentation capstone)
+from chapter_content_26_30 import CHAPTER_BODIES_26_30  # noqa: E402
+CHAPTER_BODIES.update(CHAPTER_BODIES_26_30)
+
+# Chapter 31 — AI Failures: Why, When, How → Success (presentation centerpiece)
+from chapter_content_31 import CHAPTER_BODIES_31  # noqa: E402
+CHAPTER_BODIES.update(CHAPTER_BODIES_31)

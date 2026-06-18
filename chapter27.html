@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 27: Every LLM Call — Prompt Inventory</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="reading-progress"></div>
+    <button class="mobile-menu-toggle" onclick="toggleMobileMenu()" aria-label="Toggle menu">☰</button>
+    <div class="container">
+        <header class="header">
+            <h1>Chapter 27: Every LLM Call — Prompt Inventory</h1>
+            <p class="subtitle">Intent, disambiguation, SQL agent, permissions: prompts, models, context, gaps.</p>
+        </header>
+        <nav class="nav-sidebar" id="nav-sidebar">
+            <div class="nav-brand">CONTEXT ENGINEERING 2026</div>
+            <ul>
+                <li><a href="index.html">🏠 Home</a></li>
+                <li><a href="chapter01.html">🚀 Ch1: Introduction</a></li>
+                <li><a href="chapter02.html">🧠 Ch2: LLM Recap</a></li>
+                <li><a href="chapter03.html">✍️ Ch3: Prompt Basics</a></li>
+                <li><a href="chapter04.html">🎯 Ch4: Advanced Prompts</a></li>
+                <li><a href="chapter05.html">⚠️ Ch5: Why Prompts Fail</a></li>
+                <li><a href="chapter06.html">🏗️ Ch6: Context Engineering</a></li>
+                <li><a href="chapter07.html">📚 Ch7: RAG</a></li>
+                <li><a href="chapter08.html">🔧 Ch8: Tools & MCP</a></li>
+                <li><a href="chapter09.html">🤖 Ch9: AI Agents</a></li>
+                <li><a href="chapter10.html">👥 Ch10: Multi-Agent</a></li>
+                <li><a href="chapter11.html">🔄 Ch11: AI SDLC</a></li>
+                <li><a href="chapter12.html">⚡ Ch12: Productivity</a></li>
+                <li><a href="chapter13.html">🛠️ Ch13: AI Tools</a></li>
+                <li><a href="chapter14.html">🎨 Ch14: Vibe Coding</a></li>
+                <li><a href="chapter15.html">🗄️ Ch15: NL-to-SQL</a></li>
+                <li><a href="chapter16.html">📊 Ch16: Evals</a></li>
+                <li><a href="chapter17.html">🔒 Ch17: Security</a></li>
+                <li><a href="chapter18.html">🏢 Ch18: Governance</a></li>
+                <li><a href="chapter19.html">🔮 Ch19: Future</a></li>
+                <li><a href="chapter20.html">🎤 Ch20: Present</a></li>
+                <li><a href="chapter21.html">⚖️ Ch21: Prompt vs Context</a></li>
+                <li><a href="chapter22.html">⚡ Ch22: Productivity Paradox</a></li>
+                <li><a href="chapter23.html">👁️ Ch23: Supervisory Eng.</a></li>
+                <li><a href="chapter24.html">📉 Ch24: Context Debt</a></li>
+                <li><a href="chapter25.html">🔬 Ch25: How LLMs Work</a></li>
+                <li><a href="chapter26.html">🔀 Ch26: NL2SQL Pipeline</a></li>
+                <li><a href="chapter27.html" class="active">📋 Ch27: Prompt Audit</a></li>
+                <li><a href="chapter28.html">🧱 Ch28: 9 Layers</a></li>
+                <li><a href="chapter29.html">🗺️ Ch29: Roadmap</a></li>
+                <li><a href="chapter30.html">🏆 Ch30: Master Script</a></li>
+                <li><a href="chapter31.html">💥 Ch31: AI Failures</a></li>
+            </ul>
+        </nav>
+        <main class="main-content">
+            
+            <div class="chapter-header">
+                <h1>📋 Chapter 27: Every LLM Call — Prompt Inventory</h1>
+                <p class="chapter-meta">Intent, disambiguation, SQL agent, permissions: prompts, models, context, gaps.</p>
+            </div><div class="chapter-nav"><a href="chapter26.html">← Previous</a><a href="index.html">🏠 Home</a><a href="chapter28.html">Next Chapter →</a></div>
+<div class="tagline-banner" style="text-align:left;margin-bottom:1.5rem">
+<strong>From Prompt Engineering to Context Engineering</strong><br>
+<span style="font-size:.95rem;color:#4338ca">How Developers Should Build, Use, and Control AI in 2026</span>
+<div style="margin-top:.75rem;font-size:.9rem;color:#334155">
+📍 <strong>Chapter 27</strong> · Phase: <strong>NL2SQL Deep Dive — Prompt Inventory</strong><br>
+Every prompt in the CampusCom codebase: what it does, what context it receives, which model runs it, and what can go wrong.
+</div>
+</div>
+<div class="diagram-section">
+<h3>NL2SQL Deep Dive (Chapters 26–30)</h3>
+<div style="overflow-x:auto;padding:.5rem 0;font-size:.82rem;line-height:2"><span style="color:#64748b">Ch26 Pipeline E2E</span> → <span style="font-weight:700;color:#4f46e5">Ch27 Prompt Audit</span> → <span style="color:#64748b">Ch28 9 Layers</span> → <span style="color:#64748b">Ch29 Roadmap</span> → <span style="color:#64748b">Ch30 Master Script</span></div>
+<p style="font-size:.88rem;color:#64748b;margin-top:.5rem">Chapters 1–25 teach patterns. <strong>Chapters 26–30</strong> apply every concept to the <em>CampusCom NL2SQL</em> codebase you ship in production.</p>
+</div><div class="objectives"><h3>🎯 Learning Objectives</h3><ul><li>List every LLM invocation in the NL2SQL application</li><li>Classify each prompt by role: router, extractor, generator, assistant</li><li>Understand task-specific model routing via config</li><li>Spot anti-patterns and strengths in current prompts</li><li>Compare prompt-only steps vs context-heavy steps</li></ul></div>
+<div class="section">
+<h2>LLM Inventory (Production Path)</h2>
+<table>
+<tr><th>#</th><th>Location</th><th>Task key</th><th>Output</th><th>Primary context</th></tr>
+<tr><td>1</td><td><code>llm/intent.py</code></td><td><code>intent_routing</code></td><td>JSON: sql / docs / other</td><td>26 few-shot examples + rules</td></tr>
+<tr><td>2</td><td><code>llm/tools.py</code></td><td><code>semantic_disambiguation</code></td><td>SemanticMatchOutput</td><td>terms_list + user_query</td></tr>
+<tr><td>3</td><td><code>llm/sql_agent.py</code></td><td><code>sql_generation</code></td><td>ReAct + structured JSON</td><td>construct_system_prefix bundle</td></tr>
+<tr><td>4</td><td><code>llm/sql_agent.py</code></td><td><code>sql_generation</code></td><td>Fallback SQL text</td><td>Question + tables + metadata (recovery)</td></tr>
+</table>
+<p><strong>Admin / permissions subsystem</strong> (separate from message endpoint):</p>
+<table>
+<tr><th>Location</th><th>Purpose</th><th>Context</th></tr>
+<tr><td><code>llm/permissions/prompts.py</code></td><td>Suggest entities for new role</td><td>Role description + entity docs + preview tables</td></tr>
+<tr><td><code>llm/permissions/prompts.py</code></td><td>Role conversation agent</td><td>Dynamic system prompt + rules docs + DB tool results</td></tr>
+<tr><td><code>llm/permissions/prompts.py</code></td><td>State sync (structured)</td><td>Conversation history → UI state JSON</td></tr>
+<tr><td><code>llm/policy_compiler.py</code></td><td>Compile governed policy draft</td><td>Role rows + metadata semantics</td></tr>
+</table>
+</div>
+
+<div class="section">
+<h2>Model Routing (Smart Cost Control)</h2>
+<p><code>llm/utils.py → get_llm(task)</code> maps tasks to config models:</p>
+<div class="code-block"><button class="copy-btn">Copy</button><pre><code># config.py settings (task-specific overrides)
+chat_model              # default
+chat_model_low_cost     # cheaper fallback
+chat_model_intent       # intent_routing
+chat_model_disambiguation
+chat_model_sql_generation
+chat_model_policy_compiler</code></pre></div>
+<div class="info-box"><h4>Why this matters for your presentation</h4>
+<p>Context engineering includes <strong>which model sees which context</strong>. Routing cheap models to intent/disambiguation and a stronger model to SQL generation is a 2026 best practice — you already do it.</p></div>
+</div>
+
+<div class="section">
+<h2>Prompt Deep Dive #1 — Intent Router</h2>
+<p><strong>File:</strong> <code class="inline-code">llm/intent.py</code></p>
+<div class="tab-group" data-tab-group="intent">
+<div class="tab-buttons">
+<button class="active" data-tab="weak">❌ Weak pattern</button>
+<button data-tab="strong">✅ Your pattern</button>
+</div>
+<div class="tab-panel active" data-panel="weak"><p>Single line: "Classify this question as sql or docs."</p>
+<p>No examples → model confuses "how many students" (sql) vs "how do I count students" (docs).</p></div>
+<div class="tab-panel" data-panel="strong"><ul>
+<li>Clear decision rules: data retrieval = sql, how/where/what is = docs</li>
+<li><strong>26 few-shot pairs</strong> covering edge cases (definitions, jokes, weather)</li>
+<li>Structured output via Pydantic <code>RouteQuery</code> — no free-text parsing</li>
+<li>Confidence score for future thresholding</li>
+</ul></div>
+</div>
+<div class="warning-box"><h4>Gap to mention honestly</h4>
+<p>Intent receives <strong>only the current question</strong> — no conversation history. Follow-ups like "same but for last year" may misroute. Improvement: pass last user turn as optional context (Ch 29).</p></div>
+</div>
+
+<div class="section">
+<h2>Prompt Deep Dive #2 — Semantic Disambiguation</h2>
+<p><strong>File:</strong> <code class="inline-code">llm/tools.py → SemanticPhraseMatcherTool</code></p>
+<p>Matches user phrases against canonical key phrases (e.g. business terms with multiple meanings). Strong prompt features:</p>
+<ul>
+<li>Match priority ladder: exact → partial → semantic → contextual</li>
+<li>Structured schema prevents invented terms</li>
+<li>Separate <code>clarification_message</code> — conversational, does not list terms (UI handles options)</li>
+<li>Silent fallback to empty matches on error (safe degrade)</li>
+</ul>
+<div class="tab-group" data-tab-group="disambig">
+<div class="tab-buttons">
+<button class="active" data-tab="weak">Failure mode</button>
+<button data-tab="strong">Your guardrail</button>
+</div>
+<div class="tab-panel active" data-panel="weak"><p>User says "active students" but key phrase list has both "active enrollment" and "active holds" — model must not merge unrelated concepts.</p></div>
+<div class="tab-panel" data-panel="strong"><p>Rules forbid semantic opposites, require exact <code>terms_list</code> membership, and longest-span wins for duplicates.</p></div>
+</div>
+</div>
+
+<div class="section">
+<h2>Prompt Deep Dive #3 — SQL Agent System Prefix</h2>
+<p><strong>File:</strong> <code class="inline-code">llm/utils.py → construct_system_prefix()</code></p>
+<p>This is your <strong>largest context bundle</strong> — injected as <code>SystemMessage</code> into a LangGraph ReAct agent:</p>
+<table>
+<tr><th>Section in prefix</th><th>Source</th><th>Type</th></tr>
+<tr><td>Role + mandatory SQL rules (15+ rules)</td><td>Static template</td><td>Prompt engineering</td></tr>
+<tr><td>User identity placeholders</td><td><code>current_user</code></td><td>Context</td></tr>
+<tr><td>Allowed tables list</td><td><code>hybrid_search</code> + policy</td><td>Context (RAG)</td></tr>
+<tr><td>Entity documentation</td><td><code>entity_metadata_desc</code></td><td>Context (RAG)</td></tr>
+<tr><td>Table/column metadata</td><td><code>metadata</code> string</td><td>Context (RAG)</td></tr>
+<tr><td>Role constraints block</td><td><code>SecurityPolicy</code></td><td>Context (governance)</td></tr>
+<tr><td>Tool workflow (mandatory sequence)</td><td>Static</td><td>Prompt + tool design</td></tr>
+<tr><td>Structured response schema</td><td><code>structured_response_format</code></td><td>Output contract</td></tr>
+</table>
+<p>Agent tools: <code>sql_db_list_tables</code>, <code>sql_db_schema</code>, <code>sql_db_query_checker</code>, <code>sql_db_query</code> — the prompt <em>forces</em> tool use; markdown SQL alone is not executed.</p>
+</div>
+
+<div class="section">
+<h2>What Is NOT an LLM (But Is Context Engineering)</h2>
+<table>
+<tr><th>Component</th><th>Role</th></tr>
+<tr><td><code>hybrid_search()</code></td><td>PGVector similarity + entity scoring heuristics → context strings</td></tr>
+<tr><td><code>get_user_permissions()</code></td><td>Compiles ACL from roles + query entities</td></tr>
+<tr><td><code>evaluate_nl_governed_access()</code></td><td>Blocks NL queries before agent if policy violated</td></tr>
+<tr><td><code>validate_and_rewrite_sql()</code></td><td>Deterministic SQL firewall — PASS / REWRITE / BLOCK</td></tr>
+<tr><td><code>usage_tracker</code></td><td>Token/cost observability per request</td></tr>
+</table>
+<div class="quote-block">The best context engineering decision in your app: <strong>never let the LLM be the security boundary.</strong></div>
+</div>
+
+<div class="section">
+<h2>Legacy / Caution Items (Be Honest in Q&A)</h2>
+<ul>
+<li><code>system_prompt_with_permissions()</code> in <code>llm/utils.py</code> — hardcoded batch example; production uses deterministic validator instead ✅</li>
+<li><code>SecureSQLQueryTool</code> — LLM YES/NO permission check with <strong>fail-open</strong> on error; main path uses code validator ✅</li>
+<li>Fallback SQL prompts in <code>_fallback_generate_sql</code> — recovery path if agent produces no tool call</li>
+</ul>
+</div>
+
+<div class="takeaway"><h3>Key Takeaway</h3>
+<p>You have <strong>four production LLM calls</strong> on the hot path, each with a distinct prompt contract. Presentation gold: show the inventory table and ask "which of these should be deterministic?" (Answer: security always.)</p></div>
+<div class="chapter-nav"><a href="chapter26.html">← Previous</a><a href="index.html">🏠 Home</a><a href="chapter28.html">Next Chapter →</a></div>
+        </main>
+        <footer class="footer">
+            <p>From Prompt Engineering to Context Engineering — Developer Learning Guide</p>
+            <p>Chapter 27 of 31 · Prepared for Sakib Hasan · June 2026</p>
+        </footer>
+    </div>
+    <script src="js/app.js"></script>
+</body>
+</html>

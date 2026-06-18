@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 31: AI Failures — Why, When, How → Success</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="reading-progress"></div>
+    <button class="mobile-menu-toggle" onclick="toggleMobileMenu()" aria-label="Toggle menu">☰</button>
+    <div class="container">
+        <header class="header">
+            <h1>Chapter 31: AI Failures — Why, When, How → Success</h1>
+            <p class="subtitle">Presentation centerpiece: failure taxonomy, real NL2SQL examples, fixes, daily AI best practices.</p>
+        </header>
+        <nav class="nav-sidebar" id="nav-sidebar">
+            <div class="nav-brand">CONTEXT ENGINEERING 2026</div>
+            <ul>
+                <li><a href="index.html">🏠 Home</a></li>
+                <li><a href="chapter01.html">🚀 Ch1: Introduction</a></li>
+                <li><a href="chapter02.html">🧠 Ch2: LLM Recap</a></li>
+                <li><a href="chapter03.html">✍️ Ch3: Prompt Basics</a></li>
+                <li><a href="chapter04.html">🎯 Ch4: Advanced Prompts</a></li>
+                <li><a href="chapter05.html">⚠️ Ch5: Why Prompts Fail</a></li>
+                <li><a href="chapter06.html">🏗️ Ch6: Context Engineering</a></li>
+                <li><a href="chapter07.html">📚 Ch7: RAG</a></li>
+                <li><a href="chapter08.html">🔧 Ch8: Tools & MCP</a></li>
+                <li><a href="chapter09.html">🤖 Ch9: AI Agents</a></li>
+                <li><a href="chapter10.html">👥 Ch10: Multi-Agent</a></li>
+                <li><a href="chapter11.html">🔄 Ch11: AI SDLC</a></li>
+                <li><a href="chapter12.html">⚡ Ch12: Productivity</a></li>
+                <li><a href="chapter13.html">🛠️ Ch13: AI Tools</a></li>
+                <li><a href="chapter14.html">🎨 Ch14: Vibe Coding</a></li>
+                <li><a href="chapter15.html">🗄️ Ch15: NL-to-SQL</a></li>
+                <li><a href="chapter16.html">📊 Ch16: Evals</a></li>
+                <li><a href="chapter17.html">🔒 Ch17: Security</a></li>
+                <li><a href="chapter18.html">🏢 Ch18: Governance</a></li>
+                <li><a href="chapter19.html">🔮 Ch19: Future</a></li>
+                <li><a href="chapter20.html">🎤 Ch20: Present</a></li>
+                <li><a href="chapter21.html">⚖️ Ch21: Prompt vs Context</a></li>
+                <li><a href="chapter22.html">⚡ Ch22: Productivity Paradox</a></li>
+                <li><a href="chapter23.html">👁️ Ch23: Supervisory Eng.</a></li>
+                <li><a href="chapter24.html">📉 Ch24: Context Debt</a></li>
+                <li><a href="chapter25.html">🔬 Ch25: How LLMs Work</a></li>
+                <li><a href="chapter26.html">🔀 Ch26: NL2SQL Pipeline</a></li>
+                <li><a href="chapter27.html">📋 Ch27: Prompt Audit</a></li>
+                <li><a href="chapter28.html">🧱 Ch28: 9 Layers</a></li>
+                <li><a href="chapter29.html">🗺️ Ch29: Roadmap</a></li>
+                <li><a href="chapter30.html">🏆 Ch30: Master Script</a></li>
+                <li><a href="chapter31.html" class="active">💥 Ch31: AI Failures</a></li>
+            </ul>
+        </nav>
+        <main class="main-content">
+            
+            <div class="chapter-header">
+                <h1>💥 Chapter 31: AI Failures — Why, When, How → Success</h1>
+                <p class="chapter-meta">Presentation centerpiece: failure taxonomy, real NL2SQL examples, fixes, daily AI best practices.</p>
+            </div><div class="chapter-nav"><a href="chapter30.html">← Previous</a><a href="index.html">🏠 Home</a><span></span></div>
+<div class="tagline-banner" style="text-align:left;margin-bottom:1.5rem">
+<strong>From Prompt Engineering to Context Engineering</strong><br>
+<span style="font-size:.95rem;color:#4338ca">How Developers Should Build, Use, and Control AI in 2026</span>
+<div style="margin-top:.75rem;font-size:.9rem;color:#334155">
+📍 <strong>Chapter 31</strong> · Phase: <strong>Presentation Core — AI Failures & Success</strong><br>
+The chapter your talk is built on: <strong>Why</strong> AI fails, <strong>When</strong> it fails, <strong>How</strong> it fails — and the exact solutions that turn failure into reliable success in daily life and NL2SQL.
+</div>
+</div>
+<div class="diagram-section">
+<h3>Failure → Solution → Success Path</h3>
+<div style="overflow-x:auto;padding:.5rem 0;font-size:.82rem;line-height:2"><span style="color:#64748b">Ch5 Why Prompts Fail</span> → <span style="font-weight:700;color:#dc2626">Ch31 Why/When/How</span> → <span style="color:#64748b">Ch6 Context Fix</span> → <span style="color:#64748b">Ch26 NL2SQL Real</span> → <span style="color:#64748b">Ch12 Daily Success</span></div>
+<p style="font-size:.88rem;color:#64748b;margin-top:.5rem"><strong>Chapter 31</strong> is the presentation centerpiece: why AI fails, when it fails, how to fix it, and how to use AI successfully in daily life and production.</p>
+</div><div class="objectives"><h3>🎯 Learning Objectives</h3><ul><li>Explain WHY AI fails at a fundamental level (not bad luck)</li><li>Recognize WHEN failures happen in daily work vs production apps</li><li>Diagnose HOW failures manifest with real visual examples</li><li>Apply the Failure → Fix → Success playbook for each failure class</li><li>Use AI productively in daily life without repeating common mistakes</li></ul></div>
+<div class="section">
+<h2>Your Presentation Thesis</h2>
+<div class="tagline-banner" style="text-align:center">
+AI does not fail because it is stupid.<br>
+It fails predictably — and every failure teaches us what to engineer next.
+</div>
+<p>This chapter is the <strong>spine of your talk</strong>. Teach juniors the habits. Show seniors the system design. Use real CampusCom NL2SQL examples alongside daily ChatGPT/Cursor failures.</p>
+</div>
+
+<div class="section">
+<h2>The Framework: Why → When → How → Fix → Success</h2>
+<div class="diagram-container"><div class="mermaid">
+flowchart LR
+    WHY[WHY it fails<br/>Root cause] --> WHEN[WHEN it fails<br/>Trigger moment]
+    WHEN --> HOW[HOW it shows up<br/>Symptom]
+    HOW --> FIX[FIX<br/>Engineering response]
+    FIX --> WIN[SUCCESS<br/>Reliable outcome]
+    WIN --> EVAL[Learn + eval<br/>Never repeat]
+    EVAL --> WHY
+</div></div>
+<table>
+<tr><th>Question</th><th>What audience learns</th><th>Your one-liner</th></tr>
+<tr><td><strong>WHY?</strong></td><td>Root cause in model + missing context</td><td>"It predicts text — it doesn't verify truth."</td></tr>
+<tr><td><strong>WHEN?</strong></td><td>Exact trigger: missing data, ambiguity, trust</td><td>"Fails at the fact boundary, not the grammar boundary."</td></tr>
+<tr><td><strong>HOW?</strong></td><td>What you see: fluent wrong output</td><td>"The danger is believable output."</td></tr>
+<tr><td><strong>FIX?</strong></td><td>Context, tools, validators, habits</td><td>"Stop prompting — start engineering."</td></tr>
+<tr><td><strong>SUCCESS?</strong></td><td>Measured, safe, repeatable</td><td>"Failure becomes a test case."</td></tr>
+</table>
+</div>
+
+<div class="section">
+<h2>WHY AI Fails — Five Root Causes</h2>
+<div class="diagram-container"><div class="mermaid">
+mindmap
+  root((WHY AI Fails))
+    Architecture
+      Predicts tokens not truth
+      No live database access
+      Training cutoff
+    Missing Context
+      No schema
+      No business rules
+      No user permissions
+    Wrong Context
+      Stale docs
+      Too much context lost in middle
+      Conflicting definitions
+    Human Process
+      No review
+      No tests
+      Trusting fluency
+    Adversarial
+      Prompt injection
+      Malicious RAG chunks
+</div></div>
+<div class="info-box"><h4>Memorize for Q&A</h4>
+<p>Every failure maps to one of these five. If you cannot name the root cause, you will fix the wrong thing (usually: add "be more accurate" to the prompt).</p></div>
+</div>
+
+<div class="section">
+<h2>WHEN AI Fails — Trigger Moments</h2>
+<table>
+<tr><th>When</th><th>Scenario A: Daily life (ChatGPT/Cursor)</th><th>Scenario B: NL2SQL app</th></tr>
+<tr><td><strong>Fact not in context</strong></td><td>You ask about internal API without pasting docs</td><td>User asks for table LLM never retrieved</td></tr>
+<tr><td><strong>Ambiguous language</strong></td><td>"Fix the bug" — which bug?</td><td>"Active students" — enrollment or holds?</td></tr>
+<tr><td><strong>After schema change</strong></td><td>Copilot suggests renamed column</td><td>hybrid_search still has old metadata</td></tr>
+<tr><td><strong>Permission mismatch</strong></td><td>You paste prod data into ChatGPT</td><td>User role cannot see requested entity</td></tr>
+<tr><td><strong>Long conversation</strong></td><td>Turn 15 — model forgets constraint from turn 2</td><td>Follow-up without session context</td></tr>
+<tr><td><strong>High stakes + no validator</strong></td><td>Merge AI diff without tests</td><td>SQL runs before validate_and_rewrite_sql</td></tr>
+<tr><td><strong>Over-trust</strong></td><td>"It looks correct" → ship</td><td>Executive dashboard shows wrong revenue</td></tr>
+</table>
+</div>
+
+<div class="section">
+<h2>HOW AI Fails — What You Actually See</h2>
+<div class="overview-cards">
+<div class="card"><h3>🎭 Hallucination</h3><p>Invents table <code>student</code>, column <code>invoice_status</code> — sounds right, wrong DB.</p></div>
+<div class="card"><h3>📎 Confident wrong JOIN</h3><p>SQL runs, returns data — wrong business meaning.</p></div>
+<div class="card"><h3>🤐 Silent scope creep</h3><p>Cursor refactors 8 files when you asked for one-line fix.</p></div>
+<div class="card"><h3>😊 Sycophancy</h3><p>"Great question! Here's the solution..." — solution is wrong.</p></div>
+<div class="card"><h3>🔓 Policy bypass</h3><p>SELECT * exposes columns user should not see.</p></div>
+<div class="card"><h3>🔄 Regression</h3><p>Prompt tweak fixes demo, breaks 10 production queries.</p></div>
+</div>
+</div>
+
+<div class="section">
+<h2>Real Failure #1 — NL2SQL: Believable Wrong SQL</h2>
+<p><strong>User asks:</strong> "Show students with unpaid invoices."</p>
+<div class="diagram-container"><div class="mermaid">
+flowchart TD
+    Q[User question] --> NAIVE[ChatGPT: no schema]
+    NAIVE --> OUT["SELECT * FROM student<br/>WHERE invoice_status='unpaid'"]
+    OUT --> LOOKS[✅ Looks fluent]
+    OUT --> FAIL1[❌ Table name wrong]
+    OUT --> FAIL2[❌ No JOIN to invoices]
+    OUT --> FAIL3[❌ SELECT * leaks PII]
+</div></div>
+<div class="tab-group" data-tab-group="fail1">
+<div class="tab-buttons">
+<button class="active" data-tab="weak">❌ HOW it fails</button>
+<button data-tab="strong">✅ HOW we succeed (CampusCom NL2SQL)</button>
+</div>
+<div class="tab-panel active" data-panel="weak"><div class="code-block"><button class="copy-btn">Copy</button><pre><code>-- ChatGPT without your schema
+SELECT name, email
+FROM student
+WHERE invoice_status = 'unpaid';</code></pre></div></div>
+<div class="tab-panel" data-panel="strong"><div class="code-block"><button class="copy-btn">Copy</button><pre><code>WHY: No schema in context → model guesses common names
+WHEN: Every NL question without RAG
+HOW: Fluent SQL with wrong tables
+
+FIX PATH (your app):
+1. hybrid_search() → retrieves real tables + metadata
+2. construct_system_prefix() → injects rules + ACL
+3. ReAct agent → sql_db_schema tool (live columns)
+4. validate_and_rewrite_sql() → BLOCK/REWRITE before execute
+
+SUCCESS: SQL uses real tables, governed columns, LIMIT enforced</code></pre></div></div>
+</div>
+</div>
+
+<div class="section">
+<h2>Real Failure #2 — NL2SQL: Intent Misroute</h2>
+<p><strong>User asks:</strong> "How do I run a report on unpaid invoices?"</p>
+<table>
+<tr><th></th><th>Failure</th><th>Success</th></tr>
+<tr><td><strong>WHY</strong></td><td>"unpaid invoices" sounds like data → sql</td><td>Rules: "how do I" = process question</td></tr>
+<tr><td><strong>WHEN</strong></td><td>sql vs docs boundary</td><td>Intent classifier runs first</td></tr>
+<tr><td><strong>HOW</strong></td><td>SQL generated for a help question</td><td>Routed to ask_question_proxy (docs)</td></tr>
+<tr><td><strong>FIX</strong></td><td>Better prompt guessing</td><td><code>determine_intent()</code> + 26 few-shot examples</td></tr>
+</table>
+<div class="diagram-container"><div class="mermaid">
+flowchart LR
+    Q["How do I run a report<br/>on unpaid invoices?"] --> INT[intent.py]
+    INT -->|docs 0.95| DOCS[Help & training RAG]
+    INT -->|sql would fail| X[Wrong: generate SQL]
+</div></div>
+<p><strong>Lesson:</strong> Failure at routing is cheaper than failure at SQL execution. Classify early.</p>
+</div>
+
+<div class="section">
+<h2>Real Failure #3 — NL2SQL: Ambiguous Business Term</h2>
+<p><strong>User asks:</strong> "List active female students in STEM programs."</p>
+<div class="diagram-container"><div class="mermaid">
+flowchart TD
+    Q[Ambiguous terms in query] --> MATCH[SemanticPhraseMatcherTool]
+    MATCH -->|matches key phrases| CLARIFY[Stream clarification UI]
+    CLARIFY --> USER[User picks meaning]
+    USER --> COMBINE[original_prompt + answer]
+    COMBINE --> AGENT[run_db_agent with clear intent]
+</div></div>
+<table>
+<tr><th>Stage</th><th>Without disambiguation (FAIL)</th><th>With disambiguation (SUCCESS)</th></tr>
+<tr><td>WHY</td><td>"Active" has multiple definitions in registry</td><td>Canonical key phrases in DB</td></tr>
+<tr><td>WHEN</td><td>Business jargon in query</td><td>Before expensive SQL agent</td></tr>
+<tr><td>HOW</td><td>Wrong filter → wrong student list</td><td>User confirms → correct entity</td></tr>
+<tr><td>FIX</td><td>"Ask user in prompt"</td><td>Structured disambiguation flow in message.py</td></tr>
+</table>
+</div>
+
+<div class="section">
+<h2>Real Failure #4 — NL2SQL: Security Almost Failed</h2>
+<p><strong>Scenario:</strong> LLM drafts SQL with restricted columns (SSN, bank details).</p>
+<div class="tab-group" data-tab-group="sec">
+<div class="tab-buttons">
+<button class="active" data-tab="weak">❌ If we trusted the LLM</button>
+<button data-tab="strong">✅ What actually happens (SUCCESS)</button>
+</div>
+<div class="tab-panel active" data-panel="weak"><p>SQL executes → PII in browser → incident → audit failure.</p>
+<p><strong>WHY:</strong> Model optimizes for answering, not policy.</p>
+<p><strong>WHEN:</strong> SELECT lists columns user should not see.</p></div>
+<div class="tab-panel" data-panel="strong"><div class="code-block"><button class="copy-btn">Copy</button><pre><code># sql_agent.py — after agent drafts SQL:
+validation = validate_and_rewrite_sql(
+    drafted_sql=sql_query,
+    policy=effective_policy,
+    current_user=current_user,
+    ...
+)
+if validation.decision == "BLOCK":
+    yield "<message>...cannot return sensitive information...</message>"
+    return  # SQL never executes</code></pre></div></div>
+</div>
+<div class="quote-block">Turning failure into success: every blocked query becomes a <strong>proof your system works</strong> — demo this live.</div>
+</div>
+
+<div class="section">
+<h2>Real Failure #5 — Daily Life: Cursor Agent Chaos</h2>
+<div class="compare-grid">
+<div class="compare-col bad">
+<h4>❌ FAILURE (HOW you see it)</h4>
+<p><strong>Prompt:</strong> "Fix the streaming bug"</p>
+<ul>
+<li>Agent edits 8 files</li>
+<li>Renames unrelated functions</li>
+<li>Tests fail</li>
+<li>3 hours to undo</li>
+</ul>
+<p><strong>WHY:</strong> No scope boundary in context.</p>
+<p><strong>WHEN:</strong> Vague task + Agent mode + no plan.</p>
+</div>
+<div class="compare-col good">
+<h4>✅ SUCCESS (same task)</h4>
+<ol>
+<li>@file message.py — "explain stream flow" (2 min)</li>
+<li>Plan: "hypothesis + single-file fix" (3 min)</li>
+<li>Implement one change (10 min)</li>
+<li>Run tests (5 min)</li>
+</ol>
+<p><strong>FIX:</strong> Understand → Plan → Generate → Review → Test</p>
+</div>
+</div>
+</div>
+
+<div class="section">
+<h2>Real Failure #6 — Daily Life: ChatGPT for Company Data</h2>
+<table>
+<tr><th>WHY</th><th>WHEN</th><th>HOW it fails</th><th>FIX → SUCCESS</th></tr>
+<tr>
+<td>No ACL, no audit</td>
+<td>Developer pastes prod schema to debug</td>
+<td>Data in vendor logs; wrong SQL advice</td>
+<td>Use internal NL2SQL; redact samples; enterprise API only</td>
+</tr>
+<tr>
+<td>Training cutoff</td>
+<td>Ask about library version from 2025</td>
+<td>Deprecated API suggested</td>
+<td>@docs or paste pyproject.toml version</td>
+</tr>
+<tr>
+<td>No verification</td>
+<td>Copy SQL into prod tool</td>
+<td>Deletes wrong rows</td>
+<td>Read-only sandbox; never execute AI SQL blind</td>
+</tr>
+</table>
+</div>
+
+<div class="section">
+<h2>Master Table: Failure → Fix → Success</h2>
+<table>
+<tr><th>Failure class</th><th>WHY (root)</th><th>WHEN (trigger)</th><th>HOW (symptom)</th><th>FIX</th><th>SUCCESS signal</th></tr>
+<tr><td>Missing schema</td><td>No facts in context</td><td>Any NL→SQL without RAG</td><td>Invented tables</td><td>hybrid_search + sql_db_schema tool</td><td>Columns exist in DB</td></tr>
+<tr><td>Ambiguous term</td><td>English overload</td><td>Business jargon</td><td>Wrong filter</td><td>SemanticPhraseMatcherTool</td><td>User confirms term</td></tr>
+<tr><td>Wrong route</td><td>sql vs docs overlap</td><td>"How" + data words</td><td>SQL for help Q</td><td>determine_intent few-shots</td><td>Correct datasource</td></tr>
+<tr><td>PII exposure</td><td>Model not security layer</td><td>SELECT *</td><td>Sensitive columns</td><td>validate_and_rewrite_sql</td><td>BLOCK or REWRITE logged</td></tr>
+<tr><td>Context rot</td><td>Long chat</td><td>Turn 10+</td><td>Old constraint ignored</td><td>Structured session state</td><td>Re-inject authoritative facts</td></tr>
+<tr><td>Vibe coding</td><td>Skipped review</td><td>Merge without read</td><td>Prod incident</td><td>6-stage workflow (Ch 12)</td><td>Tests pass; small diff</td></tr>
+<tr><td>Prompt injection</td><td>Untrusted text in RAG</td><td>Malicious doc chunk</td><td>Ignores system rules</td><td>Sanitize retrieval (Ch 17)</td><td>Injection eval passes</td></tr>
+<tr><td>Regression</td><td>No measurement</td><td>Prompt change</td><td>Demo OK, prod bad</td><td>Eval CI (Ch 16)</td><td>Golden set ≥ 92%</td></tr>
+</table>
+</div>
+
+<div class="section">
+<h2>Turning Failures Into Success — The Engineering Loop</h2>
+<div class="diagram-container"><div class="mermaid">
+flowchart TD
+    F[Production failure or near-miss] --> LOG[Log: question + context + output]
+    LOG --> CLASS[Classify: WHY / WHEN / HOW]
+    CLASS --> CASE[Add to golden eval dataset]
+    CASE --> FIX[Implement fix layer]
+    FIX --> CI[CI eval passes]
+    CI --> DEMO[Demo in next presentation]
+    DEMO --> TEAM[Team learns once — system remembers forever]
+</div></div>
+<p><strong>Example from your roadmap (Ch 29):</strong> User follow-up "same for faculty" fails → classify as Layer 5 session gap → add structured last_sql context → add eval case → never fails again.</p>
+</div>
+
+<div class="section">
+<h2>Best Way to Use AI in Daily Life (2026)</h2>
+<div class="diagram-container"><div class="mermaid">
+flowchart TB
+    subgraph Before you ask
+        B1[Define one clear task]
+        B2[Gather minimal context]
+        B3[Choose right tool]
+    end
+    subgraph While AI works
+        W1[Plan before code]
+        W2[Scope with @file / paste]
+        W3[Ask for structure JSON/plan]
+    end
+    subgraph After AI responds
+        A1[Read every line — especially SQL]
+        A2[Run tests / verify facts]
+        A3[Reject if risk too high]
+    end
+    B1 --> B2 --> B3 --> W1 --> W2 --> W3 --> A1 --> A2 --> A3
+</div></div>
+<h3>Tool choice by task</h3>
+<table>
+<tr><th>Task</th><th>Best tool</th><th>Why not others</th><th>Failure to avoid</th></tr>
+<tr><td>Learn a concept</td><td>ChatGPT / Claude</td><td>—</td><td>Treating explanation as prod truth</td></tr>
+<tr><td>Edit your codebase</td><td>Cursor + @file</td><td>ChatGPT can't see repo</td><td>Agent without plan</td></tr>
+<tr><td>Quick completion</td><td>Copilot</td><td>—</td><td>Tab-accept without reading</td></tr>
+<tr><td>Company data SQL</td><td>Your NL2SQL app</td><td>ChatGPT has no ACL</td><td>Pasting prod schema</td></tr>
+<tr><td>Long doc review</td><td>Claude Projects</td><td>Context window</td><td>Missing version date</td></tr>
+</table>
+</div>
+
+<div class="section">
+<h2>Daily Life Success Checklist</h2>
+<ul class="checklist">
+<li><strong>Before:</strong> Can I state the task in one sentence?</li>
+<li><strong>Before:</strong> Did I attach the minimum context (@file, schema snippet)?</li>
+<li><strong>Before:</strong> Is this the right tool (chat vs IDE vs internal app)?</li>
+<li><strong>During:</strong> Did I ask for a plan before code?</li>
+<li><strong>After:</strong> Did I verify — not just read fluently?</li>
+<li><strong>After:</strong> Would I stake my name on this output?</li>
+<li><strong>Never:</strong> Paste prod credentials, PII, or full DB into public chat</li>
+<li><strong>Never:</strong> Execute AI-generated SQL without validator + review</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>Presentation Flow — Failure-First (45 min)</h2>
+<table>
+<tr><th>Min</th><th>Section</th><th>Content</th><th>Demo</th></tr>
+<tr><td>0–5</td><td><strong>Hook</strong></td><td>"Believable wrong SQL" — audience spots errors</td><td>ChatGPT naive query</td></tr>
+<tr><td>5–12</td><td><strong>WHY + WHEN</strong></td><td>Five root causes + trigger table</td><td>Mindmap slide</td></tr>
+<tr><td>12–22</td><td><strong>HOW + FIX</strong></td><td>6 real failures with NL2SQL path</td><td>Live app stream</td></tr>
+<tr><td>22–30</td><td><strong>SUCCESS</strong></td><td>Validator blocks + disambiguation wins</td><td>Show BLOCK message</td></tr>
+<tr><td>30–38</td><td><strong>Daily life</strong></td><td>Cursor workflow + checklist</td><td>Plan-first demo</td></tr>
+<tr><td>38–45</td><td><strong>Close</strong></td><td>Failure → eval → team memory</td><td>Q&A</td></tr>
+</table>
+</div>
+
+<div class="section">
+<h2>Key Lines for Your Talk</h2>
+<div class="quote-block">AI fails predictably at the fact boundary — not the grammar boundary.</div>
+<div class="quote-block">Every production failure is a free test case — if you capture it.</div>
+<div class="quote-block">In daily life, you are the validator. In production, the code is the validator.</div>
+<div class="quote-block">We did not fix AI by saying "be more accurate." We fixed it by engineering context.</div>
+</div>
+
+<div class="quick-start" style="margin-top:2rem">
+<h2>Study Path for Failure-Focused Presentation</h2>
+<div class="button-group">
+<a href="chapter05.html" class="btn btn-primary">Ch 5 — Failure Taxonomy</a>
+<a href="cheat-sheet.html" class="btn btn-secondary">🖨️ Printable Cheat Sheet</a>
+<a href="chapter26.html" class="btn btn-secondary">Ch 26 — NL2SQL Pipeline</a>
+<a href="chapter12.html" class="btn btn-secondary">Ch 12 — Daily Workflow</a>
+</div>
+</div>
+
+<div class="takeaway"><h3>Key Takeaway</h3>
+<p>Do not fear AI failures — <strong>classify them</strong> (why/when/how), <strong>fix them systematically</strong>, and <strong>capture them as evals</strong>. That is how individuals and teams succeed with AI in 2026.</p></div>
+<div class="chapter-nav"><a href="chapter30.html">← Previous</a><a href="index.html">🏠 Home</a><span></span></div>
+        </main>
+        <footer class="footer">
+            <p>From Prompt Engineering to Context Engineering — Developer Learning Guide</p>
+            <p>Chapter 31 of 31 · Prepared for Sakib Hasan · June 2026</p>
+        </footer>
+    </div>
+    <script src="js/app.js"></script>
+</body>
+</html>

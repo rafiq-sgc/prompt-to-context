@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 30: Presentation Master Script + IDE Setup</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="reading-progress"></div>
+    <button class="mobile-menu-toggle" onclick="toggleMobileMenu()" aria-label="Toggle menu">☰</button>
+    <div class="container">
+        <header class="header">
+            <h1>Chapter 30: Presentation Master Script + IDE Setup</h1>
+            <p class="subtitle">45-minute winning talk, two-scenario framework, Cursor setup, live demo scripts.</p>
+        </header>
+        <nav class="nav-sidebar" id="nav-sidebar">
+            <div class="nav-brand">CONTEXT ENGINEERING 2026</div>
+            <ul>
+                <li><a href="index.html">🏠 Home</a></li>
+                <li><a href="chapter01.html">🚀 Ch1: Introduction</a></li>
+                <li><a href="chapter02.html">🧠 Ch2: LLM Recap</a></li>
+                <li><a href="chapter03.html">✍️ Ch3: Prompt Basics</a></li>
+                <li><a href="chapter04.html">🎯 Ch4: Advanced Prompts</a></li>
+                <li><a href="chapter05.html">⚠️ Ch5: Why Prompts Fail</a></li>
+                <li><a href="chapter06.html">🏗️ Ch6: Context Engineering</a></li>
+                <li><a href="chapter07.html">📚 Ch7: RAG</a></li>
+                <li><a href="chapter08.html">🔧 Ch8: Tools & MCP</a></li>
+                <li><a href="chapter09.html">🤖 Ch9: AI Agents</a></li>
+                <li><a href="chapter10.html">👥 Ch10: Multi-Agent</a></li>
+                <li><a href="chapter11.html">🔄 Ch11: AI SDLC</a></li>
+                <li><a href="chapter12.html">⚡ Ch12: Productivity</a></li>
+                <li><a href="chapter13.html">🛠️ Ch13: AI Tools</a></li>
+                <li><a href="chapter14.html">🎨 Ch14: Vibe Coding</a></li>
+                <li><a href="chapter15.html">🗄️ Ch15: NL-to-SQL</a></li>
+                <li><a href="chapter16.html">📊 Ch16: Evals</a></li>
+                <li><a href="chapter17.html">🔒 Ch17: Security</a></li>
+                <li><a href="chapter18.html">🏢 Ch18: Governance</a></li>
+                <li><a href="chapter19.html">🔮 Ch19: Future</a></li>
+                <li><a href="chapter20.html">🎤 Ch20: Present</a></li>
+                <li><a href="chapter21.html">⚖️ Ch21: Prompt vs Context</a></li>
+                <li><a href="chapter22.html">⚡ Ch22: Productivity Paradox</a></li>
+                <li><a href="chapter23.html">👁️ Ch23: Supervisory Eng.</a></li>
+                <li><a href="chapter24.html">📉 Ch24: Context Debt</a></li>
+                <li><a href="chapter25.html">🔬 Ch25: How LLMs Work</a></li>
+                <li><a href="chapter26.html">🔀 Ch26: NL2SQL Pipeline</a></li>
+                <li><a href="chapter27.html">📋 Ch27: Prompt Audit</a></li>
+                <li><a href="chapter28.html">🧱 Ch28: 9 Layers</a></li>
+                <li><a href="chapter29.html">🗺️ Ch29: Roadmap</a></li>
+                <li><a href="chapter30.html" class="active">🏆 Ch30: Master Script</a></li>
+                <li><a href="chapter31.html">💥 Ch31: AI Failures</a></li>
+            </ul>
+        </nav>
+        <main class="main-content">
+            
+            <div class="chapter-header">
+                <h1>🏆 Chapter 30: Presentation Master Script + IDE Setup</h1>
+                <p class="chapter-meta">45-minute winning talk, two-scenario framework, Cursor setup, live demo scripts.</p>
+            </div><div class="chapter-nav"><a href="chapter29.html">← Previous</a><a href="index.html">🏠 Home</a><a href="chapter31.html">Next Chapter →</a></div>
+<div class="tagline-banner" style="text-align:left;margin-bottom:1.5rem">
+<strong>From Prompt Engineering to Context Engineering</strong><br>
+<span style="font-size:.95rem;color:#4338ca">How Developers Should Build, Use, and Control AI in 2026</span>
+<div style="margin-top:.75rem;font-size:.9rem;color:#334155">
+📍 <strong>Chapter 30</strong> · Phase: <strong>Deliver — Master Presentation Script</strong><br>
+45-minute winning talk: timing, demos, IDE setup for daily work, and the two-scenario framework juniors and seniors both need.
+</div>
+</div>
+<div class="diagram-section">
+<h3>NL2SQL Deep Dive (Chapters 26–30)</h3>
+<div style="overflow-x:auto;padding:.5rem 0;font-size:.82rem;line-height:2"><span style="color:#64748b">Ch26 Pipeline E2E</span> → <span style="color:#64748b">Ch27 Prompt Audit</span> → <span style="color:#64748b">Ch28 9 Layers</span> → <span style="color:#64748b">Ch29 Roadmap</span> → <span style="font-weight:700;color:#4f46e5">Ch30 Master Script</span></div>
+<p style="font-size:.88rem;color:#64748b;margin-top:.5rem">Chapters 1–25 teach patterns. <strong>Chapters 26–30</strong> apply every concept to the <em>CampusCom NL2SQL</em> codebase you ship in production.</p>
+</div><div class="objectives"><h3>🎯 Learning Objectives</h3><ul><li>Deliver a 45-minute presentation with clear acts and timing</li><li>Run two live demos: daily AI workflow + NL2SQL pipeline</li><li>Configure Cursor (and alternatives) for better daily results</li><li>Apply the two-scenario framework: chat tools vs LLM apps</li><li>Handle Q&A from juniors and senior architects confidently</li></ul></div>
+<div class="section">
+<h2>Two Scenarios Framework (Open With This)</h2>
+<div class="info-box" style="border-color:#dc2626;background:#fef2f2">
+<h4>⭐ Failure-focused presentation?</h4>
+<p>Use <a href="chapter31.html"><strong>Chapter 31</strong></a> as your primary script — Why/When/How failures, real NL2SQL examples, daily-life success checklist. This chapter (30) covers timing and IDE setup.</p>
+</div>
+<div class="diagram-container"><div class="mermaid">
+flowchart LR
+    subgraph Scenario A["Scenario A — Daily work"]
+        A1[ChatGPT / Claude / Cursor chat]
+        A2[You are the orchestrator]
+        A3[Prompt + paste context + review output]
+    end
+    subgraph Scenario B["Scenario B — LLM applications"]
+        B1[Your NL2SQL product]
+        B2[Code is the orchestrator]
+        B3[9 context layers + validators + evals]
+    end
+    A1 --> LESSON[Same principles — different responsibility]
+    B1 --> LESSON
+</div></div>
+<table>
+<tr><th></th><th>Scenario A: Daily development</th><th>Scenario B: NL2SQL / production app</th></tr>
+<tr><td>Who builds context?</td><td>You, manually</td><td>Pipeline code</td></tr>
+<tr><td>Who validates?</td><td>You, before merge</td><td>Code + optional human</td></tr>
+<tr><td>Prompt role</td><td>Primary lever</td><td>One layer among nine</td></tr>
+<tr><td>Failure cost</td><td>Bad commit, leaked paste</td><td>Wrong data to thousands of users</td></tr>
+<tr><td>Best tool</td><td>Cursor with rules</td><td>Custom pipeline + evals</td></tr>
+</table>
+</div>
+
+<div class="section">
+<h2>45-Minute Presentation Script</h2>
+<table>
+<tr><th>Act</th><th>Min</th><th>Content</th><th>Chapters</th></tr>
+<tr><td><strong>1 — Hook</strong></td><td>0–5</td><td>Believable wrong SQL; "AI fails predictably"</td><td><strong>31</strong>, 5</td></tr>
+<tr><td><strong>2 — WHY + WHEN</strong></td><td>5–12</td><td>Five root causes; trigger moments table</td><td><strong>31</strong>, 2</td></tr>
+<tr><td><strong>3 — HOW + FIX</strong></td><td>12–22</td><td>6 real failures → NL2SQL fixes</td><td><strong>31</strong>, 26–28</td></tr>
+<tr><td><strong>4 — Live demos</strong></td><td>22–35</td><td>Naive SQL fail · App pipeline success · Cursor plan-first</td><td>31, 26, 12</td></tr>
+<tr><td><strong>5 — Daily success</strong></td><td>35–40</td><td>Best way to use AI in life; checklist</td><td><strong>31</strong>, 12, 13</td></tr>
+<tr><td><strong>6 — Close + Q&A</strong></td><td>40–45</td><td>Failure → eval loop; roadmap</td><td>29, 23</td></tr>
+</table>
+</div>
+
+<div class="section">
+<h2>Demo A — Daily Work in Cursor (5 min)</h2>
+<ol>
+<li><strong>Show bad:</strong> "Fix this bug" with no @file — agent guesses wrong module</li>
+<li><strong>Show good:</strong> Plan mode → @file <code>message.py</code> → @codebase "trace LLM calls" → small scoped edit</li>
+<li><strong>Say:</strong> "In Scenario A, <em>you</em> are the context engineer."</li>
+</ol>
+<div class="presentation-tip"><strong>Prep:</strong> Open nl2sql repo in Cursor before the talk. Have <code>.cursor/rules</code> visible if you use them.</div>
+</div>
+
+<div class="section">
+<h2>Demo B — NL2SQL Pipeline (8 min)</h2>
+<table>
+<tr><th>Min</th><th>Action</th><th>Say this</th></tr>
+<tr><td>0–1</td><td>Ask reporting question in your app UI</td><td>"Watch the loaders — each is a pipeline stage."</td></tr>
+<tr><td>1–2</td><td>Point at intent (or logs)</td><td>"Cheap model routes — sql vs docs."</td></tr>
+<tr><td>2–4</td><td>If disambiguation triggers, show it</td><td>"Context engineering for ambiguous business terms."</td></tr>
+<tr><td>4–6</td><td>Show SQL draft in stream</td><td>"Model proposed — not yet trusted."</td></tr>
+<tr><td>6–7</td><td>Show validator rewrite or policy message</td><td>"Code has final say — Layer 8."</td></tr>
+<tr><td>7–8</td><td>Show data or block message</td><td>"This is Scenario B — the app orchestrates."</td></tr>
+</table>
+<p><strong>Backup:</strong> Screenshots from Ch 26 diagram + pre-recorded 30s screen capture.</p>
+</div>
+
+<div class="section">
+<h2>IDE Setup — Cursor (Recommended)</h2>
+<h3>1. Project rules (<code>.cursor/rules</code>)</h3>
+<div class="code-block"><button class="copy-btn">Copy</button><pre><code># Example: nl2sql-dev.mdc
+---
+description: NL2SQL Python conventions
+globs: app/**/*.py, llm/**/*.py
+---
+- FastAPI routers stay thin; LLM logic in llm/
+- Never use LLM for security decisions — use validators
+- Match existing logging patterns with extra={}
+- Task-specific models via get_llm(task=...)</code></pre></div>
+<h3>2. User rules (Cursor Settings → Rules)</h3>
+<ul>
+<li>Ask for plan before multi-file changes</li>
+<li>Prefer minimal diff; no drive-by refactors</li>
+<li>Cite file paths when suggesting edits</li>
+</ul>
+<h3>3. Context commands — when to use what</h3>
+<table>
+<tr><th>Command</th><th>Use when</th><th>Avoid when</th></tr>
+<tr><td><code>@file</code></td><td>Editing one known file</td><td>Whole feature design</td></tr>
+<tr><td><code>@folder</code></td><td>Module-wide refactor</td><td>Unrelated directories</td></tr>
+<tr><td><code>@codebase</code></td><td>"Where is X?" discovery</td><td>Simple typo fix</td></tr>
+<tr><td><code>@docs</code></td><td>Library API questions</td><td>Internal business rules</td></tr>
+<tr><td>Agent mode</td><td>Multi-step with verification</td><td>Production hotfix without review</td></tr>
+</table>
+</div>
+
+<div class="section">
+<h2>IDE Setup — Other Tools</h2>
+<table>
+<tr><th>Tool</th><th>Setup for better results</th></tr>
+<tr><td><strong>ChatGPT</strong></td><td>Custom GPT with pasted architecture doc; never prod credentials; use for learning and drafts</td></tr>
+<tr><td><strong>Claude</strong></td><td>Projects with nl2sql README + schema samples; long-context doc review</td></tr>
+<tr><td><strong>GitHub Copilot</strong></td><td>Open relevant file first; copilot-instructions.md for repo conventions</td></tr>
+<tr><td><strong>VS Code + Continue</strong></td><td>config.yaml context providers: file, codebase; local model for privacy-sensitive snippets</td></tr>
+</table>
+</div>
+
+<div class="section">
+<h2>Daily Work Prompt Template (Scenario A)</h2>
+<div class="code-block"><button class="copy-btn">Copy</button><pre><code>ROLE: Senior Python reviewer for FastAPI + LangChain codebase.
+
+CONTEXT:
+- File: app/routers/message.py (or @attach)
+- Task: [one sentence goal]
+- Constraints: minimal diff, match existing patterns, no new deps
+
+TASK:
+1. Explain current flow in 3 bullets
+2. Propose smallest change
+3. List what could break
+
+Do not write code until I approve the plan.</code></pre></div>
+</div>
+
+<div class="section">
+<h2>Winning Lines (Memorize These)</h2>
+<div class="quote-block">Prompting is how we talk to AI. Context engineering is how we make AI useful.</div>
+<div class="quote-block">In chat, you are the pipeline. In production, the code is the pipeline.</div>
+<div class="quote-block">Our NL2SQL app does not trust the model with security — it trusts the validator.</div>
+<div class="quote-block">Seven layers strong today. Eval CI is how we stay strong tomorrow.</div>
+</div>
+
+<div class="section">
+<h2>Pre-Presentation Checklist (Final)</h2>
+<ul class="checklist">
+<li>Read Ch 26–28 (know your pipeline cold)</li>
+<li>Read Ch 29 (roadmap for hard questions)</li>
+<li>Practice Demo B three times with real app</li>
+<li>Prepare Cursor window with message.py + llm/intent.py open</li>
+<li>Export Ch 26 mermaid diagram as slide image (backup)</li>
+<li>Share prompt-to-context guide link with audience</li>
+<li>Time Act 4 — cut Demo A if running long, never cut Demo B</li>
+</ul>
+</div>
+
+<div class="quick-start" style="margin-top:2rem">
+<h2>You Are Ready to Win</h2>
+<p>You have theory (Ch 1–25), your real system (Ch 26–29), and the delivery script (Ch 30). Teach juniors the two scenarios. Show seniors the nine layers. Demo the pipeline. Own the roadmap.</p>
+<div class="button-group">
+<a href="chapter26.html" class="btn btn-primary">Start NL2SQL Deep Dive →</a>
+<a href="chapter20.html" class="btn btn-secondary">Original Presentation Guide</a>
+</div>
+</div>
+
+<div class="takeaway"><h3>Key Takeaway</h3>
+<p>The prize goes to the speaker who connects <strong>daily AI habits</strong> to <strong>production architecture</strong> with honesty and a live demo of their own system.</p></div>
+<div class="chapter-nav"><a href="chapter29.html">← Previous</a><a href="index.html">🏠 Home</a><a href="chapter31.html">Next Chapter →</a></div>
+        </main>
+        <footer class="footer">
+            <p>From Prompt Engineering to Context Engineering — Developer Learning Guide</p>
+            <p>Chapter 30 of 31 · Prepared for Sakib Hasan · June 2026</p>
+        </footer>
+    </div>
+    <script src="js/app.js"></script>
+</body>
+</html>

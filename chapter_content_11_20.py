@@ -216,6 +216,27 @@ Document: purpose, usage, assumptions, limitations, one example.""") + """
 </div>
 
 <div class="section">
+<h2>When AI Fails in Daily Work — And How to Recover</h2>
+<p>Every stage of the workflow has a <strong>failure mode</strong>. Skipping a stage does not skip the risk — it delays it.</p>
+<table>
+<tr><th>Stage skipped</th><th>WHY it fails</th><th>HOW you see it</th><th>Recovery (success)</th></tr>
+<tr><td>Understand</td><td>AI lacks system mental model</td><td>Fixes symptom not cause</td><td>Re-run @file explain; read code yourself</td></tr>
+<tr><td>Plan</td><td>Model optimizes for fast completion</td><td>Huge diff, wrong files</td><td>Stop agent; demand plan-only; approve steps</td></tr>
+<tr><td>Review</td><td>Fluency ≠ correctness</td><td>Security bug in prod</td><td>Review-first prompt; never merge unread</td></tr>
+<tr><td>Test</td><td>AI does not run your test suite</td><td>Regression next deploy</td><td>Run pytest/CI before merge</td></tr>
+</table>
+<div class="diagram-container"><div class="mermaid">
+flowchart LR
+    F[AI output wrong] --> STOP[Stop — do not merge]
+    STOP --> WHY[Ask: WHY did it fail?]
+    WHY --> CTX[Add missing @context]
+    CTX --> PLAN[Re-plan smaller scope]
+    PLAN --> WIN[Success on retry]
+</div></div>
+<p>→ Six real failures with NL2SQL examples: <a href="chapter31.html"><strong>Chapter 31</strong></a></p>
+</div>
+
+<div class="section">
 <h2>Junior vs Senior Daily Habits</h2>
 <table>
 <tr><th>Habit</th><th>Junior</th><th>Senior</th></tr>
@@ -611,6 +632,21 @@ RULES:
 </div>
 
 <div class="presentation-tip"><strong>🎤 This is your most important demo.</strong> Practice 3 times. Have screenshots as backup if live API fails.</div>
+
+<div class="section" style="border:2px solid #4f46e5;border-radius:8px;padding:1.25rem;background:#f5f3ff">
+<h2>→ Continue: Your Real Codebase (Chapters 26–30)</h2>
+<p>Chapter 15 uses generic examples to teach the pattern. <strong>Chapters 26–30 map every concept to CampusCom NL2SQL</strong> — <code class="inline-code">message.py</code>, <code class="inline-code">llm/intent.py</code>, <code class="inline-code">hybrid_search</code>, <code class="inline-code">run_db_agent</code>, and the deterministic validator.</p>
+<table>
+<tr><th>Chapter</th><th>What you get</th></tr>
+<tr><td><a href="chapter26.html">Ch 26</a></td><td>Full message endpoint flow diagram</td></tr>
+<tr><td><a href="chapter27.html">Ch 27</a></td><td>Every LLM prompt inventoried</td></tr>
+<tr><td><a href="chapter28.html">Ch 28</a></td><td>Nine context layers rated for your app</td></tr>
+<tr><td><a href="chapter29.html">Ch 29</a></td><td>Improvement roadmap + senior Q&A</td></tr>
+<tr><td><a href="chapter31.html">Ch 31</a></td><td>Why/When/How failures → success (presentation core)</td></tr>
+<tr><td><a href="chapter30.html">Ch 30</a></td><td>45-minute script + Cursor IDE setup</td></tr>
+</table>
+</div>
+
 <div class="takeaway"><h3>Key Takeaway</h3>
 <p>Production NL-to-SQL is not a prompt. It is the full Ch 2–10 stack: context, RAG, tools, validation, human control.</p></div>
 """
@@ -1170,13 +1206,18 @@ flowchart LR
 </ul>
 </div>
 
+<div class="section" style="border:2px solid #dc2626;border-radius:8px;padding:1.25rem;background:#fef2f2">
+<h2>🏆 Failure-Focused Talk? Start at Chapter 31</h2>
+<p>For presentations centered on <strong>why/when/how AI fails</strong> and <strong>how to succeed</strong>, use <a href="chapter31.html"><strong>Chapter 31</strong></a> as your primary script. Chapter 30 covers IDE setup and timing.</p>
+</div>
+
 <div class="quick-start" style="margin-top:2rem">
 <h2>You're Ready to Present</h2>
-<p>You've studied from prompt engineering through context engineering to production control. Go teach your team how to <strong>build, use, and control</strong> AI in 2026.</p>
+<p>You've studied from prompt engineering through context engineering to production control. For the office presentation with your NL2SQL demo, prioritize <strong>Chapters 26–30</strong>.</p>
 <div class="button-group">
-<a href="chapter22.html" class="btn btn-primary">Senior Topics (Ch 22–24)</a>
+<a href="chapter30.html" class="btn btn-primary">Master Script (Ch 30)</a>
+<a href="chapter26.html" class="btn btn-secondary">NL2SQL Pipeline</a>
 <a href="chapter21.html" class="btn btn-secondary">Prompt vs Context</a>
-<a href="chapter15.html" class="btn btn-secondary">NL2SQL Demo</a>
 <a href="chapter01.html" class="btn btn-secondary">Review Chapter 1</a>
 </div>
 </div>

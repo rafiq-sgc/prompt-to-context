@@ -6,53 +6,48 @@ Interactive HTML learning guide for developer presentations — sequel to [llm-l
 
 ## Topics Covered
 
+- **AI failures: WHY, WHEN, HOW → solutions → success** (Ch 31 — presentation core)
 - Prompt engineering fundamentals & advanced patterns
 - Why AI fails (hallucination, missing context, believable wrong code)
 - Context engineering (RAG, tools, agents, guardrails)
-- NL-to-SQL production case study
+- **CampusCom NL2SQL production audit** (Ch 26–30) — real `message.py` pipeline
+- Best way to use AI in daily life (ChatGPT, Cursor, Claude)
 - Vibe coding risks, evals, security, governance
-- Presentation flow & checklist
+- 45-minute presentation master script
 
 ## Quick Start
 
 Open `index.html` in any browser — no build step required.
 
 ```bash
-# Optional: serve locally
 cd prompt-to-context
 python3 -m http.server 8080
 # Visit http://localhost:8080
 ```
 
-## Structure
+## Failure-Focused Presentation (Recommended)
 
-| File | Description |
-|------|-------------|
-| `index.html` | Home page with learning path & chapter index |
-| `chapter01.html` … `chapter20.html` | One chapter per page |
-| `styles.css` | Responsive design |
-| `js/app.js` | Tabs, mobile menu, copy buttons, progress bar |
-| `generate_site.py` | Regenerates HTML from `chapter_content.py` |
+| Order | Chapter | Why |
+|-------|---------|-----|
+| **1** | **Ch 31** | **Why/When/How AI fails + fixes + daily success** |
+| — | **[Cheat sheet](cheat-sheet.html)** | **One-page printable speaker notes** |
+| 2 | Ch 5 | Failure taxonomy (deep dive) |
+| 3 | Ch 26–28 | Real NL2SQL failure examples |
+| 4 | Ch 12 | Best daily AI habits |
+| 5 | Ch 30 | Timing + IDE setup |
 
-## Learning Path
+**31 chapters total.**
 
-1. **Pass 1 (Ch 1–6):** Foundations — prompts, failures, context engineering
-2. **Pass 2 (Ch 7–15):** Implementation — RAG, agents, NL-to-SQL, vibe coding
-3. **Pass 3 (Ch 16–20):** Production — evals, security, governance, presentation
+## Learning Paths
 
-### Core presentation arcs
-
-**Ch 2–10 (Build):** Presentation banner, journey map, LLM mechanics, failure→fix examples, ChatGPT / Cursor / Claude / NL2SQL guidance. Chapter 10 ends with the Ch2–10 application blueprint.
-
-**Ch 11–20 (Use · Control · Deliver):** Production journey map, SDLC integration, daily workflow, tool comparison, vibe coding, flagship NL2SQL demo script, evals, security, governance, future skills, and full presentation delivery guide (timing, demos, slide mapping).
-
-**Ch 21–25 (Advanced & Reference):** Prompt vs context; productivity paradox; supervisory engineering; context debt; complete LLM models guide.
-
-**25 chapters total.**
+1. **Pass 1 (Ch 1–6):** Foundations
+2. **Pass 2 (Ch 7–15):** Implementation
+3. **Pass 3 (Ch 11–20):** Production & delivery
+4. **Pass 4 (Ch 21–25):** Advanced reference
+5. **Pass 5 (Ch 26–30):** CampusCom NL2SQL deep dive
+6. **Pass 6 (Ch 31):** ⭐ Failure → Success (presentation core)
 
 ## Regenerating
-
-After editing chapter content files (`chapter_content_02_06.py`, `chapter_content_07_10.py`, etc.):
 
 ```bash
 python3 generate_site.py
